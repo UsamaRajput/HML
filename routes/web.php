@@ -29,7 +29,9 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::get('/complaints', function () {
+    return Inertia::render('complaints');
+})->name('complaints');
 
 // Route::resource('room', RoomController::class);
 Route::post('room/{room}', [RoomController::class,'update'])->name('room.update');
