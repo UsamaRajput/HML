@@ -1,8 +1,11 @@
 .logo{
     font-size: 25px;
-    color: rgb(0, 0, 0);
-   
+    color: rgb(0, 0, 0);   
 }
+.custom-text {
+    font-family: 'poppins';
+    font-size: 20px;
+  }
 .button{
     width: 25%;
     height: 150px;
