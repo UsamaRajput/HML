@@ -32,6 +32,12 @@ Route::get('/dashboard', function () {
 Route::get('/complaints', function () {
     return Inertia::render('complaints');
 })->name('complaints');
+Route::get('/services', function () {
+    return Inertia::render('services');
+})->name('services');
+Route::get('/staff', function () {
+    return Inertia::render('staff');
+})->name('staff');
 
 // Route::resource('room', RoomController::class);
 Route::post('room/{room}', [RoomController::class,'update'])->name('room.update');
