@@ -12,7 +12,7 @@ class RoomServicesController extends Controller
      */
     public function index()
     {
-        //
+        $res = RoomServices::all();
     }
 
     /**
@@ -28,7 +28,17 @@ class RoomServicesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'service_name'=>['required','unique:room_services,service_name'],
+            'rating'=>['required','numeric'],
+            'charges'=>['required','numeric']
+        ]);
+        $res = RoomServices::create($request->all());
+        if($res){
+            return back()->with('message','Room service created');
+        }else{
+            return back()->with('error','Failed');
+        }
     }
 
     /**
@@ -52,7 +62,17 @@ class RoomServicesController extends Controller
      */
     public function update(Request $request, RoomServices $roomServices)
     {
-        //
+        $request->validate([
+            'service_name'=>['required','unique:room_services,service_name,except,'.$roomServices->id],
+            'rating'=>['required','numeric'],
+            'charges'=>['required','numeric']
+        ]);
+        $res = $roomServices->update($request->all());
+        if($res){
+            return back()->with('message','Room service created');
+        }else{
+            return back()->with('error','Failed');
+        }
     }
 
     /**
@@ -60,6 +80,7 @@ class RoomServicesController extends Controller
      */
     public function destroy(RoomServices $roomServices)
     {
-        //
+        $roomServices->delete();
+        return back()->with('message','deleted');
     }
 }

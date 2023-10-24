@@ -28,7 +28,17 @@ class RequestedRoomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'room_id' => ['required', 'integer','exists:rooms,id'],
+            'user_id' => ['required', 'integer','exists:users,id']
+        ]);
+
+        $requestRoom = RequestedRoom::create($request->all());
+        if($requestRoom){
+            return  back()->with('message', 'Room Requested');
+        }else{
+            return  back()->with('error', 'Failed to request ');
+        }
     }
 
     /**
@@ -52,7 +62,7 @@ class RequestedRoomController extends Controller
      */
     public function update(Request $request, RequestedRoom $requestedRoom)
     {
-        //
+        
     }
 
     /**
@@ -60,6 +70,11 @@ class RequestedRoomController extends Controller
      */
     public function destroy(RequestedRoom $requestedRoom)
     {
-        //
+        $res =  $requestedRoom->delete();
+        if($res){
+            return  back()->with('message', 'Room request deleted');
+        }else{
+            return  back()->with('error', 'Failed to delete');
+        }
     }
 }

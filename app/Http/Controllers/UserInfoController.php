@@ -28,7 +28,23 @@ class UserInfoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => ['required', 'integer','exists:users,id'],
+        ]);
+        if($request->hasFile('image')){
+            $fileName = null;
+            $image = $request->file('image');
+            $fileName = time().$image->getClientOriginalName();
+            $image->storeAs('user_images',$fileName);
+        }
+        $uesrInfo = UserInfo::create($request->all());
+
+        if($uesrInfo){
+            return back()->with('message','UserInfo added');
+        }else{
+            return back()->with('error','Failed! Something wrong');
+        }
+
     }
 
     /**
@@ -52,7 +68,22 @@ class UserInfoController extends Controller
      */
     public function update(Request $request, UserInfo $userInfo)
     {
-        //
+        $request->validate([
+            'user_id' => ['required', 'integer','exists:users,id'],
+        ]);
+        if($request->hasFile('image')){
+            $fileName = null;
+            $image = $request->file('image');
+            $fileName = time().$image->getClientOriginalName();
+            $image->storeAs('user_images',$fileName);
+        }
+        $uesrInfo = $userInfo->update($request->all());
+
+        if($uesrInfo){
+            return back()->with('message','UserInfo added');
+        }else{
+            return back()->with('error','Failed! Something wrong');
+        }
     }
 
     /**
@@ -60,6 +91,11 @@ class UserInfoController extends Controller
      */
     public function destroy(UserInfo $userInfo)
     {
-        //
+        $res = $userInfo->delete();
+        if($res){
+            return back()->with('message','deleted');
+        }else{
+            return back()->with('error','failed');
+        }
     }
 }
