@@ -12,7 +12,8 @@ class ComplainController extends Controller
      */
     public function index()
     {
-        //
+        // get all complain
+        
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,4 +16,9 @@ class Room extends Model
         'current',
         'is_active',
     ];
+
+    public function ImagesRoom()
+    {
+        return $this->hasMany(ImageRoom::class);
+    }
 }

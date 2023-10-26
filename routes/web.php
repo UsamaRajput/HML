@@ -26,6 +26,11 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/admin', function () {
+    return Inertia::render('Admin/Dashboard');
+})->name('admin.dashboard');
+
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -33,6 +38,7 @@ Route::get('/dashboard', function () {
 
 // Route::resource('room', RoomController::class);
 Route::post('room/{room}', [RoomController::class,'update'])->name('room.update');
+Route::post('room/{room}/test', [RoomController::class,'test'])->name('room.test');
 Route::resource('room', RoomController::class,['except' => ['update']]);
 
 
