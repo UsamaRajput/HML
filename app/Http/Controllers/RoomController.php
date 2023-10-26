@@ -19,7 +19,7 @@ class RoomController extends Controller
     public function index()
     {
         $rooms = Room::with('ImagesRoom')->get();
-        return Inertia::render('Test/Test', [
+        return Inertia::render('Admin/Room/List', [
             'data' => $rooms,
         ]);
     }
