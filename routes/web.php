@@ -28,7 +28,7 @@ Route::get('/', function () {
 
 Route::get('/admin', function () {
     return Inertia::render('Admin/Dashboard');
-});
+})->name('admin.dashboard');
 
 
 Route::get('/dashboard', function () {

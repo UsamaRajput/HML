@@ -1,0 +1,34 @@
+<template>
+    <div class="sidebar pe-4 pb-3">
+        <nav class="navbar bg-light navbar-light">
+            <div class="d-flex align-items-center ms-4 mb-4">
+                <div class="position-relative ml-3 mt-3">
+                    <h1>HMS</h1>
+                </div>
+            </div>
+            <div class="navbar-nav w-100">
+                <Link :href="route('admin.dashboard')" class="nav-item nav-link">
+                <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+                </Link>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
+                            class="fa fa-laptop me-2"></i>Room</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <Link :href="route('room.index')" class="dropdown-item">
+                            List
+                        </Link>
+                        <a href="button.html" class="dropdown-item">Buttons</a>
+                        <a href="typography.html" class="dropdown-item">Typography</a>
+                        <a href="element.html" class="dropdown-item">Other Elements</a>
+                    </div>
+                </div>
+                <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+            </div>
+        </nav>
+    </div>
+</template>
+
+
+<script setup>
+import { Link } from '@inertiajs/vue3';
+</script>
