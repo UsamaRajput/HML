@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Complain;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ComplainController extends Controller
 {
@@ -12,10 +13,21 @@ class ComplainController extends Controller
      */
     public function index()
     {
-        // get all complain
-        
+        $res = Complain::with('user')->get();
+        return Inertia::render('Admin/Complain/List', [
+            'data' => $res
+        ]);
     }
 
+    public function complainProgress(Request $request, Complain $complain)
+    {
+        $res = $complain->update([$request->fieldName => !$complain->{$request->fieldName}]);
+        if ($res) {
+            return response()->json(['data' => [], "message" => "Status Updated Successfully"]);
+        } else {
+            return response()->json(['data' => [], "message" => "Failed to update status"], 500);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -61,6 +73,7 @@ class ComplainController extends Controller
      */
     public function destroy(Complain $complain)
     {
-        //
+        $complain->delete();
+        return back()->with('message','Deleted!');
     }
 }

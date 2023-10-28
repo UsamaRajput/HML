@@ -14,7 +14,7 @@ const Toast = Swal.mixin({
     }
 })
 
-let simpleAlert = (type = 'success',title='Done !',text='')=>{
+let simpleAlert = (text='',type = 'success',title='Done !')=>{
     return Swal.fire({
         title: title,
         text: text,

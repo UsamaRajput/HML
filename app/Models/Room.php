@@ -21,4 +21,12 @@ class Room extends Model
     {
         return $this->hasMany(ImageRoom::class);
     }
+
+    public function requestedUser(){
+        return $this->belongsToMany(User::class,'requested_rooms');
+    }
+
+    public function users(){
+        return $this->belongsToMany(User::class, 'room_user');
+    }
 }

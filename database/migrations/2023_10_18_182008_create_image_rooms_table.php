@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('room_id');
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
-            $table->string('image')->default('room_images/default_image.jpg');
+            $table->string('image')->default('default_image.jpg');
             $table->timestamps();
         });
     }
