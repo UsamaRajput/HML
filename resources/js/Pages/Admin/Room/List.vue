@@ -75,7 +75,7 @@ function roomActiveInactive(id) {
                                 <tr v-for="(room, ind ) in props.data" :key="ind">
                                     <th>{{ room.room_number }}</th>
                                     <td>
-                                        <img v-for="(img, im) in room.images_room" class="img-fliud" :key="im" :src="base_url+'room_images/'+img.image" alt="">
+                                        <img v-for="(img, im) in room.images_room" class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :key="im" :src="base_url+'room_images/'+img.image" alt="">
                                     </td>
                                     <td>{{ room.capacity }}</td>
                                     <td>{{ room.current }}</td>

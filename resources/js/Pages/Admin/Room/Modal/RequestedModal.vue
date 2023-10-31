@@ -13,16 +13,16 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Room</th>
+                                    <th scope="col" colspan="5">Room</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(rr, ind) in r_rooms" :key="ind">
-                                    <td>{{ rr.room_number }}</td>
+                                    <td colspan="5"> {{ rr.room_number }}</td>
                                     <td>
                                         <button :disabled="disabled" :class="disabled ?? 'disabled'" @click="approve(rr.id)"
-                                            class="btn btn-info"></button>
+                                            class="btn btn-sm btn-info">Approve</button>
                                     </td>
                                 </tr>
                             </tbody>

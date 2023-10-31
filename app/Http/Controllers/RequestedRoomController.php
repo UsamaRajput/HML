@@ -78,6 +78,14 @@ class RequestedRoomController extends Controller
         return response()->json(['data' => [], 'message' => 'Rejected!']);
     }
 
+    public function requestRoom(Request $request){
+        RequestedRoom::create([
+            "user_id" => auth()->user()->id,
+            "room_id" => $request->id,
+        ]);
+        return response()->json(['data' => [], 'message' => 'Successfully requested room!']);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

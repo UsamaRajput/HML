@@ -24,6 +24,8 @@ class RoomController extends Controller
         ]);
     }
 
+   
+
     /**
      * Show the form for creating a new resource.
      */
@@ -138,4 +140,21 @@ class RoomController extends Controller
             return response()->json(['data' => [], 'message' => 'Not found'], 404);
         }
     }
+
+
+    /**
+     * User Section code
+     */
+
+     public function userRooms(){
+        // $rooms = Auth::user()->rooms()->paginate(10);
+        $rooms = Room::with('ImagesRoom')
+        ->where('is_active',1)
+        ->orderBy('room_number', 'ASC')->get();
+
+        return Inertia::render('User/Room/Index', [
+            'data' => $rooms,
+        ]);
+
+     }
 }

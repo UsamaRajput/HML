@@ -1,6 +1,6 @@
 <script setup>
-import { onMounted } from 'vue';
-import { Link } from '@inertiajs/vue3'
+import { onMounted,ref } from 'vue';
+import { Link,router  } from '@inertiajs/vue3'
 import { VueToggles } from "vue-toggles";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import axios from 'axios';
@@ -19,13 +19,8 @@ const props = defineProps({
     }
 });
 
-function editRoom(data) {
-    eventBus.emit('EDIT_ROOM', data);
-}
+let filter = ref('all');
 
-eventBus.on('ROOM_ADDED', function (data) {
-    props.data.push(data)
-});
 
 function complainProgress(fieldName, id) {
 
@@ -41,7 +36,9 @@ function complainProgress(fieldName, id) {
             }
         })
 }
-
+function filterComplain(){
+    router.get(route('complain.index',filter.value))
+}
 </script>
 
 
@@ -50,7 +47,18 @@ function complainProgress(fieldName, id) {
         <div class="row g-4">
             <div class="col-12">
                 <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">Complain List</h6>
+                    <div class="d-flex justify-content-between">
+                        <h6 class="mb-4">Complain List</h6>
+                        <div>
+                            <span>Filter </span>
+                            <select @change="filterComplain" v-model="filter" class="form-control-sm">
+                                <option value="all">All</option>
+                                <option value="watched">watched</option>
+                                <option value="inprogress">inprogress</option>
+                                <option value="closed">closed</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>

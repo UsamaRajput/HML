@@ -12,7 +12,7 @@
 
                         <label for="rating" class="form-label">Rating</label>
                         <input id="rating" class="form-control form-control-sm" v-model="form.rating" type="number" max="5" min="1"
-                            placeholder="Room number">
+                            placeholder="Rating">
                         <label for="service" class="form-label">Service</label>
                         <input id="service" class="form-control form-control-sm" v-model="form.service" type="text"
                             placeholder="Service">

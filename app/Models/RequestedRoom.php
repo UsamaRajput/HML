@@ -9,5 +9,8 @@ class RequestedRoom extends Model
 {
     use HasFactory;
 
-    
+    protected $guarded =[];
+
+
+
 }

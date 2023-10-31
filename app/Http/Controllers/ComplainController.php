@@ -11,9 +11,15 @@ class ComplainController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($filter)
     {
-        $res = Complain::with('user')->get();
+        $res = Complain::with('user');
+
+        if ($filter != 'all') {
+            $res->where($filter, 1);
+        }
+
+        $res = $res->get();
         return Inertia::render('Admin/Complain/List', [
             'data' => $res
         ]);
@@ -28,6 +34,18 @@ class ComplainController extends Controller
             return response()->json(['data' => [], "message" => "Failed to update status"], 500);
         }
     }
+
+    public function userComplain($filter)
+    {
+        $res = Complain::where('user_id', auth()->user()->id);
+        if ($filter != 'all') {
+            $res->where($filter, 1);
+        }
+        $res = $res->get();
+        return Inertia::render('User/Complain/Index', [
+            'data' => $res
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -41,7 +59,13 @@ class ComplainController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $res = Complain::create(['message' => $request->message, 'user_id' => auth()->user()->id]);
+        if ($res) {
+            return response()->json(['data' => $res, 'message' => 'Complain added'], 200);
+        } else {
+            return response()->json(['data' => [], 'message' => 'failed'], 500);
+            // return  back()->with('error', 'Failed to created ');
+        }
     }
 
     /**
@@ -74,6 +98,6 @@ class ComplainController extends Controller
     public function destroy(Complain $complain)
     {
         $complain->delete();
-        return back()->with('message','Deleted!');
+        return back()->with('message', 'Deleted!');
     }
 }
