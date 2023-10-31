@@ -1,7 +1,7 @@
 <script setup>
-import '../../css/bootstrap-icon.css'
-import '../../css/admin/style.css'
-import '../../css/admin/template.css'
+import '../../css/bootstrap-icon.css';
+import '../../css/admin/style.css';
+import '../../css/admin/template.css';
 import Sidebar from '@/components/Admin/Sidebar.vue';
 import Navbar from '@/components/Admin/Navbar.vue';
 import FooterBottom from '@/components/Admin/Footer.vue';

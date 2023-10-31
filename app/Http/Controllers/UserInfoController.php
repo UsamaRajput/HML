@@ -23,28 +23,38 @@ class UserInfoController extends Controller
         //
     }
 
+    public function updateProfile(Request $request)
+    {
+        $uesrInfo = UserInfo::updateOrCreate(['user_id'=>auth()->user()->id],$request->all());
+
+        if ($uesrInfo) {
+            return back()->with('message', 'UserInfo Updated');
+        } else {
+            return back()->with('error', 'Failed! Something wrong');
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => ['required', 'integer','exists:users,id'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
         ]);
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $fileName = null;
             $image = $request->file('image');
-            $fileName = time().$image->getClientOriginalName();
-            $image->storeAs('user_images',$fileName);
+            $fileName = time() . $image->getClientOriginalName();
+            $image->storeAs('user_images', $fileName);
         }
         $uesrInfo = UserInfo::create($request->all());
 
-        if($uesrInfo){
-            return back()->with('message','UserInfo added');
-        }else{
-            return back()->with('error','Failed! Something wrong');
+        if ($uesrInfo) {
+            return back()->with('message', 'UserInfo added');
+        } else {
+            return back()->with('error', 'Failed! Something wrong');
         }
-
     }
 
     /**
@@ -69,20 +79,20 @@ class UserInfoController extends Controller
     public function update(Request $request, UserInfo $userInfo)
     {
         $request->validate([
-            'user_id' => ['required', 'integer','exists:users,id'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
         ]);
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $fileName = null;
             $image = $request->file('image');
-            $fileName = time().$image->getClientOriginalName();
-            $image->storeAs('user_images',$fileName);
+            $fileName = time() . $image->getClientOriginalName();
+            $image->storeAs('user_images', $fileName);
         }
         $uesrInfo = $userInfo->update($request->all());
 
-        if($uesrInfo){
-            return back()->with('message','UserInfo added');
-        }else{
-            return back()->with('error','Failed! Something wrong');
+        if ($uesrInfo) {
+            return back()->with('message', 'UserInfo added');
+        } else {
+            return back()->with('error', 'Failed! Something wrong');
         }
     }
 
@@ -92,10 +102,38 @@ class UserInfoController extends Controller
     public function destroy(UserInfo $userInfo)
     {
         $res = $userInfo->delete();
-        if($res){
-            return back()->with('message','deleted');
+        if ($res) {
+            return back()->with('message', 'deleted');
+        } else {
+            return back()->with('error', 'failed');
+        }
+    }
+
+    /**
+     * Change profile image
+     */
+    public function changeImage(Request $request){
+        // dd('hi');
+        $request->validate([
+            'image' => ['required', 'image'],
+        ]);
+        if ($request->hasFile('image')) {
+            $fileName = null;
+            $image = $request->file('image');
+            $oriFileName = time() . $image->getClientOriginalName();
+            $filename = $image->storeAs('user_images', $oriFileName);
+            if($filename){
+                $res = UserInfo::updateOrCreate(['user_id'=>auth()->user()->id],['image'=>$oriFileName]);
+                if($res){
+                   return response()->json(['data'=>['image'=>$oriFileName],'message'=>'image change']);
+                }else{
+                    return response()->json(['data'=>[],'message'=>'Failed to change'],500);
+                }
+            }else{
+                return response()->json(['data'=>[],'message'=>'Something wrong'],500);
+            }
         }else{
-            return back()->with('error','failed');
+            return response()->json(['data'=>[],'message'=>'Please upload image'],500);
         }
     }
 }

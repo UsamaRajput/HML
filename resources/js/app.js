@@ -6,8 +6,16 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import VueSweetalert2 from 'vue-sweetalert2';
+import mitt from 'mitt';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
+import * as notify from "@/notify";
+
+window.notify = notify;
+
+window.eventBus = mitt();
+
+window._url = import.meta.env.VITE_APP_URL || 'http://localhost:8000/';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Complain extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'message',
+        'closed',
+        'inprogress',
+        'watched'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

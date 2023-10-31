@@ -18,11 +18,13 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::with('ImagesRoom')->get();
+        $rooms = Room::with('ImagesRoom')->orderBy('room_number', 'ASC')->get();
         return Inertia::render('Admin/Room/List', [
             'data' => $rooms,
         ]);
     }
+
+   
 
     /**
      * Show the form for creating a new resource.
@@ -43,21 +45,24 @@ class RoomController extends Controller
             'images' => ['nullable'],
         ]);
 
+        $request['is_active'] = 1;
+
         $room = Room::create($request->all());
 
         if ($room) {
-            if($request->hasFile('images')){
+            if ($request->hasFile('images')) {
                 $fileName = null;
                 $images = $request->file('images');
-                foreach($images as $key => $value){
-                    $fileName = time().$value->getClientOriginalName();
-                    $filename = $value->storeAs('room_images',$fileName);
-                    ImageRoom::create(['image'=>$fileName,'room_id'=>$room->id]);
+                foreach ($images as $key => $value) {
+                    $fileName = time() . $value->getClientOriginalName();
+                    $filename = $value->storeAs('room_images', $fileName);
+                    ImageRoom::create(['image' => $fileName, 'room_id' => $room->id]);
                 }
             }
-            return  back()->with('message', 'room created ');
+            return response()->json(['data' => $room, 'message' => 'room added'], 200);
         } else {
-            return  back()->with('error', 'Failed to created ');
+            return response()->json(['data' => [], 'message' => 'failed'], 500);
+            // return  back()->with('error', 'Failed to created ');
         }
     }
 
@@ -77,7 +82,6 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-
     }
 
     /**
@@ -85,9 +89,8 @@ class RoomController extends Controller
      */
     public function update(Request $request, Room $room)
     {
-
         $request->validate([
-            'room_number' => ['required', 'integer','unique:rooms,room_number,except,'.$room->id],
+            'room_number' => ['required', 'integer', 'unique:rooms,room_number,'.$room->id],
             'capacity' => ['required', 'integer'],
             'images' => ['nullable'],
         ]);
@@ -95,18 +98,18 @@ class RoomController extends Controller
         $update = $room->update($request->all());
 
         if ($update) {
-            if($request->hasFile('images')){
+            if ($request->hasFile('images')) {
                 $fileName = null;
                 $images = $request->file('images');
-                foreach($images as $key => $value){
-                    $fileName = time().$value->getClientOriginalName();
-                    $value->storeAs('room_images',$fileName);
-                    ImageRoom::create(['image'=>$fileName,'room_id'=>$room->id]);
+                foreach ($images as $key => $value) {
+                    $fileName = time() . $value->getClientOriginalName();
+                    $value->storeAs('room_images', $fileName);
+                    ImageRoom::create(['image' => $fileName, 'room_id' => $room->id]);
                 }
             }
-            return  back()->with('message', 'room updated ');
+            return response()->json(['data' => $room, 'message' => 'room updated'], 200);
         } else {
-            return  back()->with('error', 'Failed to update ');
+            return response()->json(['data' => [], 'message' => 'Server error'], 500);
         }
     }
 
@@ -117,14 +120,41 @@ class RoomController extends Controller
     {
         $room = $room->with('ImagesRoom')->find($room->id);
 
-        foreach($room->ImagesRoom as $key => $value){
-            if(Storage::exists('room_images/'.$value->image)){
-                Storage::delete('room_images/'.$value->image);
+        foreach ($room->ImagesRoom as $key => $value) {
+            if (Storage::exists('room_images/' . $value->image)) {
+                Storage::delete('room_images/' . $value->image);
             }
         }
 
         $room->delete();
 
-        return redirect(route('room.index'));
+        return back()->with('message','deleted');
     }
+
+    public function activeInactive($room){
+        $res = Room::where('id',$room)->first();
+        if($res){
+            $res->update(['is_active' => (!$res->is_active)]);
+            return response()->json(['data' => [], 'message' => 'updated'], 200);
+        }else{
+            return response()->json(['data' => [], 'message' => 'Not found'], 404);
+        }
+    }
+
+
+    /**
+     * User Section code
+     */
+
+     public function userRooms(){
+        // $rooms = Auth::user()->rooms()->paginate(10);
+        $rooms = Room::with('ImagesRoom')
+        ->where('is_active',1)
+        ->orderBy('room_number', 'ASC')->get();
+
+        return Inertia::render('User/Room/Index', [
+            'data' => $rooms,
+        ]);
+
+     }
 }

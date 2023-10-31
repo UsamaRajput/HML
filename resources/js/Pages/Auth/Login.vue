@@ -1,10 +1,5 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -30,65 +25,70 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
+    <Head title="Log in" />
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+    <section class="vh-100" style="background-color: #9A616D;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-xl-10">
+                    <div class="card" style="border-radius: 1rem;">
+                        <div class="row g-0">
+                            <div class="col-md-6 col-lg-5 d-none d-md-block">
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+                                    alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                            </div>
+                            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                                <div class="card-body p-4 p-lg-5 text-black">
+                                    <div v-if="status" class="mb-4 text-sm text-danger">
+                                        {{ status }}
+                                    </div>
+
+                                    <form @submit.prevent="submit">
+
+                                        <div class="d-flex align-items-center mb-3 pb-1">
+                                            <!-- <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i> -->
+                                            <span class="h1 fw-bold mb-0">HMS</span>
+                                        </div>
+
+                                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account
+                                        </h5>
+
+                                        <div class="form-outline mb-4">
+                                            <input type="email" id="email" class="form-control form-control-lg"
+                                                v-model="form.email" required autofocus autocomplete="username" />
+                                            <label class="form-label" for="email">Email address</label>
+                                            <InputError class="mt-2" :message="form.errors.email" />
+
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <input id="password" type="password" v-model="form.password" required
+                                                autocomplete="current-password" class="form-control form-control-lg" />
+                                            <label class="form-label" for="form2Example27">Password</label>
+                                            <InputError class="mt-2" :message="form.errors.password" />
+                                        </div>
+
+                                        <div class="pt-1 mb-4">
+                                            <button class="btn btn-dark btn-lg d-block btn-block"
+                                                :disabled="form.processing" type="submit">Login</button>
+                                        </div>
+
+                                        <Link v-if="canResetPassword" :href="route('password.request')"
+                                            class="small text-muted">
+                                        Forgot password?
+                                        </Link>
+
+                                        <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account?
+                                            <Link :href="route('register')" style="color: #393f81;">Register here</Link>
+                                        </p>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+    </section>
 </template>
