@@ -23,7 +23,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    if (auth()) {
+    if (auth()->guard()->name != 'web') {
         if (auth()->user()->role == 1) {
             return redirect(route('admin.dashboard'));
         } else if (auth()->user()->role == 0) {
