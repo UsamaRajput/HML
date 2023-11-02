@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('spentable_time')->default(30);
             $table->integer('usage')->default(6);
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }

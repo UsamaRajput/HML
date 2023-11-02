@@ -26,9 +26,18 @@
                     </div>
                 </div>
                 <Link :href="route('complain.index')" class="nav-item nav-link">
-                <i class="fa fa-tachometer-alt me-2"></i>Complains
+                    <i class="fa fa-tachometer-alt me-2"></i>Complains
                 </Link>
-                <div class="nav-item dropdown">
+                <Link :href="route('visitor.index')" class="nav-item nav-link">
+                    <i class="fa fa-tachometer-alt me-2"></i>Visitor
+                </Link>
+                <Link :href="route('user.index')" class="nav-item nav-link">
+                    <i class="fa fa-tachometer-alt me-2"></i>User
+                </Link>
+                <Link :href="route('services.index')" class="nav-item nav-link">
+                    <i class="fa fa-tachometer-alt me-2"></i>Services
+                </Link>
+                <!-- <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                             class="fa fa-laptop me-2"></i>Ratings</a>
                     <div class="dropdown-menu bg-transparent border-0">
@@ -36,7 +45,7 @@
                         List
                         </Link>
                     </div>
-                </div>
+                </div> -->
             </div>
         </nav>
     </div>

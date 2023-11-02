@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_service', function (Blueprint $table) {
+        Schema::create('general_service_user', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('general_service_id');
-            $table->foreign('general_service_id')->references('id')->on('general_services')->onDelete('cascade');
-            $table->time('entry')->nullable();
-            $table->time('exit')->nullable();
-            $table->boolean('rejected')->nullable();
-
+            $table->unsignedBigInteger('room_id');
+            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
+            $table->dateTime('requested_time');
+            $table->dateTime('leaving_time');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_service');
+        Schema::dropIfExists('general_service_user');
     }
 };

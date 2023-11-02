@@ -5,8 +5,10 @@ use App\Http\Controllers\UserInfoController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ComplainController;
+use App\Http\Controllers\GeneralServicesController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RequestedRoomController;
+use App\Models\GeneralServices;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -50,7 +52,7 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::group(['prefix' => 'user', 'middleware' => 'user_auth'], function () {
+Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () {
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile.edit');
         Route::post('/changeImage', [UserInfoController::class, 'changeImage'])->name('profile.changeImage');
         Route::post('/profile', [UserInfoController::class, 'updateProfile'])->name('profile.updateProfile');
@@ -67,7 +69,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/visitorLeave/', [VisitorController::class, 'visitorLeave'])->defaults('filter', 'all')->name('user.visitorLeave');
     });
 
-    Route::group(['prefix' => 'admin', 'middleware' => 'admin_auth'], function () {
+    Route::group(['prefix' => 'admin',/* 'middleware' => 'admin_auth'*/], function () {
         Route::get('/', function () {
             return Inertia::render('Admin/Dashboard');
         })->name('admin.dashboard');
@@ -89,6 +91,16 @@ Route::middleware('auth')->group(function () {
         Route::get('complain/index/{filter?}', [ComplainController::class, 'index'])->defaults('filter', 'all')->name('complain.index');
         Route::post('complain/{complain}', [ComplainController::class, 'complainProgress'])->name('complain.complainProgress');
         Route::resource('complain', ComplainController::class, ['except' => ['update', 'index']]);
+
+        // Visitor management
+        Route::post('visitor/approve', [VisitorController::class, 'visitorApprove'])->name('visitor.approve');
+        Route::resource('visitor', VisitorController::class);
+
+        // User Controller
+        Route::resource('user', UserInfoController::class);
+
+        // Room Services Controller
+        Route::resource('services', GeneralServicesController::class);
     });
 });
 
