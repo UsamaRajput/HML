@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserInfo;
+use App\Models\User;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class UserInfoController extends Controller
@@ -12,7 +14,10 @@ class UserInfoController extends Controller
      */
     public function index()
     {
-        //
+       $res = User::with('userInfo')->get();
+       return Inertia::render('Admin/User/List',[
+        'data'=>$res
+        ]);
     }
 
     /**
@@ -101,7 +106,7 @@ class UserInfoController extends Controller
      */
     public function destroy(UserInfo $userInfo)
     {
-        $res = $userInfo->delete();
+        $res = User::where(['id'=>$userInfo->user_id])->delete();
         if ($res) {
             return back()->with('message', 'deleted');
         } else {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GeneralServices;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class GeneralServicesController extends Controller
 {
@@ -12,7 +13,10 @@ class GeneralServicesController extends Controller
      */
     public function index()
     {
-        //
+        $res = GeneralServices::withCount('users')->get();
+        return Inertia::render('Admin/Gservices/List', [
+            'data' => $res
+        ]);
     }
 
     /**
@@ -28,15 +32,27 @@ class GeneralServicesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $res = GeneralServices::create($request->all());
+        if ($res) {
+            return response()->json(['data' => $res, 'message' => 'Service added'], 200);
+        } else {
+            return response()->json(['data' => [], 'message' => 'failed'], 500);
+            // return  back()->with('error', 'Failed to created ');
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(GeneralServices $generalServices)
+    public function show(Request $request)
     {
-        //
+        $res = GeneralServices::with('users')->where('id',$request->service)->first();
+        if ($res) {
+            return response()->json(['data' => $res, 'message' => 'Service record'], 200);
+        } else {
+            return response()->json(['data' => [], 'message' => 'failed'], 500);
+            // return  back()->with('error', 'Failed to created ');
+        }
     }
 
     /**
