@@ -7,7 +7,9 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ComplainController;
 use App\Http\Controllers\GeneralServicesController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\RequestedRoomController;
+use App\Http\Controllers\WebContentController;
 use App\Models\GeneralServices;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -25,15 +27,9 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    if (auth()->guard()->name != 'web') {
-        if (auth()->user()->role == 1) {
-            return redirect(route('admin.dashboard'));
-        } else if (auth()->user()->role == 0) {
-            return redirect(route('profile.edit'));
-        }
-    } else {
-        return redirect(route('login'));
-    }
+   return Inertia::render('Welcome', [
+
+   ]);
     // return Inertia::render('Welcome', [
     //     'canLogin' => Route::has('login'),
     //     'canRegister' => Route::has('register'),
@@ -101,6 +97,13 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
 
         // Room Services Controller
         Route::resource('services', GeneralServicesController::class);
+
+        // Staff Controller
+        Route::resource('staff', StaffController::class);
+
+        // Webcontent Management
+        Route::get('WebContent', [WebContentController::class, 'index'])->name('webcontent.index');
+        Route::post('WebContent/update', [WebContentController::class, 'update'])->name('webcontent.update');
     });
 });
 

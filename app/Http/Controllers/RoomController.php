@@ -18,13 +18,30 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::with('ImagesRoom')->orderBy('room_number', 'ASC')->get();
+        $rooms = Room::with('ImagesRoom')
+        ->selectRaw('
+            sum(ratings.increment_amount) AS amount, rooms.id ,
+            rooms.room_number,
+            rooms.capacity,
+            rooms.is_active
+         ')
+        ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
+        ->leftjoin('ratings','ratings.id','room_ratings.id')
+        ->groupBy(
+            'rooms.id',
+            'rooms.room_number',
+            'rooms.capacity',
+            'rooms.is_active'
+        )
+        ->orderBy('room_number', 'ASC')
+        ->get();
+        // dd($rooms);
         return Inertia::render('Admin/Room/List', [
             'data' => $rooms,
         ]);
     }
 
-   
+
 
     /**
      * Show the form for creating a new resource.

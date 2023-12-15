@@ -21,7 +21,7 @@
                                 <tr v-for="(rr, ind) in r_rooms" :key="ind">
                                     <td colspan="5"> {{ rr.room_number }}</td>
                                     <td>
-                                        <button :disabled="disabled" :class="disabled ?? 'disabled'" @click="approve(rr.id)"
+                                        <button :disabled="disabled" :class="disabled ?? 'disabled'" @click="approve(rr.room_id)"
                                             class="btn btn-sm btn-info">Approve</button>
                                     </td>
                                 </tr>
@@ -77,9 +77,10 @@ let rejectRoom = () => {
 
 eventBus.on('REQUESTED_ROOM', function (data) {
     disabled.value = false;
-    r_rooms = data.requested_room;
+    r_rooms = data;
     name.value = data.name;
-    user_id = data.id;
+    user_id = data[0]?.user_id;
+
     let myModal = new bootstrap.Modal(document.getElementById('requestedRoomModal'), {
         keyboard: false
     })

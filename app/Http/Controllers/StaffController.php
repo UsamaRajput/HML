@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class StaffController extends Controller
 {
@@ -12,7 +13,11 @@ class StaffController extends Controller
      */
     public function index()
     {
-        //
+        $res = Staff::all();
+
+        return Inertia::render('Admin/Staff/Index', [
+            'data' => $res
+        ]);
     }
 
     /**

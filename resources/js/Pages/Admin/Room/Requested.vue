@@ -19,6 +19,7 @@ const props = defineProps({
 function requestedRoom(id) {
     axios.post(route('requested.requestedRoom'),{id})
     .then(function(res){
+        // console.log('res.data.data',res.data.data);
         eventBus.emit('REQUESTED_ROOM', res.data.data);
     }).catch(function(err){
         console.log(err);
@@ -51,7 +52,7 @@ function requestedRoom(id) {
                                     <td>{{ req.user_info?.image ?? '' }}</td>
                                     <td>{{ req.user_info?.phone ?? '' }} </td>
                                     <td>
-                                        {{ req.requested_room }}
+
                                         <button class="btn btn-sm btn-info " @click="requestedRoom(req.id)">
                                             <i class="fa fa-eye"></i>
                                         </button>
