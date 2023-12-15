@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Staff extends Model
+class WebContent extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'image',
-        'phone',
-        'role'
+        'banner',
+        'title',
+        'superintendent_name',
+        'superintendent_desc',
+        'content',
     ];
 }

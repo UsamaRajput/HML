@@ -65,6 +65,7 @@ function roomActiveInactive(id) {
                                 <tr>
                                     <th>#</th>
                                     <th>Images</th>
+                                    <th>Amount</th>
                                     <th>Capacity</th>
                                     <th>Current</th>
                                     <th>Active</th>
@@ -77,12 +78,16 @@ function roomActiveInactive(id) {
                                     <td>
                                         <img v-for="(img, im) in room.images_room" class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :key="im" :src="base_url+'room_images/'+img.image" alt="">
                                     </td>
+                                    <td>{{ room.amount }}</td>
                                     <td>{{ room.capacity }}</td>
                                     <td>{{ room.current }}</td>
                                     <td>
                                         <VueToggles @click="roomActiveInactive(room.id)" :value="room.is_active" />
                                     </td>
                                     <td>
+                                        <button class="btn btn-sm btn-warning mr-1" @click="editRoom(room)">
+                                            <i class="fa fa-star"></i>
+                                        </button>
                                         <button class="btn btn-sm btn-info " @click="editRoom(room)">
                                             <i class="fa fa-pencil-alt"></i>
                                         </button>

@@ -17,8 +17,11 @@ class RequestedRoomController extends Controller
      */
     public function index()
     {
-        $res = User::with('userInfo')->get();
-        //    dd($res);
+        $res = User::with('userInfo')->rightJoin('requested_rooms','requested_rooms.user_id','users.id')
+        ->select('users.name','users.id')
+         ->groupBy('users.name','users.id')
+        ->get();
+
         return Inertia::render('Admin/Room/Requested', [
             'data' => $res
         ]);
@@ -26,7 +29,12 @@ class RequestedRoomController extends Controller
 
     public function requestedRoom(Request $request)
     {
-        $room =  User::with('requestedRoom')->where('id', $request->id)->first();
+        // $room =  User::with('requestedRoom')->where('id', $request->id)->first();
+
+        $room = Room::leftJoin('requested_rooms','rooms.id','requested_rooms.room_id')
+        ->select('requested_rooms.user_id','rooms.id as room_id','rooms.room_number')
+        ->where('requested_rooms.user_id', $request->id)
+        ->get();
 
         if ($room) {
             return response()->json(['data' => $room, 'message' => 'ok']);
