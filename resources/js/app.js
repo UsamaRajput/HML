@@ -1,12 +1,15 @@
 import './bootstrap';
 import '../sass/app.scss'
 import '../css/app.css';
+
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import VueSweetalert2 from 'vue-sweetalert2';
 import mitt from 'mitt';
+import "../css/user/user.css"
+import "../css/user/style.css"
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 import * as notify from "@/notify";
