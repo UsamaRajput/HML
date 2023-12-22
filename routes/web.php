@@ -6,6 +6,7 @@ use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ComplainController;
 use App\Http\Controllers\GeneralServicesController;
+use App\Http\Controllers\GeneralServiceUserController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\RequestedRoomController;
@@ -55,7 +56,9 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         // User Room
         Route::get('/rooms', [RoomController::class, 'userRooms'])->name('user.rooms');
         Route::post('/requestRoom', [RequestedRoomController::class, 'requestRoom'])->name('user.requestRoom');
-
+        //service:
+        Route::get('/add_service',[GeneralServiceUserController::class,'index'])->name('user.services');
+        Route::post('/added',[GeneralServiceUserController::class,'store'])->name('user.added');
         // User complain
         Route::get('/complain/{filter?}', [ComplainController::class, 'userComplain'])->defaults('filter', 'all')->name('user.complain');
 

@@ -76,10 +76,7 @@ function roomActiveInactive(id) {
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>Spentable time</th>
-                                    <th>Usage</th>
                                     <th>Active</th>
-                                    <th>Current usage</th>
                                     <th>Requests</th>
                                     <th>Action</th>
                                 </tr>
@@ -89,8 +86,6 @@ function roomActiveInactive(id) {
 
                                     <th>{{ ind+1 }}</th>
                                     <th>{{ item.name }}</th>
-                                    <td>{{ item.spentable_time }}</td>
-                                    <td>{{ item.usage }}</td>
                                     <td>
                                         <VueToggles @click="itemActiveInactive(item.id)" :value="item.is_active" />
                                     </td>

@@ -14,14 +14,6 @@
                             <input id="name" class="form-control form-control-sm" v-model="form.name"
                                 type="text" placeholder="Service number">
 
-                            <label for="spentable_time" class="form-label">spentable time</label>
-                            <input id="spentable_time" class="form-control form-control-sm" v-model="form.spentable_time" type="text"
-                                placeholder="Service spentable time">
-
-                            <label for="usage" class="form-label">usage</label>
-                            <input id="usage" class="form-control form-control-sm" v-model="form.usage" type="text"
-                                placeholder="Service usage">
-
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -41,8 +33,6 @@ import { reactive } from 'vue';
 import { multiAlert, simpleAlert } from "@/notify";
 let form = reactive({
     name: '',
-    spentable_time: '',
-    usage: '',
     is_active: 1
 })
 
