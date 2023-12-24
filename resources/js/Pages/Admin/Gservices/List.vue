@@ -4,6 +4,7 @@ import { Link } from '@inertiajs/vue3'
 import { VueToggles } from "vue-toggles";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import AddServiceModal from "@/Pages/Admin/Gservices/Modal/AddServiceModal.vue";
+import EditServiceModal from "@/Pages/Admin/Gservices/Modal/EditServiceModal.vue";
 import ShowUserModal from "@/Pages/Admin/Gservices/Modal/ShowUserModal.vue";
 
 import axios from 'axios';
@@ -22,13 +23,9 @@ const props = defineProps({
     }
 });
 
-function editRoom(data) {
-    eventBus.emit('EDIT_ROOM', data);
+function edititem(data) {
+    eventBus.emit('EDIT_GSERVICE', data);
 }
-
-eventBus.on('SERVICE_ADDED', function (data) {
-    props.data.push(data)
-});
 
 function showUser(id){
 
@@ -40,20 +37,7 @@ function showUser(id){
         })
 }
 
-function roomActiveInactive(id) {
 
-    axios.get(route('room.activeInactive', id))
-        .then((res) => {
-            console.log(res);
-            notify.simpleAlert(res.data.message);
-        }).catch((err) => {
-            if (err.response.status == 404) {
-                notify.okAlert('error', "No Room Found");
-            } else {
-                notify.okAlert('error', 'server error');
-            }
-        })
-}
 
 </script>
 
@@ -113,6 +97,7 @@ function roomActiveInactive(id) {
         </div>
     </AdminLayout>
     <AddServiceModal />
+    <EditServiceModal />
     <ShowUserModal />
 </template>
 

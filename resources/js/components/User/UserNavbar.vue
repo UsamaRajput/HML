@@ -17,13 +17,16 @@ import { Link  } from '@inertiajs/vue3';
             <Link :href="route('user.complain')" class="nav-link ">
                 Complain
             </Link>
+            <Link :href="route('user.service')" class="nav-link ">
+                Service
+            </Link>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="https://placehold.co/400" alt="" style="width: 40px; height: 40px;">
                     <span class="d-none d-lg-inline-flex">{{ $page.props.auth.user.name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <Link :href="route('profile.updateProfile')" class="dropdown-item">My Profile</Link>
+                    <Link :href="route('profile.edit')" class="dropdown-item">My Profile</Link>
                     <Link class="dropdown-item" :href="route('logout')" method="post" as="button">Log Out</Link>
                 </div>
             </div>

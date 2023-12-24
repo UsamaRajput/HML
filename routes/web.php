@@ -50,15 +50,16 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () {
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.edit');
+        Route::get('/', [ProfileController::class, 'index'])->name('profile.edit');
         Route::post('/changeImage', [UserInfoController::class, 'changeImage'])->name('profile.changeImage');
         Route::post('/profile', [UserInfoController::class, 'updateProfile'])->name('profile.updateProfile');
         // User Room
         Route::get('/rooms', [RoomController::class, 'userRooms'])->name('user.rooms');
         Route::post('/requestRoom', [RequestedRoomController::class, 'requestRoom'])->name('user.requestRoom');
         //service:
-        Route::get('/add_service',[GeneralServiceUserController::class,'index'])->name('user.services');
-        Route::post('/added',[GeneralServiceUserController::class,'store'])->name('user.added');
+        Route::get('/service',[GeneralServiceUserController::class,'index'])->name('user.service');
+        Route::get('/service_history/{id}',[GeneralServiceUserController::class,'service_history'])->name('service.history');
+        Route::post('/service/request',[GeneralServiceUserController::class,'store'])->name('service.request');
         // User complain
         Route::get('/complain/{filter?}', [ComplainController::class, 'userComplain'])->defaults('filter', 'all')->name('user.complain');
 
@@ -99,6 +100,8 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         Route::resource('user', UserInfoController::class);
 
         // Room Services Controller
+        Route::post('services/approveAction',[GeneralServicesController::class,'approveAction'])->name('services.approveAction');
+        Route::post('services/updated',[GeneralServicesController::class,'update'])->name('services.updated');
         Route::resource('services', GeneralServicesController::class);
 
         // Staff Controller

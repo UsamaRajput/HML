@@ -18,9 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('general_service_id');
             $table->foreign('general_service_id')->references('id')->on('general_services')->onDelete('cascade');
             $table->time('entry')->nullable();
-            $table->time('exit')->nullable();
-            $table->boolean('rejected')->nullable();
-
+            $table->date('date')->nullable();
+            $table->smallInteger('status')->default(0);
         });
     }
 
