@@ -3,7 +3,7 @@ import { Link  } from '@inertiajs/vue3';
 
 </script>
 <template>
-    <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0 ">
+    <!-- <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0 ">
         <a href="index.html" class="navbar-brand d-flex  me-4">
             <h2 class="text-primary mb-0">HMS</h2>
         </a>
@@ -31,5 +31,17 @@ import { Link  } from '@inertiajs/vue3';
                 </div>
             </div>
         </div>
-    </nav>
+    </nav> -->
+
+
+
+
+
+
+
+
+
+
+
+    
 </template>
