@@ -61,4 +61,8 @@ class User extends Authenticatable
             ->orderByPivot('allocation_date', 'DESC');
     }
 
+    public function generalServices(){
+        return $this->belongsToMany(GeneralServices::class,'user_service','user_id','general_service_id');
+    }
+
 }

@@ -34,9 +34,20 @@
                 <Link :href="route('user.index')" class="nav-item nav-link">
                     <i class="fa fa-tachometer-alt me-2"></i>User
                 </Link>
-                <Link :href="route('services.index')" class="nav-item nav-link">
-                    <i class="fa fa-tachometer-alt me-2"></i>Services
-                </Link>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
+                            class="fa fa-laptop me-2"></i>Service</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <Link :href="route('services.index')" class="dropdown-item">
+                             List
+                        </Link>
+                        <Link :href="route('services.uhistory')" class="dropdown-item">
+                         History
+                        </Link>
+
+                    </div>
+                </div>
                 <Link :href="route('webcontent.index')" class="nav-item nav-link">
                     <i class="fa fa-tachometer-alt me-2"></i>Web Content
                 </Link>

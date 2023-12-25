@@ -1,6 +1,6 @@
 <template>
     <!-- Modal -->
-    <div class="modal fade" id="SHOW_USER_GENERAL" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="SHOW_USER_GENERAL_HISTORY" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -20,19 +20,9 @@
                             <tbody>
                                  <tr v-for="(item, index) in users" :key="index">
                                     <td>
-                                        {{ item.name }}</td>
+                                        {{ item.name }}
+                                    </td>
                                     <td>
-                                        <div class="d-flex justify-content-center flex-column">
-                                            <div>
-                                                <button class="btn btn-sm btn-info " @click="approveService(item.id,'approve')">
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-danger " @click="approveService(item.id,'reject')">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </div>
-
-                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -60,8 +50,8 @@ import { reactive,ref } from 'vue';
 let id = ref(null)
 let users = ref({});
 
-eventBus.on('SHOW_USER_GENERAL', function (data) {
-    let myModal = new bootstrap.Modal(document.getElementById('SHOW_USER_GENERAL'), {
+eventBus.on('SHOW_USER_GENERAL_HISTORY', function (data) {
+    let myModal = new bootstrap.Modal(document.getElementById('SHOW_USER_GENERAL_HISTORY'), {
         keyboard: false
     });
 
@@ -73,7 +63,7 @@ eventBus.on('SHOW_USER_GENERAL', function (data) {
 
 function approveService(uid,status){
 
-    axios.post(route('services.approveAction'),{service_id:id.value,user_id:uid,status})
+    axios.post(route('services.show_hostory'),{service_id:id.value,user_id:uid,status})
         .then((res) => {
             notify.simpleAlert(status);
         }).catch((err) => {
@@ -81,8 +71,5 @@ function approveService(uid,status){
         })
 }
 
-function rejectUser(){
-    console.log('res');
-}
 
 </script>

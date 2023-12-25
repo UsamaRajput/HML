@@ -6,24 +6,14 @@ import "../../css/user/user.css";
 import "../../css/user/style.css";
 import "../../css/user/slicknav.css";
 import "../../css/user/flaticon.css";
-import { Icon } from '@iconify/vue';
+//import { Icon } from '@iconify/vue';
 
 
 defineProps({
     canLogin: {
         type: Boolean,
     },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
+
 });
 
 
@@ -41,7 +31,7 @@ defineProps({
     <header class="header-section">
         <div class="top-nav">
             <div class="container">
-                
+
                 <div class="row">
                     <div class="col-lg-6">
                         <ul class="tn-left">
@@ -58,7 +48,7 @@ defineProps({
                                 <a href="#"><i class="fa fa-instagram"></i></a>
                             </div>
                             <a href="#" class="bk-btn">Booking Now</a>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -110,7 +100,7 @@ defineProps({
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
-                
+
                     <div class="hero-text">
                         <h1>Sona A Luxury Hotel</h1>
                         <p>Here are the best hotel booking sites, including recommendations for international
@@ -397,7 +387,7 @@ defineProps({
 
 
 
- 
+
 
     <!-- Blog Section Begin -->
     <section class="blog-section spad">
@@ -474,7 +464,7 @@ defineProps({
                                 </a>
                             </div>
                             <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
-                           
+
                         </div>
                     </div>
                     <div class="col-lg-3 offset-lg-1">
@@ -538,7 +528,7 @@ defineProps({
 
 </template>
 
-<!-- 
+<!--
 
 
 <style>
@@ -546,7 +536,7 @@ defineProps({
     margin-right: -15px;
     overflow: hidden;
     height: 600px;
-    
+
 }
 .set-bg{
     background-repeat: no-repeat;
@@ -556,63 +546,63 @@ defineProps({
 <style>
 
 .hero-section{
- 
+
     background-image: url("../../images/hero-3.jpg");
-   
+
 }.set-bg.hero2{
- 
+
     background-image: url("../../images/hero-2.jpg");
-   
+
 }
 .set-bg.hero3{
- 
+
     background-image: url("../../images/hero-3.jpg");
-   
-   
+
+
 }
 .set-bg.room1{
- 
+
     background-image: url("../../images/room-b1.jpg");
-   
+
 }
 .set-bg.room2{
- 
+
     background-image: url("../../images/room-b2.jpg");
-   
+
 }.set-bg.room3{
- 
+
     background-image: url("../../images/room-b3.jpg");
-   
+
 }
 .set-bg.room4{
- 
+
     background-image: url("../../images/room-b4.jpg");
-   
+
 }
 .set-bg.blog1{
- 
+
     background-image: url("../../images/blog-1.jpg");
-   
+
 }
 .set-bg.blog2{
- 
+
     background-image: url("../../images/blog-2.jpg");
-   
+
 }
 .set-bg.blog3{
- 
+
     background-image: url("../../images/blog-3.jpg");
-   
+
 }
 .set-bg.blog4{
- 
+
     background-image: url("../../images/blog-wide.jpg");
-   
+
 }
 .set-bg.blog5{
- 
+
     background-image: url("../../images/blog-10.jpg");
-   
+
 }
 
 </style>

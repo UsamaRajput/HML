@@ -31,7 +31,7 @@
                                             <i class="fas fa-arrow-right"></i>
                                         </button>
                                         <!-- {{ item.users_count }} -->
-                                        <button v-if="item.users_count > 0" class="btn btn-sm btn-info ">
+                                        <button v-if="item.users_count > 0" class="btn btn-sm btn-info"  @click="cancelService(item)">
                                             cancel
                                         </button>
                                     </td>
@@ -53,7 +53,8 @@
   </template>
 
   <script setup>
-  import { reactive } from 'vue';
+import { reactive } from 'vue';
+import { useForm } from '@inertiajs/vue3';
 import { okAlert, simpleAlert } from '@/notify';
   import RequestService from '@/Pages/User/Services/Modal/RequestService.vue';
 import HistoryService from "@/Pages/User/Services/Modal/HistoryService.vue";
@@ -72,7 +73,15 @@ import HistoryService from "@/Pages/User/Services/Modal/HistoryService.vue";
     }
 });
 
+let form = useForm({
+    id : null,
+});
 
+function cancelService(item){
+    form.id = item.id;
+
+    form.post(route('service.cancel'));
+}
 function requestService(item){
     eventBus.emit('REQUEST_SERVICE',item);
 }

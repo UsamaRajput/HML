@@ -58,6 +58,7 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         Route::post('/requestRoom', [RequestedRoomController::class, 'requestRoom'])->name('user.requestRoom');
         //service:
         Route::get('/service',[GeneralServiceUserController::class,'index'])->name('user.service');
+        Route::post('/service/cancel',[GeneralServiceUserController::class,'service_cancel'])->name('service.cancel');
         Route::get('/service_history/{id}',[GeneralServiceUserController::class,'service_history'])->name('service.history');
         Route::post('/service/request',[GeneralServiceUserController::class,'store'])->name('service.request');
         // User complain
@@ -100,8 +101,10 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         Route::resource('user', UserInfoController::class);
 
         // Room Services Controller
-        Route::post('services/approveAction',[GeneralServicesController::class,'approveAction'])->name('services.approveAction');
-        Route::post('services/updated',[GeneralServicesController::class,'update'])->name('services.updated');
+        Route::get('service/history',[GeneralServicesController::class,'history'])->name('services.uhistory');
+        Route::post('service/show/history',[GeneralServicesController::class,'history'])->name('services.show_hostory');
+        Route::post('service/approveAction',[GeneralServicesController::class,'approveAction'])->name('services.approveAction');
+        Route::post('service/updated',[GeneralServicesController::class,'update'])->name('services.updated');
         Route::resource('services', GeneralServicesController::class);
 
         // Staff Controller

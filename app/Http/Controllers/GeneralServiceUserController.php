@@ -36,6 +36,7 @@ class GeneralServiceUserController extends Controller
     }
 
     public function service_history($id){
+        
         $services = DB::table('user_service')->where('user_id',auth()->user()->id)->where('general_service_id',$id)->get();
          if ($services) {
              return response()->json(['data' => $services, 'message' => 'Service request history'], 200);
@@ -44,5 +45,14 @@ class GeneralServiceUserController extends Controller
          }
     }
 
-
+    public function service_cancel(Request $req){
+        $id = $req->id;
+        $services = DB::table('user_service')->where('user_id',auth()->user()->id)->where('general_service_id',$id)
+        ->where('status',0)->latest('id')->delete();
+        if ($services) {
+            return redirect()->back()->with('message','Service request canceled');
+        } else {
+            return redirect()->back()->with('message','failed');
+        }
+    }
 }

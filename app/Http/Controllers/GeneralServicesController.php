@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GeneralServices;
 use App\Models\GeneralServiceUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,9 @@ class GeneralServicesController extends Controller
      */
     public function index()
     {
-        $res = GeneralServices::withCount('users')->get();
+        $res = GeneralServices::withCount(['users'=>function($qry){
+           return  $qry->where('user_service.status',0);
+        }])->get();
         return Inertia::render('Admin/Gservices/List', [
             'data' => $res
         ]);
@@ -48,7 +51,12 @@ class GeneralServicesController extends Controller
      */
     public function show(Request $request)
     {
-        $res = GeneralServices::with('users')->where('id',$request->service)->first();
+        // dd('hi');
+        $res = DB::table('user_service')->leftJoin('users','users.id','user_service.user_id')
+        ->selectRaw("users.id as id, users.name as name")
+        ->where('user_service.status',0)
+        ->where('general_service_id',$request->service)
+        ->get();
         if ($res) {
             return response()->json(['data' => $res, 'message' => 'Service record'], 200);
         } else {
@@ -82,7 +90,7 @@ class GeneralServicesController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    { 
+    {
         GeneralServices::where('id',$id)->delete();
         return redirect()->back();
     }
@@ -90,11 +98,20 @@ class GeneralServicesController extends Controller
     public function approveAction(Request $request) {
 
         $status = $request->status == 'approve' ? 1:2;
+
         $res = DB::table('user_service')->where(['user_id'=>$request->user_id,'general_service_id'=>$request->service_id])->update(['status'=>$status]);
         if ($res) {
             return response()->json(['data' => $res, 'message' => 'Service '.$request->status], 200);
         } else {
             return response()->json(['data' => [], 'message' => 'failed'], 500);
         }
+    }
+
+    public function history(Request $request){
+
+        $res = User::withcount('generalServices')->get();
+        return Inertia::render('Admin/Gservices/History', [
+            'data' => $res
+        ]);
     }
 }

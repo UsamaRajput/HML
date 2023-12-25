@@ -23,15 +23,11 @@ const props = defineProps({
     }
 });
 
-function edititem(data) {
-    eventBus.emit('EDIT_GSERVICE', data);
-}
+ function showHistory(id){
 
-function showUser(id){
-
-    axios.get(route('services.show', id))
+    axios.post(route('services.show_hostory', id))
         .then((res) => {
-            eventBus.emit('SHOW_USER_GENERAL',{id,users:res.data.data});
+            eventBus.emit('SHOW_USER_GENERAL_HISTORY',{id,users:res.data.data});
         }).catch((err) => {
             notify.okAlert('error', 'server error');
         })
@@ -60,33 +56,19 @@ function showUser(id){
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>Active</th>
-                                    <th>Requests</th>
-                                    <th>Action</th>
+                                    <th>count</th>
+                                    <th>History</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(item, ind ) in props.data" :key="ind">
-
                                     <th>{{ ind+1 }}</th>
                                     <th>{{ item.name }}</th>
+                                    <td>{{ item.general_services_count }}</td>
                                     <td>
-                                        <VueToggles @click="itemActiveInactive(item.id)" :value="item.is_active" />
-                                    </td>
-                                    <td>{{ item.users_count }}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info " @click="showUser(item.id)">
+                                        <button class="btn btn-sm btn-info " @click="showHistory(item.id)">
                                             <i class="fa fa-eye"></i>
                                         </button>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info " @click="edititem(item)">
-                                            <i class="fa fa-pencil-alt"></i>
-                                        </button>
-                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('services.destroy', item.id)"
-                                            method="DELETE" as="button" type="button">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </Link>
                                     </td>
                                 </tr>
                             </tbody>
