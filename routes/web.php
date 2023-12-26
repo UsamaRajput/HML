@@ -110,7 +110,8 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         // Webcontent Management
         Route::get('WebContent', [WebContentController::class, 'index'])->name('webcontent.index');
         Route::post('WebContent/update', [WebContentController::class, 'update'])->name('webcontent.update');
-    });
+    });    
 });
+Route::get('/moreDetails', [RoomController::class,'roomDetail'])->name('user.room_details');
 
 require __DIR__ . '/auth.php';

@@ -4,8 +4,8 @@
 import { Head, Link } from '@inertiajs/vue3';
 import "../../css/user/user.css";
 import "../../css/user/style.css";
-import "../../css/user/slicknav.css";
-import "../../css/user/flaticon.css";
+// import "../../css/user/slicknav.css";
+// import "../../css/user/flaticon.css";
 import { Icon } from '@iconify/vue';
 
 
@@ -80,22 +80,12 @@ defineProps({
                                 <ul>
                                     <li class="active"><a href="./index.html">Home</a></li>
                                     <li><a href="./rooms.html">Rooms</a></li>
-                                    <li><a href="./about-us.html">About Us</a></li>
-                                    <li><a href="./pages.html">Pages</a>
-                                        <ul class="dropdown">
-                                            <li><a href="./room-details.html">Room Details</a></li>
-                                            <li><a href="./blog-details.html">Blog Details</a></li>
-                                            <li><a href="#">Family Room</a></li>
-                                            <li><a href="#">Premium Room</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="./blog.html">News</a></li>
-                                    <li><a href="./contact.html">Contact</a></li>
+                                    <li><a href="#about-us">About Us</a></li>
+                                
+                                  
                                 </ul>
                             </nav>
-                            <div class="nav-right search-switch">
-                                <Icon icon="bx:search-alt" style="font-size:24px; color: #DFA974;"  />
-                            </div>
+                           
                         </div>
                     </div>
                 </div>
@@ -120,33 +110,24 @@ defineProps({
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
-                        <h3>Booking Your Hotel</h3>
+                        <h3>Contact Us  </h3>
                         <form action="#">
                             <div class="check-date">
-                                <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
-                                <i class="icon_calendar"></i>
+                                <label for="date-in">Name:</label>
+                                <input type="text">
+                           
                             </div>
                             <div class="check-date">
-                                <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
-                                <i class="icon_calendar"></i>
+                                <label for="date-out">Email:</label>
+                                <input type="email" >
+                    
+                            </div>   <div class="check-date">
+                                <label for="date-out">Message:</label>
+                                <input type="text" >
+                    
                             </div>
-                            <div class="select-option">
-                                <label for="guest">Guests:</label>
-                                <select id="guest">
-                                    <option value="">2 Adults</option>
-                                    <option value="">3 Adults</option>
-                                </select>
-                            </div>
-                            <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select id="room">
-                                    <option value="">1 Room</option>
-                                    <option value="">2 Room</option>
-                                </select>
-                            </div>
-                            <button type="submit">Check Availability</button>
+                           
+                            <button type="submit">Send</button>
                         </form>
                     </div>
                 </div>
@@ -268,7 +249,7 @@ defineProps({
 
 
 <!-- Home Room Section Begin -->
-<section class="hp-room-section">
+<section class="hp-room-section" id="about-us">
         <div class="container-fluid">
             <div class="hp-room-items">
                 <div class="row">
@@ -296,7 +277,7 @@ defineProps({
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="#" class="primary-btn">More Details</a>
+                                <Link :href="route('user.room_details')" class="primary-btn">More Details</Link>
                             </div>
                         </div>
                     </div>
