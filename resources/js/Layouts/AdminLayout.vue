@@ -8,17 +8,18 @@ import FooterBottom from '@/components/Admin/Footer.vue';
 
 </script>
 <template>
-    <div class="container-xxl position-relative bg-white d-flex p-0">
+    <div class="container-fluid position-relative bg-white d-flex p-0" :style="{ backgroundColor: '#fbf6f0' }">
         <!-- Sidebar Start -->
         <Sidebar />
         <!-- Sidebar End -->
         <!-- Content Start -->
-        <div class="content">
+    <div class="container" :style="{ backgroundColor: '#fbf6f0' }">
+        <div class="content" :style="{ backgroundColor: '#fbf6f0' }">
             <!-- Navbar Start -->
             <Navbar />
             <!-- Navbar End -->
             <!-- Form Start -->
-            <div class="container-fluid pt-4 px-4">
+            <div class="container-fluid pt-4 px-4" :style="{ backgroundColor: '#fbf6f0' }">
                 <slot />
             </div>
             <!-- Form End -->
@@ -26,6 +27,7 @@ import FooterBottom from '@/components/Admin/Footer.vue';
             <FooterBottom />
             <!-- Footer End -->
         </div>
+    </div>
         <!-- Content End -->
 
     </div>

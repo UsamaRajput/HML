@@ -1,7 +1,7 @@
 /********** Template CSS **********/
 :root {
     --primary: #009CFF;
-    --light: #F3F6F9;
+    --light: #fbf6f0;
     --dark: #191C24;
 }
 
@@ -80,9 +80,9 @@
 }
 
 .content {
-    margin-left: 250px;
+    /* margin-left: 250px; */
     min-height: 100vh;
-    background: #FFFFFF;
+    background: #f3f6f9;
     transition: 0.5s;
 }
 
@@ -96,7 +96,7 @@
     }
 
     .content {
-        width: calc(100% - 250px);
+        width: 100%;
     }
 
     .content.open {
@@ -275,3 +275,6 @@
     background: var(--dark);
     border-color: var(--primary);
 }
+
+
+
