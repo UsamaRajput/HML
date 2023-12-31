@@ -5,7 +5,7 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 <template>
     <AdminLayout>
-        <div class="row g-4">
+        <div class="row g-4" :style="{ backgroundColor: '#fbf6f0' }">
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-light rounded h-100 p-4">
                     <h6 class="mb-4">New added users</h6>
