@@ -25,7 +25,7 @@ const props = defineProps({
 
  function showHistory(id){
 
-    axios.post(route('services.show_hostory', id))
+    axios.post(route('services.show_hostory'),{user_id:id})
         .then((res) => {
             eventBus.emit('SHOW_USER_GENERAL_HISTORY',{id,users:res.data.data});
         }).catch((err) => {

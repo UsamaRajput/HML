@@ -96,9 +96,7 @@ class GeneralServicesController extends Controller
     }
 
     public function approveAction(Request $request) {
-
         $status = $request->status == 'approve' ? 1:2;
-
         $res = DB::table('user_service')->where(['user_id'=>$request->user_id,'general_service_id'=>$request->service_id])->update(['status'=>$status]);
         if ($res) {
             return response()->json(['data' => $res, 'message' => 'Service '.$request->status], 200);
@@ -108,10 +106,13 @@ class GeneralServicesController extends Controller
     }
 
     public function history(Request $request){
-
         $res = User::withcount('generalServices')->get();
         return Inertia::render('Admin/Gservices/History', [
             'data' => $res
         ]);
     }
+
+    // public function show_hostory() {
+
+    // }
 }

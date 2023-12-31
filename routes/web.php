@@ -102,7 +102,7 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
 
         // Room Services Controller
         Route::get('service/history',[GeneralServicesController::class,'history'])->name('services.uhistory');
-        Route::post('service/show/history',[GeneralServicesController::class,'history'])->name('services.show_hostory');
+        Route::post('service/show/history',[GeneralServicesController::class,'show_hostory'])->name('services.show_hostory');
         Route::post('service/approveAction',[GeneralServicesController::class,'approveAction'])->name('services.approveAction');
         Route::post('service/updated',[GeneralServicesController::class,'update'])->name('services.updated');
         Route::resource('services', GeneralServicesController::class);
