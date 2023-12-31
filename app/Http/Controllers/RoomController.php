@@ -174,4 +174,9 @@ class RoomController extends Controller
         ]);
 
      }
+
+     public function roomDetail()
+     {
+        return Inertia::render('User/Room/RoomDetails');
+     }
 }
