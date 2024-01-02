@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar pe-4 pb-3">
-        <nav class="navbar bg-light navbar-light">
+        <nav class="navbar  navbar-light">
             <div class="d-flex align-items-center ms-4 mb-4">
                 <div class="position-relative ml-3 mt-3">
                     <h1>HMS</h1>

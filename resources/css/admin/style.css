@@ -1,6 +1,6 @@
 /********** Template CSS **********/
 :root {
-    --primary: #009CFF;
+    --primary: hsl(203, 100%, 50%);
     --light: #fbf6f0;
     --dark: #191C24;
 }
@@ -80,23 +80,30 @@
 }
 
 .content {
-    /* margin-left: 250px; */
+    margin-left: 88px;
     min-height: 100vh;
     background: #f3f6f9;
     transition: 0.5s;
+}
+.main {
+    width: 100%;
 }
 
 @media (min-width: 992px) {
     .sidebar {
         margin-left: 0;
     }
-
+    .main .container {
+        width: 75%;
+    }
     .sidebar.open {
         margin-left: -250px;
     }
 
     .content {
         width: 100%;
+        margin-left: 88px;
+
     }
 
     .content.open {
