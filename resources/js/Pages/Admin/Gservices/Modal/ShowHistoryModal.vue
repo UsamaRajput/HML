@@ -5,7 +5,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Edit rating</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Service History</h5>
                 </div>
                 <div class="modal-body">
                     <div class="bg-light rounded h-100 ">
@@ -18,11 +18,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                 <tr v-for="(item, index) in users" :key="index">
+                                 <tr v-for="(item, index) in services" :key="index">
+
                                     <td>
-                                        {{ item.name }}
+                                        {{index}}
                                     </td>
                                     <td>
+                                        {{ item.name }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -40,36 +42,23 @@
 
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
-import { reactive,ref } from 'vue';
+import { ref } from 'vue';
 
-// let users = reactive({
+// let services = reactive({
 //     id:null,
 //     name:null
 // });
 let id = ref(null)
-let users = ref({});
+let services = ref({});
 
 eventBus.on('SHOW_USER_GENERAL_HISTORY', function (data) {
+
     let myModal = new bootstrap.Modal(document.getElementById('SHOW_USER_GENERAL_HISTORY'), {
         keyboard: false
     });
 
-    console.log('data.users',data);
     myModal.show();
-    id.value = data.id
-    users.value = data.users;
+    services.value = data.data;
 });
-
-function approveService(uid,status){
-
-    axios.post(route('services.show_hostory'),{service_id:id.value,user_id:uid,status})
-        .then((res) => {
-            notify.simpleAlert(status);
-        }).catch((err) => {
-            notify.okAlert('error', 'server error');
-        })
-}
-
 
 </script>

@@ -112,7 +112,14 @@ class GeneralServicesController extends Controller
         ]);
     }
 
-    // public function show_hostory() {
+    public function show_hostory(Request $request) {
+        $res = GeneralServices::leftjoin('user_service','user_service.general_service_id','general_services.id')
 
-    // }
+        ->where('user_service.user_id',$request->user_id)->get();
+        if ($res) {
+            return response()->json(['data' => $res, 'message' => 'Service Hitory '], 200);
+        } else {
+            return response()->json(['data' => [], 'message' => 'failed'], 500);
+        }
+    }
 }

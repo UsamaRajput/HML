@@ -1,11 +1,7 @@
 <script setup>
 import { onMounted } from 'vue';
-import { Link } from '@inertiajs/vue3'
-import { VueToggles } from "vue-toggles";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import AddServiceModal from "@/Pages/Admin/Gservices/Modal/AddServiceModal.vue";
-import EditServiceModal from "@/Pages/Admin/Gservices/Modal/EditServiceModal.vue";
-import ShowUserModal from "@/Pages/Admin/Gservices/Modal/ShowUserModal.vue";
+import ShowHistoryModal from "@/Pages/Admin/Gservices/Modal/ShowHistoryModal.vue";
 
 import axios from 'axios';
 
@@ -27,7 +23,7 @@ const props = defineProps({
 
     axios.post(route('services.show_hostory'),{user_id:id})
         .then((res) => {
-            eventBus.emit('SHOW_USER_GENERAL_HISTORY',{id,users:res.data.data});
+            eventBus.emit('SHOW_USER_GENERAL_HISTORY',{data:res.data.data});
         }).catch((err) => {
             notify.okAlert('error', 'server error');
         })
@@ -78,9 +74,7 @@ const props = defineProps({
             </div>
         </div>
     </AdminLayout>
-    <AddServiceModal />
-    <EditServiceModal />
-    <ShowUserModal />
+    <ShowHistoryModal />
 </template>
 
 
