@@ -14,6 +14,11 @@
                         <input id="name" class="form-control form-control-sm" v-model="form.name" type="text"
                             placeholder="Service name">
 
+
+                            <label for="description" class="form-label">Description</label>
+                            <input id="description" class="form-control form-control-sm" v-model="form.description"
+                                type="text" placeholder="Service description">
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -32,7 +37,7 @@ import { useForm } from '@inertiajs/vue3';
 import { reactive, ref } from 'vue';
 
 let id = ref(null)
-let form = ref({name:null,id:null});
+let form = ref({name:null,description:null,id:null});
 
 eventBus.on('EDIT_GSERVICE', function (data) {
     let myModal = new bootstrap.Modal(document.getElementById('EDIT_GSERVICE'), {
@@ -51,5 +56,5 @@ function editService() {
             notify.okAlert('error', 'server error');
         })
 }
- 
+
 </script>

@@ -19,7 +19,7 @@ class RatingController extends Controller
         ]);
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -100,6 +100,16 @@ class RatingController extends Controller
         if($res){
             $res->update(['is_active' => (!$res->is_active)]);
             return response()->json(['data' => [], 'message' => 'updated'], 200);
+        }else{
+            return response()->json(['data' => [], 'message' => 'Not found'], 404);
+        }
+    }
+
+    public function room_rating(Request $request){
+        $res = Rating::leftjoin('room_ratings','room_ratings.rating_id','ratings.id')
+        ->where('is_active',1)->get();
+        if($res){
+            return response()->json(['data' => $res, 'message' => 'updated'], 200);
         }else{
             return response()->json(['data' => [], 'message' => 'Not found'], 404);
         }

@@ -60,6 +60,7 @@ function showUser(id){
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
+                                    <th>Description</th>
                                     <th>Active</th>
                                     <th>Requests</th>
                                     <th>Action</th>
@@ -70,6 +71,7 @@ function showUser(id){
 
                                     <th>{{ ind+1 }}</th>
                                     <th>{{ item.name }}</th>
+                                    <th>{{ item.description }}</th>
                                     <td>
                                         <VueToggles @click="itemActiveInactive(item.id)" :value="item.is_active" />
                                     </td>

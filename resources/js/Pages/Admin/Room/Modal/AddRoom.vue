@@ -17,6 +17,10 @@
 
                             <input id="capacity" class="form-control form-control-sm" v-model="form.capacity" type="text"
                                 placeholder="Room Capacity">
+                            <label for="capacity" class="form-label">price</label>
+
+                            <input id="price" class="form-control form-control-sm" v-model="form.price" type="number" step="0.01"
+                                placeholder="Room price">
                             <label for="image" class="form-label">Image</label>
                             <input id="image" type="file" class="form-control form-control-sm"
                                 @input="form.images = $event.target.files" multiple accept="image/*">
@@ -40,6 +44,7 @@ import { reactive } from 'vue';
 import { multiAlert, simpleAlert } from "@/notify";
 let form = reactive({
     room_number: '',
+    price: '',
     capacity: '',
     images: []
 })

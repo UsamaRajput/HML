@@ -51,6 +51,9 @@
                 <Link :href="route('webcontent.index')" class="nav-item nav-link">
                     <i class="fa fa-tachometer-alt me-2"></i>Web Content
                 </Link>
+                <Link :href="route('staff.index')" class="nav-item nav-link">
+                    <i class="fa fa-tachometer-alt me-2"></i>Staff
+                </Link>
                 <!-- <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                             class="fa fa-laptop me-2"></i>Ratings</a>

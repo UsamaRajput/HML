@@ -21,9 +21,11 @@ const props = defineProps({
     }
 });
 
-function editRoom(data) {
+function editStaff(data) {
     eventBus.emit('EDIT_STAFF', data);
 }
+
+
 
 eventBus.on('STAFF_ADDED', function (data) {
     props.data.push(data)
@@ -61,7 +63,7 @@ eventBus.on('STAFF_ADDED', function (data) {
                                 <tr v-for="(user, ind ) in props.data" :key="ind">
                                     <td>{{ ind }}</td>
                                     <td>
-                                        <img  class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :src="base_url+'user_images/'+user.image" alt="">
+                                        <img  class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :src="base_url+'staff_images/'+user.image" alt="">
                                     </td>
                                     <th>{{ user.name }}</th>
                                     <td>{{ user.phone }}</td>
@@ -69,10 +71,10 @@ eventBus.on('STAFF_ADDED', function (data) {
                                         <VueToggles @click="userActiveInactive(user.id)" :value="user.status" />
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-info " @click="edituser(user)">
+                                        <button class="btn btn-sm btn-info " @click="editStaff(user)">
                                             <i class="fa fa-pencil-alt"></i>
                                         </button>
-                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('user.destroy', user.id)"
+                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('staff.destroy', user.id)"
                                             method="DELETE" as="button" type="button">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                         </Link>

@@ -33,7 +33,26 @@ class StaffController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $request->validate([
+        //     'user_id' => ['required', 'integer', 'exists:users,id'],
+        // ]);
+
+        $data = $request->all();
+        if ($request->hasFile('image')) {
+            $fileName = null;
+            $image = $request->file('image')[0];
+            $fileName = time() . $image->getClientOriginalName();
+            $image->storeAs('staff_images', $fileName);
+            $data['image'] = $fileName;
+        }
+
+        $uesrInfo = Staff::create($data);
+
+        if ($uesrInfo) {
+            return back()->with('message', 'UserInfo added');
+        } else {
+            return back()->with('error', 'Failed! Something wrong');
+        }
     }
 
     /**
@@ -65,6 +84,7 @@ class StaffController extends Controller
      */
     public function destroy(Staff $staff)
     {
-        //
+        $staff->delete();
+        return back()->with('message', 'Deleted!');
     }
 }

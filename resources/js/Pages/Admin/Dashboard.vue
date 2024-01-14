@@ -1,5 +1,13 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+
+const props = defineProps({
+    data: {
+        type: Object,
+    },
+
+});
+
 </script>
 
 
@@ -7,124 +15,36 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
     <AdminLayout>
         <div class="row g-4" :style="{ backgroundColor: '#fbf6f0' }">
             <div class="col-sm-12 col-xl-6">
-                <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">New added users</h6>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">City</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>
-                                    <img class="rounded-circle flex-shrink-0" src="https://placehold.co/40" alt=""
-                                        style="width: 40px; height: 40px;">
-                                </th>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td>jhon@email.com</td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    <img class="rounded-circle flex-shrink-0" src="https://placehold.co/40" alt=""
-                                        style="width: 40px; height: 40px;">
-                                </th>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td>jhon@email.com</td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    <img class="rounded-circle flex-shrink-0" src="https://placehold.co/40" alt=""
-                                        style="width: 40px; height: 40px;">
-                                </th>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td>jhon@email.com</td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    <img class="rounded-circle flex-shrink-0" src="https://placehold.co/40" alt=""
-                                        style="width: 40px; height: 40px;">
-                                </th>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td>jhon@email.com</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="bg-danger rounded h-100 p-4">
+                    <div class=" text-center">
+                        <h2 class="mb-4">Total User </h2>
+                        <h4 class="text-light">{{ props.data.user_count }}</h4>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-12 col-xl-6">
-                <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">New Complains</h6>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Message</th>
-                                <th scope="col">Visit</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td><button class="btn btn-sm btn-primary">visit</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="bg-danger rounded h-100 p-4">
+                    <div class=" text-center">
+                        <h2 class="mb-4">Total Room</h2>
+                        <h4 class="text-light">{{ props.data.room_count }}</h4>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-12 col-xl-6">
-                <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">Visitor</h6>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Visitor</th>
-                                <th scope="col">Entry</th>
-                                <th scope="col">Leave</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td>3-3-3</td>
-                                <td>3-3-3</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="bg-danger rounded h-100 p-4">
+                    <div class=" text-center">
+                        <h2 class="mb-4">Open Complains</h2>
+                        <h4 class="text-light">{{ props.data.complain_count }}</h4>
+
+                    </div>
                 </div>
             </div>
             <div class="col-sm-12 col-xl-6">
-                <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">Room Request</h6>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Current Room</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td><button class="btn btn-sm btn-primary">Check</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="bg-danger rounded h-100 p-4">
+                    <div class=" text-center">
+                        <h2 class="mb-4">Today Visitor</h2>
+                        <h4 class="text-light">{{ props.data.visitor_count }}</h4>
+                    </div>
                 </div>
             </div>
         </div>

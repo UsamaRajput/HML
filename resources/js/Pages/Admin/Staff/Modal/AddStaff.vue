@@ -10,16 +10,16 @@
                     <div class="modal-body">
                         <div class="bg-light rounded h-100 p-4">
 
-                            <label for="room_number" class="form-label">Number</label>
-                            <input id="room_number" class="form-control form-control-sm" v-model="form.room_number"
-                                type="text" placeholder="Room number">
-                            <label for="capacity" class="form-label">Capacity</label>
+                            <label for="name" class="form-label">Name</label>
+                            <input id="name" class="form-control form-control-sm" v-model="form.name"
+                                type="text" placeholder="Name">
+                            <label for="phone" class="form-label">phone</label>
+                            <input id="phone" class="form-control form-control-sm" v-model="form.phone" type="text"
+                                placeholder="Phone">
 
-                            <input id="capacity" class="form-control form-control-sm" v-model="form.capacity" type="text"
-                                placeholder="Room Capacity">
                             <label for="image" class="form-label">Image</label>
                             <input id="image" type="file" class="form-control form-control-sm"
-                                @input="form.images = $event.target.files" multiple accept="image/*">
+                                @input="form.image = $event.target.files" accept="image/*">
 
                         </div>
                     </div>
@@ -39,9 +39,9 @@ import { useForm } from '@inertiajs/vue3';
 import { reactive } from 'vue';
 import { multiAlert, simpleAlert } from "@/notify";
 let form = reactive({
-    room_number: '',
-    capacity: '',
-    images: []
+    name: '',
+    phone: '',
+    image: []
 })
 
 let createStaff = () => {

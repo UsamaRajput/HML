@@ -4,6 +4,7 @@ import { Link } from '@inertiajs/vue3'
 import { VueToggles } from "vue-toggles";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import AddRoomModal from "@/Pages/Admin/Room/Modal/AddRoom.vue";
+import RatingRoomModal from "@/Pages/Admin/Room/Modal/RatingRoom.vue";
 import EditRoomModal from "@/Pages/Admin/Room/Modal/EditRoom.vue";
 import axios from 'axios';
 
@@ -23,6 +24,21 @@ const props = defineProps({
 
 function editRoom(data) {
     eventBus.emit('EDIT_ROOM', data);
+}
+
+function ratingRoom(data) {
+    axios.post(route('rating.room'))
+    .then((res) => {
+        console.log(res.data);
+    // eventBus.emit('RATING_ROOM', data);
+    }).catch((err) => {
+        if (err.response.status == 404) {
+            notify.okAlert('error', "No Room Found");
+        } else {
+            notify.okAlert('error', 'server error');
+        }
+    })
+
 }
 
 eventBus.on('ROOM_ADDED', function (data) {
@@ -78,14 +94,14 @@ function roomActiveInactive(id) {
                                     <td>
                                         <img v-for="(img, im) in room.images_room" class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :key="im" :src="base_url+'room_images/'+img.image" alt="">
                                     </td>
-                                    <td>{{ room.amount }}</td>
+                                    <td>{{ parseFloat(room.price) + parseFloat(room.amount) }}</td>
                                     <td>{{ room.capacity }}</td>
                                     <td>{{ room.current }}</td>
                                     <td>
                                         <VueToggles @click="roomActiveInactive(room.id)" :value="room.is_active" />
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-warning mr-1" @click="editRoom(room)">
+                                        <button class="btn btn-sm btn-warning mr-1" @click="ratingRoom(room,id)">
                                             <i class="fa fa-star"></i>
                                         </button>
                                         <button class="btn btn-sm btn-info " @click="editRoom(room)">
@@ -105,6 +121,7 @@ function roomActiveInactive(id) {
         </div>
     </AdminLayout>
     <AddRoomModal />
+    <RatingRoomModal />
     <EditRoomModal />
 </template>
 

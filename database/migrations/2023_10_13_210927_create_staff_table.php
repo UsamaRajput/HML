@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('phone')->nullable();
             $table->string('role',50)->default('staff');
+            $table->boolean('active')->default(1);
             $table->timestamps();
         });
     }

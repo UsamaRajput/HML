@@ -4,30 +4,33 @@
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="bg-light rounded h-100 p-4">
-
-                        <label for="room_number" class="form-label">Number</label>
-                        <input id="room_number" class="form-control form-control-sm" v-model="form.room_number" type="text"
-                            placeholder="Room number">
-                        <label for="capacity" class="form-label">Number</label>
-
-                        <input id="capacity" class="form-control form-control-sm" v-model="form.capacity" type="text"
-                            placeholder="Room number">
-                        <label for="image" class="form-label">Image</label>
-                        <input id="image" type="file" class="form-control form-control-sm"
-                            @input="form.images = $event.target.files" multiple accept="image/*">
-
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Edit Staff</h5>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button  class="btn btn-primary" @click="updateRoom" data-bs-dismiss="modal">Update</button>
-                </div>
+                    <div class="modal-body">
+                        <div class="bg-light rounded h-100 p-4">
+
+                            <label for="name" class="form-label">Name</label>
+                            <input id="name" class="form-control form-control-sm" v-model="form.name"
+                                type="text" placeholder="Name">
+                            <label for="phone" class="form-label">phone</label>
+                            <input id="phone" class="form-control form-control-sm" v-model="form.phone" type="text"
+                                placeholder="Phone">
+
+                            <img  class="img-fliud" style="width: 50px; height: 50px;" :src="base_url+'staff_images/'+form.image" alt="">
+                            <br/>
+
+                            <label for="image" class="form-label">Image</label>
+                            <input id="image" type="file" class="form-control form-control-sm"
+                                @input="form.image = $event.target.files" accept="image/*">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-primary" data-bs-dismiss="modal" @click="createStaff">Add</button>
+                    </div>
+
             </div>
         </div>
     </div>
@@ -37,21 +40,22 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import { reactive } from 'vue';
-
+let base_url= _url;
 let form = reactive({
-    room_number: '',
-    capacity: '',
-    images: []
+    name: '',
+    phone: '',
+    image: null
 })
 
-eventBus.on('EDIT_ROOM', function (data) {
+eventBus.on('EDIT_STAFF', function (data) {
     let myModal = new bootstrap.Modal(document.getElementById('EDIT_STAFF'), {
         keyboard: false
     })
     myModal.show();
     form.id = data.id;
-    form.room_number = data.room_number;
-    form.capacity = data.capacity;
+    form.name = data.name;
+    form.phone = data.phone;
+    form.image = data.image;
 });
 
 

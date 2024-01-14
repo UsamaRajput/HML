@@ -12,7 +12,11 @@
 
                             <label for="name" class="form-label">Name</label>
                             <input id="name" class="form-control form-control-sm" v-model="form.name"
-                                type="text" placeholder="Service number">
+                                type="text" placeholder="Service name">
+
+                            <label for="description" class="form-label">Description</label>
+                            <input id="description" class="form-control form-control-sm" v-model="form.description"
+                                type="text" placeholder="Service description">
 
                         </div>
                     </div>
@@ -33,6 +37,7 @@ import { reactive } from 'vue';
 import { multiAlert, simpleAlert } from "@/notify";
 let form = reactive({
     name: '',
+    description:'',
     is_active: 1
 })
 

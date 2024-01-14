@@ -20,9 +20,10 @@ class RoomController extends Controller
     {
         $rooms = Room::with('ImagesRoom')
         ->selectRaw('
-            sum(ratings.increment_amount) AS amount, rooms.id ,
+            isnull(sum(ratings.increment_amount)) AS amount, rooms.id ,
             rooms.room_number,
             rooms.capacity,
+            rooms.price,
             rooms.is_active
          ')
         ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
@@ -31,6 +32,7 @@ class RoomController extends Controller
             'rooms.id',
             'rooms.room_number',
             'rooms.capacity',
+            'rooms.price',
             'rooms.is_active'
         )
         ->orderBy('room_number', 'ASC')

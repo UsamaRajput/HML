@@ -1,7 +1,7 @@
 <template>
     <!-- Modal -->
-    <div class="modal fade" id="editRoomModal"  data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="editRoomModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -18,6 +18,10 @@
 
                         <input id="capacity" class="form-control form-control-sm" v-model="form.capacity" type="text"
                             placeholder="Room number">
+                        <label for="capacity" class="form-label">price</label>
+
+                        <input id="price" class="form-control form-control-sm" v-model="form.price" type="number"
+                            step="0.01" placeholder="Room price">
                         <label for="image" class="form-label">Image</label>
                         <input id="image" type="file" class="form-control form-control-sm"
                             @input="form.images = $event.target.files" multiple accept="image/*">
@@ -26,7 +30,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button  class="btn btn-primary" @click="updateRoom" data-bs-dismiss="modal">Update</button>
+                    <button class="btn btn-primary" @click="updateRoom" data-bs-dismiss="modal">Update</button>
                 </div>
             </div>
         </div>
@@ -41,6 +45,7 @@ import { reactive } from 'vue';
 let form = reactive({
     room_number: '',
     capacity: '',
+    price: '',
     images: []
 })
 
@@ -51,6 +56,7 @@ eventBus.on('EDIT_ROOM', function (data) {
     myModal.show();
     form.id = data.id;
     form.room_number = data.room_number;
+    form.price = data.price;
     form.capacity = data.capacity;
 });
 
@@ -68,7 +74,7 @@ let updateRoom = () => {
             if (err.response.status == 422) {
                 notify.multiAlert('error', 'Validation error', err.response.data.errors)
             } else {
-                notify.okAlert('error','server error');
+                notify.okAlert('error', 'server error');
             }
 
         })

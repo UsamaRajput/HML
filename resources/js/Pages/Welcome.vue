@@ -9,7 +9,10 @@ import "../../css/user/style.css";
 import { Icon } from '@iconify/vue';
 
 
-defineProps({
+let props = defineProps({
+    data: {
+        type: Object,
+    },
     canLogin: {
         type: Boolean,
     },
@@ -59,7 +62,7 @@ defineProps({
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <h2 >
+                            <h2>
                                 HMS
                             </h2>
                         </div>
@@ -86,7 +89,7 @@ defineProps({
 
 
     <!-- hero-section -->
-    <section class="hero-section">
+    <section class="hero-section" style="background-image: url({{ props.data.main_content.banner }});">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -100,7 +103,7 @@ defineProps({
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
-                        <h3>Contact Us  </h3>
+                        <h3>Contact Us </h3>
                         <form action="#">
                             <div class="check-date">
                                 <label for="date-in">Name:</label>
@@ -109,11 +112,12 @@ defineProps({
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Email:</label>
-                                <input type="email" >
+                                <input type="email">
 
-                            </div>   <div class="check-date">
+                            </div>
+                            <div class="check-date">
                                 <label for="date-out">Message:</label>
-                                <input type="text" >
+                                <input type="text">
 
                             </div>
 
@@ -123,41 +127,28 @@ defineProps({
                 </div>
             </div>
         </div>
-        <div class="hero-slider owl-carousel">
-            <div class="hs-item set-bg hero1" data-setbg="../../images/bed.jpg"></div>
-            <div class="hs-item set-bg hero2" data-setbg="../../images/bed.jpg"></div>
-            <div class="hs-item set-bg hero3" data-setbg="../../images/bed.jpg"></div>
-        </div>
     </section>
 
 
 
-       <!-- About Us Section Begin -->
-       <section class="aboutus-section spad">
+    <!-- About Us Section Begin -->
+    <section class="aboutus-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="about-text">
                         <div class="section-title">
-                            <span>About Us</span>
-                            <h2>Intercontinental LA <br />Westlake Hotel</h2>
+                            <span>Superintendent</span>
+                            <h3>{{ props.data.main_content.superintendent_name }} </h3>
                         </div>
-                        <p class="f-para">Sona.com is a leading online accommodation site. We’re passionate about
-                            travel. Every day, we inspire and reach millions of travelers across 90 local websites in 41
-                            languages.</p>
-                        <p class="s-para">So when it comes to booking the perfect hotel, vacation rental, resort,
-                            apartment, guest house, or tree house, we’ve got you covered.</p>
-                        <a href="#" class="primary-btn about-btn">Read More</a>
+                        <p class="f-para"> {{ props.data.main_content.superintendent_desc }}</p>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="about-pic">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <img src="../../images/about-1.jpg" alt="">
-                            </div>
-                            <div class="col-sm-6">
-                                <img src="../../images/about-2.jpg" alt="">
                             </div>
                         </div>
                     </div>
@@ -170,64 +161,21 @@ defineProps({
 
 
 
-     <!-- Services Section End -->
-     <section class="services-section spad">
+    <!-- Services Section End -->
+    <section class="services-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span>What We Do</span>
-                        <h2>Discover Our Services</h2>
+                        <span>Discover Our Services</span>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-4 col-sm-6">
+                <div class="col-lg-4 col-sm-6" v-for="(service, ind) in props.data.services" :key="ind">
                     <div class="service-item">
-                        <Icon icon="bx:location-plus"  style="font-size:54px; color: #DFA974;"/>
-                        <h4>Travel Plan</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <Icon icon="bx:fork" style="font-size:54px; color: #DFA974;" />
-                        <h4>Catering Service</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <Icon icon="bx:bed" style="font-size:54px; color: #DFA974;" />
-                        <h4>Babysitting</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <Icon icon="bx:closet"  style="font-size:54px; color: #DFA974;" />
-                        <h4>Laundry</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <Icon icon="bx:car" style="font-size:54px; color: #DFA974;" />
-                        <h4>Hire Driver</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <Icon icon="bx:drink" style="font-size:54px; color: #DFA974;" />
-                        <h4>Bar & Drink</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
+                        <h4>{{ service.name }}</h4>
+                        <p>{{ service.description }}</p>
                     </div>
                 </div>
             </div>
@@ -238,15 +186,16 @@ defineProps({
 
 
 
-<!-- Home Room Section Begin -->
-<section class="hp-room-section" id="about-us">
+    <!-- Home Room Section Begin -->
+    <section class="hp-room-section" id="about-us">
         <div class="container-fluid">
             <div class="hp-room-items">
                 <div class="row">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg room1" data-setbg="../../images/room-1.jpg"  >                       <div class="hr-text">
-                                <h3>Double Room</h3>
-                                <h2>199$<span>/Pernight</span></h2>
+                    <div class="col-lg-3 col-md-6" v-for="(room , ind) in props.data.rooms" :key="ind">
+                        <div class="hp-room-item set-bg room1" style="background-image: url({{ props.data.room.banner }});">
+                            <div class="hr-text">
+                                <h3>{{ room.room_number }}</h3>
+                                <h2>199$</h2>
                                 <table>
                                     <tbody>
                                         <tr>
@@ -271,93 +220,7 @@ defineProps({
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg room2" data-setbg="img/room/room-b2.jpg">
-                            <div class="hr-text">
-                                <h3>Premium King Room</h3>
-                                <h2>159$<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg room3" data-setbg="img/room/room-b3.jpg">
-                            <div class="hr-text">
-                                <h3>Deluxe Room</h3>
-                                <h2>198$<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg room4" data-setbg="img/room/room-b4.jpg">
-                            <div class="hr-text">
-                                <h3>Family Room</h3>
-                                <h2>299$<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -464,8 +327,9 @@ defineProps({
                             <p>Get the latest updates and offers.</p>
                             <form action="#" class="fn-form">
                                 <input type="text" placeholder="Email">
-                                <button type="submit">                        <Icon icon="bx:send" style=" color:white;" />
-</button>
+                                <button type="submit">
+                                    <Icon icon="bx:send" style=" color:white;" />
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -484,9 +348,12 @@ defineProps({
                         </ul>
                     </div>
                     <div class="col-lg-5">
-                        <div class="co-text"><p>
-  Copyright &copy; All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="#" target="_blank"></a>
-</p></div>
+                        <div class="co-text">
+                            <p>
+                                Copyright &copy; All rights reserved | This template is made with <i class="fa fa-heart"
+                                    aria-hidden="true"></i> by <a href="#" target="_blank"></a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -504,9 +371,6 @@ defineProps({
         </div>
     </div>
     <!-- Search model end -->
-
-
-
 </template>
 
 <!--
@@ -525,65 +389,75 @@ defineProps({
 </style> -->
 
 <style>
-
-.hero-section{
+.hero-section {
 
     background-image: url("../../images/hero-3.jpg");
 
-}.set-bg.hero2{
+}
+
+.set-bg.hero2 {
 
     background-image: url("../../images/hero-2.jpg");
 
 }
-.set-bg.hero3{
+
+.set-bg.hero3 {
 
     background-image: url("../../images/hero-3.jpg");
 
 
 }
-.set-bg.room1{
+
+.set-bg.room1 {
 
     background-image: url("../../images/room-b1.jpg");
 
 }
-.set-bg.room2{
+
+.set-bg.room2 {
 
     background-image: url("../../images/room-b2.jpg");
 
-}.set-bg.room3{
+}
+
+.set-bg.room3 {
 
     background-image: url("../../images/room-b3.jpg");
 
 }
-.set-bg.room4{
+
+.set-bg.room4 {
 
     background-image: url("../../images/room-b4.jpg");
 
 }
-.set-bg.blog1{
+
+.set-bg.blog1 {
 
     background-image: url("../../images/blog-1.jpg");
 
 }
-.set-bg.blog2{
+
+.set-bg.blog2 {
 
     background-image: url("../../images/blog-2.jpg");
 
 }
-.set-bg.blog3{
+
+.set-bg.blog3 {
 
     background-image: url("../../images/blog-3.jpg");
 
 }
-.set-bg.blog4{
+
+.set-bg.blog4 {
 
     background-image: url("../../images/blog-wide.jpg");
 
 }
-.set-bg.blog5{
+
+.set-bg.blog5 {
 
     background-image: url("../../images/blog-10.jpg");
 
-}
-
-</style>
+}</style>

@@ -11,7 +11,13 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\RequestedRoomController;
 use App\Http\Controllers\WebContentController;
+use App\Models\Complain;
 use App\Models\GeneralServices;
+use App\Models\Room;
+use App\Models\Staff;
+use App\Models\User;
+use App\Models\Visitor;
+use App\Models\WebContent;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,9 +34,13 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-   return Inertia::render('Welcome', [
+    $data['main_content'] = WebContent::first();
+    $data['services'] = GeneralServices::where('is_active',1)->get();
+    $data['rooms'] = Room::where('is_active',1)->get();
 
-   ]);
+   return Inertia::render('Welcome', [
+        'data'=>$data
+       ]);
     // return Inertia::render('Welcome', [
     //     'canLogin' => Route::has('login'),
     //     'canRegister' => Route::has('register'),
@@ -72,7 +82,11 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
 
     Route::group(['prefix' => 'admin',/* 'middleware' => 'admin_auth'*/], function () {
         Route::get('/', function () {
-            return Inertia::render('Admin/Dashboard');
+            $data['user_count'] = User::count();
+            $data['room_count'] = Room::count();
+            $data['complain_count'] = Complain::where('closed',0)->count();
+            $data['visitor_count'] = Visitor::whereDate('visit',date('Y-m-d'))->count();
+            return Inertia::render('Admin/Dashboard',['data'=>$data]);
         })->name('admin.dashboard');
 
         Route::post('room/{room}', [RoomController::class, 'update'])->name('room.update');
@@ -87,6 +101,7 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
 
         Route::get('rating/{rating}/activeInactive', [RatingController::class, 'activeInactive'])->name('rating.activeInactive');
         Route::post('rating/{rating}', [RatingController::class, 'update'])->name('rating.update');
+        Route::post('room_rating', [RatingController::class, 'room_rating'])->name('rating.room');
         Route::resource('rating', RatingController::class, ['except' => ['update']]);
 
         Route::get('complain/index/{filter?}', [ComplainController::class, 'index'])->defaults('filter', 'all')->name('complain.index');
@@ -113,7 +128,7 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         // Webcontent Management
         Route::get('WebContent', [WebContentController::class, 'index'])->name('webcontent.index');
         Route::post('WebContent/update', [WebContentController::class, 'update'])->name('webcontent.update');
-    });    
+    });
 });
 Route::get('/moreDetails', [RoomController::class,'roomDetail'])->name('user.room_details');
 

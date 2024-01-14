@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->integer('room_number');
+            $table->float('price')->default(0);
             $table->integer('capacity')->default(1);
             $table->integer('current')->default(0);
             $table->boolean('is_active')->default(1);
