@@ -5,7 +5,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">{{ name }} Room Request</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Room Rating</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -13,16 +13,18 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col" colspan="5">Room</th>
+                                    <th scope="col" colspan="5">Rating</th>
+                                    <th scope="col" >Increment Amount</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody> 
                                 <tr v-for="(rr, ind) in r_rooms" :key="ind">
-                                    <td colspan="5"> {{ rr.room_number }}</td>
-                                    <td>
-                                        <button :disabled="disabled" :class="disabled ?? 'disabled'" @click="approve(rr.room_id)"
-                                            class="btn btn-sm btn-info">Approve</button>
+                                    <td colspan="5"> {{ rr.rating_name }}</td>
+                                    <td> {{ rr.increment_amount }}</td>
+                                    <td>  
+                                        <button v-if="rr.room_id != room.id" @click="addRemoveRating(rr.rating_id,room.id,'add')" class="btn btn-sm btn-info">Add</button>
+                                        <button v-if="rr.room_id == room.id" @click="addRemoveRating(rr.rating_id,room.id,'remove')" class="btn btn-sm btn-danger">Remove</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -31,8 +33,6 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary" @click="rejectRoom" :class="disabled ?? 'disabled'" :disabled="disabled"
-                        data-bs-dismiss="modal">Reject</button>
                 </div>
             </div>
         </div>
@@ -42,33 +42,28 @@
 <script setup>
 import { okAlert, simpleAlert } from '@/notify';
 import { ref, reactive } from 'vue';
-let r_rooms = {};
+let r_rooms = ref({});
 
-let name = ref('name');
-let user_id = null;
-let disabled = ref(false);
+let room = ref({});
+let user_id = null; 
 
-let addRoomRating = (room_id) => {
-    disabled.value = true;
-    axios.post(route('requested.approveRoom'), { room_id, user_id })
+let addRemoveRating = (rating_id,room_id,mode) => {
+    axios.post(route('rating.addRemoveRoom'), { room_id,rating_id,mode })
         .then(function (res) {
             if (res.status == 200) {
                 simpleAlert(res.data.message);
-            } else {
-                disabled.value = false;
+            } else { 
                 okAlert('error', 'Wrong', res.data.message)
             }
-        }).catch(function (err) {
-            disabled.value = false;
+        }).catch(function (err) { 
             console.log(err);
         })
 }
 
 
 eventBus.on('RATING_ROOM', function (data) {
-    disabled.value = false;
-    r_rooms = data;
-   
+    room.value = data.room;
+    r_rooms.value = data.data.data; 
     let myModal = new bootstrap.Modal(document.getElementById('RATING_ROOM'), {
         keyboard: false
     })

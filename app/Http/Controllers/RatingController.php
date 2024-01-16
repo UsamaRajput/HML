@@ -107,11 +107,22 @@ class RatingController extends Controller
 
     public function room_rating(Request $request){
         $res = Rating::leftjoin('room_ratings','room_ratings.rating_id','ratings.id')
+        ->selectRaw("
+            ratings.id as rating_id,
+            ratings.increment_amount as increment_amount,
+            ratings.service as rating_name,
+            room_ratings.room_id as room_id,
+            room_ratings.rating_id as room_rating_id
+        ")
         ->where('is_active',1)->get();
         if($res){
             return response()->json(['data' => $res, 'message' => 'updated'], 200);
         }else{
             return response()->json(['data' => [], 'message' => 'Not found'], 404);
         }
+    }
+
+    public function add_remove_room_rating(Request $request) {
+        dd($request);
     }
 }

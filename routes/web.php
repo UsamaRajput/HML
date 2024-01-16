@@ -102,6 +102,7 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         Route::get('rating/{rating}/activeInactive', [RatingController::class, 'activeInactive'])->name('rating.activeInactive');
         Route::post('rating/{rating}', [RatingController::class, 'update'])->name('rating.update');
         Route::post('room_rating', [RatingController::class, 'room_rating'])->name('rating.room');
+        Route::post('add_remove_room_rating', [RatingController::class, 'add_remove_room_rating'])->name('rating.addRemoveRoom');
         Route::resource('rating', RatingController::class, ['except' => ['update']]);
 
         Route::get('complain/index/{filter?}', [ComplainController::class, 'index'])->defaults('filter', 'all')->name('complain.index');

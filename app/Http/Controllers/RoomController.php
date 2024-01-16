@@ -37,7 +37,7 @@ class RoomController extends Controller
         )
         ->orderBy('room_number', 'ASC')
         ->get();
-        // dd($rooms);
+        
         return Inertia::render('Admin/Room/List', [
             'data' => $rooms,
         ]);

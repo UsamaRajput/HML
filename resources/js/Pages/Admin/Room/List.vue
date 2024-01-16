@@ -26,11 +26,10 @@ function editRoom(data) {
     eventBus.emit('EDIT_ROOM', data);
 }
 
-function ratingRoom(data) {
+function ratingRoom(param) {
     axios.post(route('rating.room'))
     .then((res) => {
-        console.log(res.data);
-    // eventBus.emit('RATING_ROOM', data);
+        eventBus.emit('RATING_ROOM', {data:res.data,room:param});
     }).catch((err) => {
         if (err.response.status == 404) {
             notify.okAlert('error', "No Room Found");
@@ -101,7 +100,7 @@ function roomActiveInactive(id) {
                                         <VueToggles @click="roomActiveInactive(room.id)" :value="room.is_active" />
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-warning mr-1" @click="ratingRoom(room,id)">
+                                        <button class="btn btn-sm btn-warning mr-1" @click="ratingRoom(room)">
                                             <i class="fa fa-star"></i>
                                         </button>
                                         <button class="btn btn-sm btn-info " @click="editRoom(room)">
