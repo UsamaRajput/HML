@@ -114,6 +114,7 @@ class RatingController extends Controller
             room_ratings.room_id as room_id,
             room_ratings.rating_id as room_rating_id
         ")
+        ->orderby('ratings.id','asc')
         ->where('is_active',1)->get();
         if($res){
             return response()->json(['data' => $res, 'message' => 'updated'], 200);
@@ -123,6 +124,28 @@ class RatingController extends Controller
     }
 
     public function add_remove_room_rating(Request $request) {
-        dd($request);
+        $res = false;
+        if($request->mode == 'added'){
+            $res = \DB::table('room_ratings')->insert(['room_id'=>$request->room_id,'rating_id'=>$request->rating_id]);
+        }else if($request->mode == 'remove'){
+            $res = \DB::table('room_ratings')->where(['room_id'=>$request->room_id,'rating_id'=>$request->rating_id])->delete();
+        }
+
+        if($res){
+            $data = Rating::leftjoin('room_ratings','room_ratings.rating_id','ratings.id')
+            ->selectRaw("
+                ratings.id as rating_id,
+                ratings.increment_amount as increment_amount,
+                ratings.service as rating_name,
+                room_ratings.room_id as room_id,
+                room_ratings.rating_id as room_rating_id
+            ")
+            ->orderby('ratings.id','asc')
+            ->where('is_active',1)->get();
+
+            return response()->json(['data' => $data, 'message' => $request->mode ], 200);
+        }else{
+            return response()->json(['data' => [], 'message' => 'Not found'], 404);
+        }
     }
 }

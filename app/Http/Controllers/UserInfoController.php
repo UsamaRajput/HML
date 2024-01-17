@@ -14,7 +14,9 @@ class UserInfoController extends Controller
      */
     public function index()
     {
-       $res = User::with('userInfo')->get();
+       $res = User::with(['userInfo','rooms'=>function($qry){
+        return $qry->whereNull('leaving_date');
+       }])->get();
        return Inertia::render('Admin/User/List',[
         'data'=>$res
         ]);

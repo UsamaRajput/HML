@@ -68,17 +68,21 @@ function roomActiveInactive(id) {
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
+                                    <th>Room</th>
+                                    <th>active</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(user, ind ) in props.data" :key="ind">
+                                    <td>{{ ind }}</td>
                                     <td>
                                         <img  class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :src="base_url+'user_images/'+user.user_info?.image" alt="">
                                     </td>
                                     <th>{{ user.name }}</th>
                                     <td>{{ user.email }}</td>
                                     <td>{{ user.user_info?.phone }}</td>
+                                    <td>{{ user.rooms[0]?.room_number }}</td>
                                     <td>
                                         <VueToggles @click="userActiveInactive(user.id)" :value="user.status" />
                                     </td>

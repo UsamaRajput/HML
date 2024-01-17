@@ -20,14 +20,14 @@ class RoomController extends Controller
     {
         $rooms = Room::with('ImagesRoom')
         ->selectRaw('
-            isnull(sum(ratings.increment_amount)) AS amount, rooms.id ,
+            sum(ratings.increment_amount) AS amount, rooms.id ,
             rooms.room_number,
             rooms.capacity,
             rooms.price,
             rooms.is_active
          ')
         ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
-        ->leftjoin('ratings','ratings.id','room_ratings.id')
+        ->leftjoin('ratings','ratings.id','room_ratings.rating_id')
         ->groupBy(
             'rooms.id',
             'rooms.room_number',
@@ -37,7 +37,7 @@ class RoomController extends Controller
         )
         ->orderBy('room_number', 'ASC')
         ->get();
-        
+       
         return Inertia::render('Admin/Room/List', [
             'data' => $rooms,
         ]);

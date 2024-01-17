@@ -23,7 +23,7 @@
                                     <td colspan="5"> {{ rr.rating_name }}</td>
                                     <td> {{ rr.increment_amount }}</td>
                                     <td>  
-                                        <button v-if="rr.room_id != room.id" @click="addRemoveRating(rr.rating_id,room.id,'add')" class="btn btn-sm btn-info">Add</button>
+                                        <button v-if="rr.room_id != room.id" @click="addRemoveRating(rr.rating_id,room.id,'added')" class="btn btn-sm btn-info">Add</button>
                                         <button v-if="rr.room_id == room.id" @click="addRemoveRating(rr.rating_id,room.id,'remove')" class="btn btn-sm btn-danger">Remove</button>
                                     </td>
                                 </tr>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" @click="redirectRoom" >Close</button>
                 </div>
             </div>
         </div>
@@ -42,6 +42,8 @@
 <script setup>
 import { okAlert, simpleAlert } from '@/notify';
 import { ref, reactive } from 'vue';
+import { Link,router } from '@inertiajs/vue3';
+
 let r_rooms = ref({});
 
 let room = ref({});
@@ -49,17 +51,21 @@ let user_id = null;
 
 let addRemoveRating = (rating_id,room_id,mode) => {
     axios.post(route('rating.addRemoveRoom'), { room_id,rating_id,mode })
-        .then(function (res) {
-            if (res.status == 200) {
-                simpleAlert(res.data.message);
-            } else { 
-                okAlert('error', 'Wrong', res.data.message)
-            }
-        }).catch(function (err) { 
-            console.log(err);
-        })
+    .then(function (res) {
+        if (res.status == 200) {
+            r_rooms.value = res.data.data;
+            simpleAlert(res.data.message);
+        } else { 
+            okAlert('error', 'Wrong', res.data.message)
+        }
+    }).catch(function (err) { 
+        console.log(err);
+    })
 }
 
+let redirectRoom = () =>{
+    return router.visit(route('room.index'))
+}
 
 eventBus.on('RATING_ROOM', function (data) {
     room.value = data.room;
