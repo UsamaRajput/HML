@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
 use App\Models\UserInfo;
 use App\Models\User;
 use Inertia\Inertia;
@@ -14,12 +15,52 @@ class UserInfoController extends Controller
      */
     public function index()
     {
-       $res = User::with(['userInfo','rooms'=>function($qry){
+        // dd('ds');
+       $res['users'] = User::with(['userInfo','rooms'=>function($qry){
         return $qry->whereNull('leaving_date');
        }])->get();
+
+       $res['rooms'] = Room::withCount(['users'=>function($qry){
+        return $qry->whereNull('leaving_date');
+       }])->where('is_active',1)->get();
+    //    dd($res['rooms']);
        return Inertia::render('Admin/User/List',[
         'data'=>$res
         ]);
+    }
+
+
+    function addUser(Request $request) {
+        // dd('da');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:'.User::class,
+            'password' => 'required',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => \Hash::make($request->password),
+        ]);
+        $infoData = $request->all();
+
+         if ($request->hasFile('image')) {
+            $fileName = null;
+            $image = $request->file('image');
+            $fileName = time() . $image->getClientOriginalName();
+            $image->storeAs('user_images', $fileName);
+            $infoData['image'] =  $fileName;
+        }
+
+        $infoData['user_id'] = $user->id;
+        $uesrInfo = UserInfo::create($infoData);
+       
+        if ($uesrInfo) {
+            return back()->with('message', 'UserInfo Updated');
+        } else {
+            return back()->with('error', 'Failed! Something wrong');
+        }
     }
 
     /**
@@ -75,26 +116,45 @@ class UserInfoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserInfo $userInfo)
+    public function edit(Request $request)
     {
-        //
+        $id = $request->user_id;
+        $res = User::leftjoin('user_infos','users.id','users_infos.user_id')->where('users.id',$id)->first();
+        if ($res) {
+            return response()->json(['data'=>$res]);
+        } else {
+            return response()->json(['data'=>[],'message'=>'Not found!'],404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserInfo $userInfo)
+    public function update(Request $request)
     {
         $request->validate([
             'user_id' => ['required', 'integer', 'exists:users,id'],
         ]);
+
+        if($request->is_admin){
+            User::where('id',$request->user_id)->update([
+                'name'=>$request->name,
+                'email'=>$request->email,
+                // 'password'=>$request->password,
+            ]);
+        }
+        
+        $userInfo = UserInfo::where('user_id',$request->user_id);
+
+        $userInfoData = $request->all();
         if ($request->hasFile('image')) {
             $fileName = null;
             $image = $request->file('image');
             $fileName = time() . $image->getClientOriginalName();
             $image->storeAs('user_images', $fileName);
+            $userInfoData['image'] = $fileName;
         }
-        $uesrInfo = $userInfo->update($request->all());
+        $uesrInfo = $userInfo->update($userInfoData);
 
         if ($uesrInfo) {
             return back()->with('message', 'UserInfo added');
@@ -106,9 +166,11 @@ class UserInfoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserInfo $userInfo)
+    public function destroy($userInfo)
     {
-        $res = User::where(['id'=>$userInfo->user_id])->delete();
+        $res = User::where(['id'=>$userInfo])->delete();
+        UserInfo::where(['user_id'=>$userInfo])->delete();
+        \DB::table('room_user')->where(['user_id'=> $userInfo])->delete();
         if ($res) {
             return back()->with('message', 'deleted');
         } else {

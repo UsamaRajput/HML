@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-
+use App\Models\User;
 
 
 class RoomController extends Controller
@@ -18,7 +18,9 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::with('ImagesRoom')
+        $rooms = Room::with(['ImagesRoom','users'=>function($qry){
+            return $qry->whereNull('leaving_date');
+           }])
         ->selectRaw('
             sum(ratings.increment_amount) AS amount, rooms.id ,
             rooms.room_number,
@@ -175,6 +177,11 @@ class RoomController extends Controller
             'data' => $rooms,
         ]);
 
+     }
+
+     public function room_history(Request $request){
+        $res = Room::leftJoin('room_user','room_user.room_id','rooms.id')->where('room_user.user_id',$request->user_id)->get();
+        return response()->json(['data' => $res, 'message' => 'updated'], 200);
      }
 
      public function roomDetail()

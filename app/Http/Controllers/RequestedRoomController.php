@@ -154,4 +154,9 @@ class RequestedRoomController extends Controller
             return  back()->with('error', 'Failed to delete');
         }
     }
+
+    public function removeUserRoom(Request $request) {
+        DB::table('room_user')->where(['user_id'=> $request->user_id])->whereNull('leaving_date')->update(['leaving_date'=>date('Y-m-d',time())]);
+        return response()->json(['data' => [], 'message' => 'Room remove!']);
+    }
 }

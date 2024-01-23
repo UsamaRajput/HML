@@ -95,7 +95,7 @@ function roomActiveInactive(id) {
                                     </td>
                                     <td>{{ parseFloat(room.price) + parseFloat(room.amount) }}</td>
                                     <td>{{ room.capacity }}</td>
-                                    <td>{{ room.current }}</td>
+                                    <td>{{ room.users.length }}</td>
                                     <td>
                                         <VueToggles @click="roomActiveInactive(room.id)" :value="room.is_active" />
                                     </td>

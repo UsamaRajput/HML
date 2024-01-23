@@ -90,12 +90,14 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         })->name('admin.dashboard');
 
         Route::post('room/{room}', [RoomController::class, 'update'])->name('room.update');
+        Route::post('room_history', [RoomController::class, 'room_history'])->name('room.history');
         Route::post('room/{room}/test', [RoomController::class, 'test'])->name('room.test');
         Route::get('room/{room}/activeInactive', [RoomController::class, 'activeInactive'])->name('room.activeInactive');
         Route::resource('room', RoomController::class, ['except' => ['update']]);
 
         Route::post('requested_room', [RequestedRoomController::class, 'requestedRoom'])->name('requested.requestedRoom');
         Route::post('approve_room', [RequestedRoomController::class, 'approveRoom'])->name('requested.approveRoom');
+        Route::post('remove_user_room', [RequestedRoomController::class, 'removeUserRoom'])->name('remove.UserRoom');
         Route::post('reject_room', [RequestedRoomController::class, 'rejectRoom'])->name('requested.rejectRoom');
         Route::resource('requested', RequestedRoomController::class);
 
@@ -114,7 +116,9 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         Route::resource('visitor', VisitorController::class);
 
         // User Controller
-        Route::resource('user', UserInfoController::class);
+        Route::post('add/user', [UserInfoController::class, 'addUser'])->name('add.user');
+        Route::post('update/user', [UserInfoController::class, 'update'])->name('update.user');
+        Route::resource('user', UserInfoController::class,['except' => ['update']]);
 
         // Room Services Controller
         Route::get('service/history',[GeneralServicesController::class,'history'])->name('services.uhistory');

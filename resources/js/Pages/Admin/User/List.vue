@@ -3,8 +3,9 @@ import { onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3'
 import { VueToggles } from "vue-toggles";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import AddRoomModal from "@/Pages/Admin/Room/Modal/AddRoom.vue";
-import EditRoomModal from "@/Pages/Admin/Room/Modal/EditRoom.vue";
+import AddUserModal from "@/Pages/Admin/User/Modal/AddUser.vue";
+import UpdateUserModal from "@/Pages/Admin/User/Modal/UpdateUser.vue";
+import RoomHistoryModal from "@/Pages/Admin/User/Modal/RoomHistory.vue";
 import axios from 'axios';
 
 let base_url= _url;
@@ -21,17 +22,45 @@ const props = defineProps({
     }
 });
 
-function editRoom(data) {
-    eventBus.emit('EDIT_ROOM', data);
+function room_history (id){
+    axios.post(route('room.history'),{user_id:id})
+        .then((res) => {  
+            eventBus.emit('ROOM_HISTORY', res.data.data);
+            // notify.simpleAlert(res.data.message);
+        }).catch((err) => {
+            if (err.response.status == 404) {
+                notify.okAlert('error', "No Room Found");
+            } else {
+                notify.okAlert('error', 'server error');
+            }
+        })
+
 }
 
 eventBus.on('ROOM_ADDED', function (data) {
     props.data.push(data)
 });
 
-function roomActiveInactive(id) {
+let edituser = (user_id)=>{
+    
+}
 
-    axios.get(route('room.activeInactive', id))
+function room_change(event,id) {
+    let room_id = event.target.value;
+
+    if(room_id == 'remove'){
+        axios.post(route('remove.UserRoom'),{user_id:id})
+        .then((res) => { 
+            notify.simpleAlert(res.data.message);
+        }).catch((err) => {
+            if (err.response.status == 404) {
+                notify.okAlert('error', "No Room Found");
+            } else {
+                notify.okAlert('error', 'server error');
+            }
+        })
+    }else{
+        axios.post(route('requested.approveRoom'), {user_id:id,room_id})
         .then((res) => {
             console.log(res);
             notify.simpleAlert(res.data.message);
@@ -42,6 +71,8 @@ function roomActiveInactive(id) {
                 notify.okAlert('error', 'server error');
             }
         })
+    } 
+    
 }
 
 </script>
@@ -66,28 +97,37 @@ function roomActiveInactive(id) {
                                     <th>#</th>
                                     <th>Images</th>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
+                                    <th>Email</th> 
                                     <th>Room</th>
                                     <th>active</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(user, ind ) in props.data" :key="ind">
+                                <tr v-for="(user, ind ) in props.data.users" :key="ind">
                                     <td>{{ ind }}</td>
                                     <td>
                                         <img  class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :src="base_url+'user_images/'+user.user_info?.image" alt="">
                                     </td>
                                     <th>{{ user.name }}</th>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.user_info?.phone }}</td>
-                                    <td>{{ user.rooms[0]?.room_number }}</td>
+                                    <td>{{ user.email }}</td> 
+                                    <td >
+                                        <div class="d-flex">
+                                            <select class="form-control" :value="user.rooms[0]?.room_number" @change="room_change($event,user.id)">
+                                                <option value="remove">Remove</option>
+                                                <option v-for="room in props.data.rooms" :value="room.id" :disabled="room.users_count >= room.capacity">{{ room.room_number }}</option>
+                                            </select>
+                                            <button class="btn btn-sm ml-1 btn-info " @click="room_history(user.id)">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <!-- <td>{{ user.rooms[0]?.room_number }}</td> -->
                                     <td>
                                         <VueToggles @click="userActiveInactive(user.id)" :value="user.status" />
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-info " @click="edituser(user)">
+                                        <button class="btn btn-sm btn-info " @click="edituser(user.id)">
                                             <i class="fa fa-pencil-alt"></i>
                                         </button>
                                         <Link class="btn btn-sm btn-danger ml-1" :href="route('user.destroy', user.id)"
@@ -103,8 +143,9 @@ function roomActiveInactive(id) {
             </div>
         </div>
     </AdminLayout>
-    <AddRoomModal />
-    <EditRoomModal />
+    <AddUserModal />
+    <UpdateUserModal />
+    <RoomHistoryModal />
 </template>
 
 
