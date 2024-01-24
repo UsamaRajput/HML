@@ -42,7 +42,16 @@ eventBus.on('ROOM_ADDED', function (data) {
 });
 
 let edituser = (user_id)=>{
-    
+    axios.get(route('user.edit',user_id))
+        .then((res) => { 
+            eventBus.emit('ROOM_EDIT', res.data.data);
+        }).catch((err) => {
+            if (err.response.status == 404) {
+                notify.okAlert('error', "No Room Found");
+            } else {
+                notify.okAlert('error', 'server error');
+            }
+        })
 }
 
 function room_change(event,id) {

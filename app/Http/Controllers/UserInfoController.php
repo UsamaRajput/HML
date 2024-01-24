@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\UserInfo;
 use App\Models\User;
+use App\Models\Security;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -116,10 +117,17 @@ class UserInfoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request)
+    public function edit($id)
     {
-        $id = $request->user_id;
-        $res = User::leftjoin('user_infos','users.id','users_infos.user_id')->where('users.id',$id)->first();
+        // $id = $request->user_id;
+        $res = User::leftjoin('user_infos','users.id','user_infos.user_id')
+        ->selectRaw("
+            user_infos.*,
+            users.*,
+            user_infos.user_id as user_id,
+            users.id as id
+        ")
+        ->where('users.id',$id)->first();
         if ($res) {
             return response()->json(['data'=>$res]);
         } else {
@@ -131,20 +139,12 @@ class UserInfoController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
-    {
-        $request->validate([
-            'user_id' => ['required', 'integer', 'exists:users,id'],
+    { 
+        User::where('id',$request->id)->update([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            // 'password'=>$request->password,
         ]);
-
-        if($request->is_admin){
-            User::where('id',$request->user_id)->update([
-                'name'=>$request->name,
-                'email'=>$request->email,
-                // 'password'=>$request->password,
-            ]);
-        }
-        
-        $userInfo = UserInfo::where('user_id',$request->user_id);
 
         $userInfoData = $request->all();
         if ($request->hasFile('image')) {
@@ -154,7 +154,7 @@ class UserInfoController extends Controller
             $image->storeAs('user_images', $fileName);
             $userInfoData['image'] = $fileName;
         }
-        $uesrInfo = $userInfo->update($userInfoData);
+        $uesrInfo = UserInfo::updateOrCreate(['user_id'=>$request->id],$userInfoData);
 
         if ($uesrInfo) {
             return back()->with('message', 'UserInfo added');
@@ -176,6 +176,41 @@ class UserInfoController extends Controller
         } else {
             return back()->with('error', 'failed');
         }
+    }
+
+    public function security() {
+        $res = User::leftJoin('securities','securities.user_id','users.id')
+        ->leftJoin('user_infos','user_infos.user_id','users.id')
+        ->selectRaw("
+            users.id as user_id,
+            users.name as name,
+            users.email as email,
+            user_infos.security_pay as security_pay,
+            sum(securities.deduction) as remaining_security
+        ")
+        ->groupBy(
+            'users.id',
+            'users.name',
+            'users.email',
+            'user_infos.security_pay'
+        )
+        ->get();
+        // dd($res);
+        return Inertia::render('Admin/User/Security',[
+            'data'=> $res
+        ]);
+    }
+
+    public function deduction_history($id){
+        $res = \DB::table('securities')->where('user_id',$id)->orderByDesc('created_at')->get();
+        return response()->json(['data'=> $res ,'message'=>'All history']);
+    }
+
+
+    public function add_deduction(Request $request){
+        $res = Security::create($request->all());
+        $data = \DB::table('securities')->where('user_id',$request->user_id)->orderByDesc('created_at')->get();
+        return response()->json(['data'=> $data ,'message'=>'added']);
     }
 
     /**

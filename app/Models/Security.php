@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Security extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'reson',
+        'deduction', 
+    ];
 }

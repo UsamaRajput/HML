@@ -1,6 +1,6 @@
 <template>
     <!-- Modal -->
-    <div class="modal fade" id="adRoomModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="ROOM_EDIT" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -75,6 +75,14 @@
 import { ref } from 'vue';
 import { multiAlert, simpleAlert } from "@/notify";
 let form = ref({})
+
+eventBus.on('ROOM_EDIT', function (data) {
+    form.value = data;
+    let myModal = new bootstrap.Modal(document.getElementById('ROOM_EDIT'), {
+        keyboard: false
+    })
+    myModal.show()
+});
 
 let createUser = () => {
     axios.post(route('update.user'), form.value, {

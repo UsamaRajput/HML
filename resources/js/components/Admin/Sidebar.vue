@@ -34,6 +34,9 @@
                 <Link :href="route('user.index')" class="nav-item nav-link">
                     <i class="fa fa-tachometer-alt me-2"></i>User
                 </Link>
+                <Link :href="route('security.user')" class="nav-item nav-link">
+                    <i class="fa fa-tachometer-alt me-2"></i>Security
+                </Link>
 
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i

@@ -118,6 +118,9 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         // User Controller
         Route::post('add/user', [UserInfoController::class, 'addUser'])->name('add.user');
         Route::post('update/user', [UserInfoController::class, 'update'])->name('update.user');
+        Route::get('security/user', [UserInfoController::class, 'security'])->name('security.user');
+        Route::get('deduction/{id}/history', [UserInfoController::class, 'deduction_history'])->name('deduction.history');
+        Route::post('deduction/add', [UserInfoController::class, 'add_deduction'])->name('deduction.add');
         Route::resource('user', UserInfoController::class,['except' => ['update']]);
 
         // Room Services Controller
