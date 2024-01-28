@@ -1,7 +1,5 @@
 <script setup>
-
 import { useForm } from '@inertiajs/vue3';
-
 import UserLayout from '@/Layouts/UserLayout.vue';
 
 let base_url = _url;
@@ -17,6 +15,14 @@ const props = defineProps({
         type: String
     }
 });
+
+function search(val, arr){
+    for (let i=0; i < arr.length; i++) {
+        if (arr[i].id === val) {
+            return true;
+        }
+    }
+}
 
 function requestRoom(id){
     axios.post(route('user.requestRoom'), {id})
@@ -54,6 +60,7 @@ function requestRoom(id){
                                     <th>Images</th>
                                     <th>Capacity</th>
                                     <th>Current</th>
+                                    <th>Price</th>
                                     <th>Request</th>
                                 </tr>
                             </thead>
@@ -65,9 +72,10 @@ function requestRoom(id){
                                         <img v-for="(img, im) in room.images_room" style="width: 50px; height: 50px; border-radius: 50%;" class="img-fliud" :key="im" :src="base_url+'room_images/'+img.image" alt="">
                                     </td>
                                     <td>{{ room.capacity }}</td>
-                                    <td>{{ room.current }}</td>
+                                    <td>{{ room.users.length??0 }}</td>
+                                    <td>{{ parseFloat(room.price??0) + parseFloat(room.amount??0) }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-info " @click="requestRoom(room.id)">
+                                        <button v-if="!search($page.props.auth.user.id,room.users )" class="btn btn-sm btn-info " @click="requestRoom(room.id)">
                                             <i class="fas fa-arrow-right"></i>
                                         </button>
                                     </td>

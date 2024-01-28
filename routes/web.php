@@ -10,6 +10,8 @@ use App\Http\Controllers\GeneralServiceUserController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\RequestedRoomController;
+use App\Http\Controllers\SecurityController;
+use App\Http\Controllers\MessController;
 use App\Http\Controllers\WebContentController;
 use App\Models\Complain;
 use App\Models\GeneralServices;
@@ -36,7 +38,31 @@ use Inertia\Inertia;
 Route::get('/', function () {
     $data['main_content'] = WebContent::first();
     $data['services'] = GeneralServices::where('is_active',1)->get();
-    $data['rooms'] = Room::where('is_active',1)->get();
+    $data['rooms'] = Room::with(['ImagesRoom','users'=>function($qry){
+        return $qry->whereNull('leaving_date');
+       }])
+    ->selectRaw('
+        sum(ratings.increment_amount) AS amount, rooms.id ,
+        avg(ratings.rating) AS rating,
+        rooms.room_number,
+        rooms.capacity,
+        rooms.price,
+        rooms.is_active
+     ')
+    ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
+    ->leftjoin('ratings','ratings.id','room_ratings.rating_id')
+    ->groupBy(
+        'rooms.id',
+        'rooms.room_number',
+        'rooms.capacity',
+        'rooms.price',
+        'rooms.is_active'
+    )
+    ->where('rooms.is_active',1)
+    ->orderBy('room_number', 'ASC')
+    ->get();
+
+    $data['staff'] = Staff::where('active',1)->get();
 
    return Inertia::render('Welcome', [
         'data'=>$data
@@ -61,11 +87,12 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () {
         Route::get('/', [ProfileController::class, 'index'])->name('profile.edit');
-        Route::post('/changeImage', [UserInfoController::class, 'changeImage'])->name('profile.changeImage');
+        Route::post('/change_image', [UserInfoController::class, 'changeImage'])->name('profile.changeImage');
         Route::post('/profile', [UserInfoController::class, 'updateProfile'])->name('profile.updateProfile');
         // User Room
         Route::get('/rooms', [RoomController::class, 'userRooms'])->name('user.rooms');
         Route::post('/requestRoom', [RequestedRoomController::class, 'requestRoom'])->name('user.requestRoom');
+
         //service:
         Route::get('/service',[GeneralServiceUserController::class,'index'])->name('user.service');
         Route::post('/service/cancel',[GeneralServiceUserController::class,'service_cancel'])->name('service.cancel');
@@ -73,7 +100,9 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         Route::post('/service/request',[GeneralServiceUserController::class,'store'])->name('service.request');
         // User complain
         Route::get('/complain/{filter?}', [ComplainController::class, 'userComplain'])->defaults('filter', 'all')->name('user.complain');
-
+        
+        // Mess
+        Route::get('/mess', [MessController::class, 'user_mess'])->defaults('filter', 'all')->name('user.mess');
         // Visitor management
         Route::get('/visitor/', [VisitorController::class, 'userVisitor'])->defaults('filter', 'all')->name('user.visitor');
         Route::post('/visitor/', [VisitorController::class, 'visitorRequest'])->defaults('filter', 'all')->name('user.visitorRequest');
@@ -118,10 +147,15 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         // User Controller
         Route::post('add/user', [UserInfoController::class, 'addUser'])->name('add.user');
         Route::post('update/user', [UserInfoController::class, 'update'])->name('update.user');
-        Route::get('security/user', [UserInfoController::class, 'security'])->name('security.user');
-        Route::get('deduction/{id}/history', [UserInfoController::class, 'deduction_history'])->name('deduction.history');
-        Route::post('deduction/add', [UserInfoController::class, 'add_deduction'])->name('deduction.add');
         Route::resource('user', UserInfoController::class,['except' => ['update']]);
+
+        /**
+         * Security Controler
+         */
+        Route::post('security/add', [SecurityController::class, 'add_security'])->name('security.add');
+        Route::get('security/user', [SecurityController::class, 'security'])->name('security.user');
+        Route::get('deduction/{id}/history', [SecurityController::class, 'deduction_history'])->name('deduction.history');
+        Route::post('deduction/add', [SecurityController::class, 'add_deduction'])->name('deduction.add');
 
         // Room Services Controller
         Route::get('service/history',[GeneralServicesController::class,'history'])->name('services.uhistory');
@@ -132,12 +166,18 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
 
         // Staff Controller
         Route::resource('staff', StaffController::class);
+        
+        /**
+         * Mess
+         */
+        Route::post('mess/update',[MessController::class,'update'])->name('mess.update');
+        Route::resource('mess', MessController::class,['except' => ['update']]);
 
         // Webcontent Management
-        Route::get('WebContent', [WebContentController::class, 'index'])->name('webcontent.index');
-        Route::post('WebContent/update', [WebContentController::class, 'update'])->name('webcontent.update');
+        Route::post('web_content/update', [WebContentController::class, 'update'])->name('webcontent.update');
+        Route::get('web_content', [WebContentController::class, 'index'])->name('webcontent.index');
     });
 });
-Route::get('/moreDetails', [RoomController::class,'roomDetail'])->name('user.room_details');
+Route::get('room/moreDetails/{id?}', [RoomController::class,'roomDetail'])->name('user.room_details');
 
 require __DIR__ . '/auth.php';

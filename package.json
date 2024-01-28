@@ -35,6 +35,7 @@
         "bootstrap-icons-vue": "^1.11.1",
         "jquery": "^3.7.1",
         "mitt": "^3.0.1",
+        "moment": "^2.30.1",
         "vue-router": "^4.2.5",
         "vue-sweetalert2": "^5.0.5",
         "vue-toggles": "^2.1.0",

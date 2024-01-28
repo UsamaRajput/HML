@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mess;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class MessController extends Controller
@@ -12,7 +13,11 @@ class MessController extends Controller
      */
     public function index()
     {
-        //
+        $res = Mess::orderBy('day')->get();
+       
+        return Inertia::render('Admin/Mess/Index', [
+            'data' => $res
+        ]);
     }
 
     /**
@@ -28,7 +33,12 @@ class MessController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $res = Mess::create($request->all());
+        if ($res) {
+            return response()->json(['data' => $res, 'message' => 'Mess added'], 200);
+        } else {
+            return response()->json(['data' => [], 'message' => 'failed'], 500);
+        }
     }
 
     /**
@@ -44,15 +54,23 @@ class MessController extends Controller
      */
     public function edit(Mess $mess)
     {
-        //
+        return $mess;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Mess $mess)
-    {
-        //
+    public function update(Request $request)
+    {      
+        $update['name'] = $request['name'];
+        $update['time'] = $request['time'];
+        $update['day'] = $request['day'];
+        $res = Mess::where('id',$request->id)->update($update);
+        if ($res) {
+            return response()->json(['data'=>$res,'message'=>'Mess Updated!']);
+        } else {
+            return response()->json(['data'=>[],'message'=>'Not found!'],404);
+        }
     }
 
     /**
@@ -60,6 +78,15 @@ class MessController extends Controller
      */
     public function destroy(Mess $mess)
     {
-        //
+        $mess->delete();
+        return redirect()->back();
+    }
+
+    public function user_mess()  {
+        $res = Mess::orderBy('day')->get();
+       
+        return Inertia::render('User/Mess/Index', [
+            'data' => $res
+        ]);
     }
 }

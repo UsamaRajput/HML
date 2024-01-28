@@ -23,8 +23,18 @@ const props = defineProps({
     }
 });
 
-let  changeValue = (event)=>{
-console.log(event.target.value);
+let  changeValue = (event,user_id)=>{ 
+    axios.post(route('security.add'),{user_id,security_pay:event.target.value})
+        .then((res) => { 
+            notify.simpleAlert(res.data.message); 
+        }).catch((err) => {
+            if (err.response.status == 404) {
+                notify.okAlert('error', "No Room Found");
+            } else {
+                notify.okAlert('error', 'server error');
+            }
+        })
+    
 }
 
  
@@ -35,6 +45,7 @@ eventBus.on('ROOM_ADDED', function (data) {
 let deductionHistory = (user_id,name)=>{
     axios.get(route('deduction.history',user_id))
         .then((res) => { 
+
             eventBus.emit('DEDUCTION_HISTORY', {data:res.data.data,name,user_id});
         }).catch((err) => {
             if (err.response.status == 404) {
@@ -70,11 +81,11 @@ let deductionHistory = (user_id,name)=>{
                             </thead>
                             <tbody>
                                 <tr v-for="(user, ind ) in props.data" :key="ind">
-                                    <td>{{ ind }}</td>
+                                    <td>{{ ind+1 }}</td>
                                     <th>{{ user.name }}</th>
                                     <td>{{ user.email }}</td> 
                                     <td>
-                                    <input class="w-50 form-control form-control-sm" type="number" :value="user.security_pay" @input="changeValue">
+                                    <input class="w-50 form-control form-control-sm" type="number" :value="user.security_pay" @change="changeValue($event,user.user_id)">
                                     </td> 
                                     <td >
                                      {{ parseInt(user.security_pay??0) - parseInt(user.remaining_security??0)}}

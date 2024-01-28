@@ -106,16 +106,15 @@ class RatingController extends Controller
     }
 
     public function room_rating(Request $request){
-        $res = Rating::leftjoin('room_ratings','room_ratings.rating_id','ratings.id')
+        $res = Rating:: distinct()
         ->selectRaw("
-            ratings.id as rating_id,
-            ratings.increment_amount as increment_amount,
-            ratings.service as rating_name,
-            room_ratings.room_id as room_id,
-            room_ratings.rating_id as room_rating_id
-        ")
+        ratings.id as rating_id,
+        ratings.increment_amount as increment_amount,
+        ratings.service as rating_name,
+        (select room_id from room_ratings where room_id = {$request->id} and room_ratings.rating_id = ratings.id limit 1 ) as room_id
+        ") 
         ->orderby('ratings.id','asc')
-        ->where('is_active',1)->get();
+        ->where('ratings.is_active',1)->get();
         if($res){
             return response()->json(['data' => $res, 'message' => 'updated'], 200);
         }else{
@@ -132,18 +131,17 @@ class RatingController extends Controller
         }
 
         if($res){
-            $data = Rating::leftjoin('room_ratings','room_ratings.rating_id','ratings.id')
+            $res = Rating:: distinct()
             ->selectRaw("
-                ratings.id as rating_id,
-                ratings.increment_amount as increment_amount,
-                ratings.service as rating_name,
-                room_ratings.room_id as room_id,
-                room_ratings.rating_id as room_rating_id
-            ")
+            ratings.id as rating_id,
+            ratings.increment_amount as increment_amount,
+            ratings.service as rating_name,
+            (select room_id from room_ratings where room_id = {$request->room_id} and room_ratings.rating_id = ratings.id limit 1 ) as room_id
+            ") 
             ->orderby('ratings.id','asc')
-            ->where('is_active',1)->get();
+            ->where('ratings.is_active',1)->get();
 
-            return response()->json(['data' => $data, 'message' => $request->mode ], 200);
+            return response()->json(['data' => $res, 'message' => $request->mode ], 200);
         }else{
             return response()->json(['data' => [], 'message' => 'Not found'], 404);
         }

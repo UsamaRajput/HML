@@ -27,7 +27,7 @@ function editRoom(data) {
 }
 
 function ratingRoom(param) {
-    axios.post(route('rating.room'))
+    axios.post(route('rating.room'),{id:param.id})
     .then((res) => {
         eventBus.emit('RATING_ROOM', {data:res.data,room:param});
     }).catch((err) => {
@@ -80,6 +80,7 @@ function roomActiveInactive(id) {
                                 <tr>
                                     <th>#</th>
                                     <th>Images</th>
+                                    <th>rating</th>
                                     <th>Amount</th>
                                     <th>Capacity</th>
                                     <th>Current</th>
@@ -93,6 +94,7 @@ function roomActiveInactive(id) {
                                     <td>
                                         <img v-for="(img, im) in room.images_room" class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :key="im" :src="base_url+'room_images/'+img.image" alt="">
                                     </td>
+                                    <td>{{ room.rating }}</td>
                                     <td>{{ parseFloat(room.price) + parseFloat(room.amount) }}</td>
                                     <td>{{ room.capacity }}</td>
                                     <td>{{ room.users.length }}</td>

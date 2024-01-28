@@ -20,6 +20,9 @@ import { Link  } from '@inertiajs/vue3';
             <Link :href="route('user.service')" class="nav-link ">
                 Service
             </Link>
+            <Link :href="route('user.mess')" class="nav-link ">
+                Mess
+            </Link>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="https://placehold.co/400" alt="" style="width: 40px; height: 40px;">

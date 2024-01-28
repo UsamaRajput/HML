@@ -7,7 +7,7 @@ import "../../css/user/style.css";
 // import "../../css/user/slicknav.css";
 // import "../../css/user/flaticon.css";
 import { Icon } from '@iconify/vue';
-
+let base_url= _url;
 
 let props = defineProps({
     data: {
@@ -17,46 +17,14 @@ let props = defineProps({
         type: Boolean,
     },
 
-});
-
-
-
+}); 
 
 </script>
-
-
-
-
 
 
 <template class="template">
     <Head title="Welcome" />
     <header class="header-section">
-        <div class="top-nav">
-            <div class="container">
-
-                <div class="row">
-                    <div class="col-lg-6">
-                        <ul class="tn-left">
-                            <li><i class="fa fa-phone"></i> (12) 345 67890</li>
-                            <li><i class="fa fa-envelope"></i> info.colorlib@gmail.com</li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="tn-right">
-                            <div class="top-social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-tripadvisor"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                            </div>
-                            <a href="#" class="bk-btn">Booking Now</a>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="menu-item">
             <div class="container">
                 <div class="row">
@@ -72,8 +40,10 @@ let props = defineProps({
                             <nav class="mainmenu">
                                 <ul>
                                     <li class="active"><a href="./index.html">Home</a></li>
-                                    <li><a href="./rooms.html">Rooms</a></li>
+                                    <li><a href="#rooms-all">Rooms</a></li>
                                     <li><a href="#about-us">About Us</a></li>
+                                    <li><Link :href="route('login')" v-if="canLogin">Login</Link></li>
+                                    <li><Link :href="route('user.rooms')" v-if="!canLogin">Panel</Link></li>
 
 
                                 </ul>
@@ -86,18 +56,15 @@ let props = defineProps({
         </div>
     </header>
 
-
-
     <!-- hero-section -->
-    <section class="hero-section" style="background-image: url({{ props.data.main_content.banner }});">
+    <section class="hero-section"  :style="`background-image: url('${base_url}main_images/${props.data.main_content.banner}');`">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
 
                     <div class="hero-text">
-                        <h1>Sona A Luxury Hotel</h1>
-                        <p>Here are the best hotel booking sites, including recommendations for international
-                            travel and for finding low-priced hotel rooms.</p>
+                        <h1>{{ props.data.main_content.title }}</h1>
+                        <p>{{ props.data.main_content.content }}</p>
                         <a href="#" class="primary-btn">Discover Now</a>
                     </div>
                 </div>
@@ -129,10 +96,8 @@ let props = defineProps({
         </div>
     </section>
 
-
-
     <!-- About Us Section Begin -->
-    <section class="aboutus-section spad">
+    <section class="aboutus-section spad" id="about-us">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -148,7 +113,7 @@ let props = defineProps({
                     <div class="about-pic">
                         <div class="row">
                             <div class="col-sm-12">
-                                <img src="../../images/about-1.jpg" alt="">
+                                <img :src="`${base_url}main_images/${props.data.main_content.superintendent_image}`" alt="">
                             </div>
                         </div>
                     </div>
@@ -158,16 +123,13 @@ let props = defineProps({
     </section>
     <!-- About Us Section End -->
 
-
-
-
     <!-- Services Section End -->
     <section class="services-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span>Discover Our Services</span>
+                        <span>Discover Our Room</span>
                     </div>
                 </div>
             </div>
@@ -183,36 +145,33 @@ let props = defineProps({
     </section>
     <!-- Services Section End -->
 
-
-
-
     <!-- Home Room Section Begin -->
-    <section class="hp-room-section" id="about-us">
+    <section class="hp-room-section" id="rooms-all">
         <div class="container-fluid">
             <div class="hp-room-items">
                 <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>Discover Our Services</span>
+                    </div>
+                </div>
+            </div>
+                <div class="row">
                     <div class="col-lg-3 col-md-6" v-for="(room , ind) in props.data.rooms" :key="ind">
-                        <div class="hp-room-item set-bg room1" style="background-image: url({{ props.data.room.banner }});">
+                    
+                        <div class="hp-room-item set-bg room1" :style="`background-image: url('${base_url}room_images/${room.images_room[0]?.image}');`">
                             <div class="hr-text">
                                 <h3>{{ room.room_number }}</h3>
-                                <h2>199$</h2>
+                                <h2>{{ parseFloat(room.price??0) + parseFloat(room.amount??0) }} RS</h2>
                                 <table>
                                     <tbody>
                                         <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
                                             <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
+                                            <td>Max {{room.capacity}}</td>
                                         </tr>
                                         <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
+                                            <td class="r-o">Stars:</td>
+                                            <td>{{ parseFloat(room.rating??0,2) }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -227,66 +186,22 @@ let props = defineProps({
     </section>
     <!-- Home Room Section End -->
 
-
-
-
-
-
-
     <!-- Blog Section Begin -->
     <section class="blog-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span>Hotel News</span>
-                        <h2>Our Blog & Event</h2>
+                        <span>Meet</span>
+                        <h2>Our Staff</h2>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="blog-item set-bg blog1" data-setbg="img/blog/blog-1.jpg">
+                <div v-for="(staf,ind) in props.data.staff" :key="ind" class="col-lg-4">
+                    <div class="blog-item set-bg "  :style="`background-image:url('${base_url}staff_images/${staf.image}')`"  >
                         <div class="bi-text">
-                            <span class="b-tag">Travel Trip</span>
-                            <h4><a href="#">Tremblant In Canada</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 15th April, 2019</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="blog-item set-bg blog2" data-setbg="img/blog/blog-2.jpg">
-                        <div class="bi-text">
-                            <span class="b-tag">Camping</span>
-                            <h4><a href="#">Choosing A Static Caravan</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 15th April, 2019</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="blog-item set-bg blog3" data-setbg="img/blog/blog-3.jpg">
-                        <div class="bi-text">
-                            <span class="b-tag">Event</span>
-                            <h4><a href="#">Copper Canyon</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 21th April, 2019</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="blog-item small-size set-bg blog4" data-setbg="img/blog/blog-wide.jpg">
-                        <div class="bi-text">
-                            <span class="b-tag">Event</span>
-                            <h4><a href="#">Trip To Iqaluit In Nunavut A Canadian Arctic City</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 08th April, 2019</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="blog-item small-size set-bg blog5" data-setbg="img/blog/blog-10.jpg">
-                        <div class="bi-text">
-                            <span class="b-tag">Travel</span>
-                            <h4><a href="#">Traveling To Barcelona</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 12th April, 2019</div>
+                            <span class="b-tag">{{staf.name}}</span>
                         </div>
                     </div>
                 </div>
@@ -304,7 +219,7 @@ let props = defineProps({
                         <div class="ft-about">
                             <div class="logo">
                                 <a href="#">
-                                    <img src="img/footer-logo.png" alt="">
+                                    <img :src="`../../img/footer-logo.png`" alt="">
                                 </a>
                             </div>
                             <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
@@ -316,23 +231,12 @@ let props = defineProps({
                             <h6>Contact Us</h6>
                             <ul>
                                 <li>(12) 345 67890</li>
-                                <li>info.colorlib@gmail.com</li>
-                                <li>856 Cordia Extension Apt. 356, Lake, United State</li>
+                                <li>info.hms@gmail.com</li>
+                                <li>gcs LHR.</li>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-3 offset-lg-1">
-                        <div class="ft-newslatter">
-                            <h6>New latest</h6>
-                            <p>Get the latest updates and offers.</p>
-                            <form action="#" class="fn-form">
-                                <input type="text" placeholder="Email">
-                                <button type="submit">
-                                    <Icon icon="bx:send" style=" color:white;" />
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -341,17 +245,13 @@ let props = defineProps({
                 <div class="row">
                     <div class="col-lg-7">
                         <ul>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">Terms of use</a></li>
-                            <li><a href="#">Privacy</a></li>
-                            <li><a href="#">Environmental Policy</a></li>
+                            <li><a href="#">Contact</a></li>  
                         </ul>
                     </div>
                     <div class="col-lg-5">
                         <div class="co-text">
                             <p>
-                                Copyright &copy; All rights reserved | This template is made with <i class="fa fa-heart"
-                                    aria-hidden="true"></i> by <a href="#" target="_blank"></a>
+                                Copyright &copy; All rights reserved 
                             </p>
                         </div>
                     </div>
@@ -389,11 +289,7 @@ let props = defineProps({
 </style> -->
 
 <style>
-.hero-section {
-
-    background-image: url("../../images/hero-3.jpg");
-
-}
+ 
 
 .set-bg.hero2 {
 

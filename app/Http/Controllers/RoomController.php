@@ -23,6 +23,7 @@ class RoomController extends Controller
            }])
         ->selectRaw('
             sum(ratings.increment_amount) AS amount, rooms.id ,
+            avg(ratings.rating) AS rating,
             rooms.room_number,
             rooms.capacity,
             rooms.price,
@@ -169,9 +170,35 @@ class RoomController extends Controller
 
      public function userRooms(){
         // $rooms = Auth::user()->rooms()->paginate(10);
-        $rooms = Room::with('ImagesRoom')
-        ->where('is_active',1)
-        ->orderBy('room_number', 'ASC')->get();
+
+        $rooms = Room::with(['ImagesRoom','users'=>function($qry){
+            return $qry->whereNull('leaving_date');
+           }])
+        ->selectRaw('
+            sum(ratings.increment_amount) AS amount,
+            avg(ratings.rating) AS rating,
+            rooms.id ,
+            rooms.room_number,
+            rooms.capacity,
+            rooms.price,
+            rooms.is_active
+         ')
+        ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
+        ->leftjoin('ratings','ratings.id','room_ratings.rating_id')
+        ->groupBy(
+            'rooms.id',
+            'rooms.room_number',
+            'rooms.capacity',
+            'rooms.price',
+            'rooms.is_active'
+        )
+        ->where('rooms.is_active',1)
+        ->orderBy('room_number', 'ASC')
+        ->get();
+
+        // $rooms = Room::with('ImagesRoom')
+        // ->where('is_active',1)
+        // ->orderBy('room_number', 'ASC')->get();
 
         return Inertia::render('User/Room/Index', [
             'data' => $rooms,
@@ -184,8 +211,35 @@ class RoomController extends Controller
         return response()->json(['data' => $res, 'message' => 'updated'], 200);
      }
 
-     public function roomDetail()
+     public function roomDetail($id=null)
      {
-        return Inertia::render('User/Room/RoomDetails');
+        $data =  Room::with(['ImagesRoom','users'=>function($qry){
+            return $qry->whereNull('leaving_date');
+           }])
+        ->selectRaw('
+            sum(ratings.increment_amount) AS amount, rooms.id ,
+            avg(ratings.rating) AS rating,
+            rooms.room_number,
+            rooms.capacity,
+            rooms.price,
+            rooms.is_active
+         ')
+        ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
+        ->leftjoin('ratings','ratings.id','room_ratings.rating_id')
+        ->groupBy(
+            'rooms.id',
+            'rooms.room_number',
+            'rooms.capacity',
+            'rooms.price',
+            'rooms.is_active'
+        )
+        ->where('rooms.is_active',1)
+        ->where('rooms.id',$id)
+        ->orderBy('room_number', 'ASC')
+        ->first();
+            // dd($data);
+        return Inertia::render('User/Room/RoomDetails', [
+            'data'=>$data
+        ]);
      }
 }

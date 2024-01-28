@@ -57,15 +57,14 @@
                 <Link :href="route('staff.index')" class="nav-item nav-link">
                     <i class="fa fa-tachometer-alt me-2"></i>Staff
                 </Link>
-                <!-- <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                            class="fa fa-laptop me-2"></i>Ratings</a>
-                    <div class="dropdown-menu bg-transparent border-0">
-                        <Link :href="route('room.index')" class="dropdown-item">
-                        List
-                        </Link>
-                    </div>
-                </div> -->
+                <Link :href="route('mess.index')" class="nav-item nav-link">
+                    <i class="fa fa-tachometer-alt me-2"></i>Mess
+                </Link>
+         
+                <Link class="nav-item nav-link" :href="route('logout')" method="post" >
+                    <i class="fa fa-tachometer-alt me-2"></i>
+                    Log Out
+                </Link>  
             </div>
         </nav>
     </div>
