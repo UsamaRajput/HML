@@ -14,6 +14,7 @@ class Room extends Model
         'room_number',
         'capacity',
         'price',
+        'room_desc',
         'current',
         'is_active',
     ];
@@ -29,5 +30,9 @@ class Room extends Model
 
     public function users(){
         return $this->belongsToMany(User::class, 'room_user');
+    }
+
+    public function ratings(){
+        return $this->belongsToMany(Rating::class, 'room_ratings','room_id','rating_id');
     }
 }

@@ -21,6 +21,10 @@
 
                             <input id="price" class="form-control form-control-sm" v-model="form.price" type="number" step="0.01"
                                 placeholder="Room price">
+                            <label for="room_desc" class="form-label">room description</label>
+
+                            <input id="room_desc" class="form-control form-control-sm" v-model="form.room_desc" type="text" 
+                                placeholder="Room Description">
                             <label for="image" class="form-label">Image</label>
                             <input id="image" type="file" class="form-control form-control-sm"
                                 @input="form.images = $event.target.files" multiple accept="image/*">
@@ -46,6 +50,7 @@ let form = reactive({
     room_number: '',
     price: '',
     capacity: '',
+    room_desc:'',
     images: []
 })
 

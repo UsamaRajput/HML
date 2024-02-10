@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import "../../../../css/user/detail.css"
 import "../../../../css/user/user.css";
 import "../../../../css/user/style.css";
-import { ref,onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 // import "../../css/user/slicknav.css";
 // import "../../css/user/flaticon.css";
 // import { Icon } from '@iconify/vue';
@@ -25,8 +25,8 @@ let props = defineProps({
         type: String,
         required: true,
     },
-    phpVersion: {
-        type: String,
+    related: {
+        type: Object,
         required: true,
     },
 });
@@ -44,15 +44,15 @@ function changeActiveImage(index) {
 
 
 
-onMounted(()=>{
+onMounted(() => {
     // console.log('props.data.data',props.data.images_room);
-    images.value = props.data.images_room.map((item)=>{
+    images.value = props.data.images_room.map((item) => {
         return {
             url: `${base_url}room_images/${item.image}`,
             thumbnailUrl: `${base_url}room_images/${item.image}`
         }
     });
-    console.log('images.value',images.value);
+    console.log('images.value', images.value);
 
 });
 </script>
@@ -126,25 +126,24 @@ onMounted(()=>{
                             </ul>
                         </div>
                         <div class="details col-md-6">
-                            <h3 class="product-title">men's shoes fashion</h3>
+                            <h3 class="product-title">Room Number {{ props.data.room_number }}</h3>
                             <div class="rating">
-                                <div class="stars"> 
-                                    <template v-for="(val,ind) in 5">
-                                        <span class="fa fa-star" :class="val > parseInt( props.data.rating??0) ?'':'checked'"></span>
+                                <div class="stars">
+                                    <template v-for="(val, ind) in 5">
+                                        <span class="fa fa-star"
+                                            :class="val > parseInt(props.data.rating ?? 0) ? '' : 'checked'"></span>
                                     </template>
-                                     
-                                </div> 
+
+                                </div>
                             </div>
-                            <p class="product-description">Suspendisse quos? Tempus cras iure temporibus? Eu laudantium
-                                cubilia sem sem! Repudiandae et! Massa senectus enim minim sociosqu delectus posuere.</p>
-                            <h4 class="price">current price: <span>{{ parseFloat( props.data.price??0) + parseFloat( props.data.amount??0) }} RS</span></h4>
-                            <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong>
-                            </p>
-                        
+                            <h4 class="price">current price: <span>{{ parseFloat(props.data.price ?? 0) + parseFloat(
+                                props.data.amount ?? 0) }} RS</span></h4>
                             <div class="action mt-3">
-                                <h6>For booking</h6>
-                                <Link v-if="canLogin" :href="route('login')" class="add-to-cart btn btn-default" type="button">Login/Register</Link>                              
-                                <Link v-if="!canLogin" :href="route('user.rooms')" class="add-to-cart btn btn-default" type="button">Visit for request</Link>                              
+                                <h3>For booking</h3>
+                                <Link v-if="canLogin" :href="route('login')" class="add-to-cart btn btn-default"
+                                    type="button">Login/Register</Link>
+                                <Link v-if="!canLogin" :href="route('user.rooms')" class="add-to-cart btn btn-default"
+                                    type="button">Visit for request</Link>
                             </div>
                         </div>
                     </div>
@@ -165,197 +164,68 @@ onMounted(()=>{
                             </div>
                             <div class="card-body">
                                 <p class="text">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum dolore modi soluta
-                                    aperiam dolorum ut, magni, officiis numquam ipsum delectus quidem neque ad. Ipsa hic
-                                    inventore aut voluptatem cumque amet nam commodi, sit porro corrupti magni quaerat
-                                    incidunt quod possimus odit architecto numquam dolore. Aut magni eius distinctio
-                                    mollitia? Amet.
+                                    {{ props.data.room_desc }}
                                     <hr>
                                 </p>
+                            <h3 class="product-title">Services</h3>
                                 <table class="table  ">
                                     <thead class="table-warning">
                                         <tr>
-                                            <th>Rooms</th>
-                                            <th>Space</th>
-                                            <th>Beds</th>
+                                            <th>Stars</th>
+                                            <th>Service Name</th>
+                                            <th>Charges</th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-secondary">
-                                        <tr>
-                                            <td>1</td>
-                                            <td>20ft</td>
-                                            <td>3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>20ft</td>
-                                            <td>3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>20ft</td>
-                                            <td>3</td>
+                                        <tr v-for="rating in props.data.ratings">
+                                            <td>
+                                                <div class="stars">
+                                                    <template v-for="(val, ind) in 5">
+                                                        <span class="fa fa-star"
+                                                            :class="val > parseInt(rating.rating ?? 0) ? '' : 'checked'"></span>
+                                                    </template>
+                                                </div>
+                                            </td>
+                                            <td>{{rating.service}}</td>
+                                            <td>{{ rating.increment_amount }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         </div>
-
-
-
-
-
-
-
                     </div>
                     <div class="col-4">
                         <div class="card">
                             <div class="card-header">
                                 <h2>Similar Items</h2>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body"> 
+                               <template v-for="item in props.related">
                                 <div class="row">
-
                                     <div class="col-4">
-
-                                        <img src="../../../../images/bed-rooms.jpg" alt="">
+                                        <img :src="`${base_url}room_images/${item.images_room[0]?.image}`" alt="">
                                     </div>
                                     <div class="col-8">
                                         <a href="" class="text-decoration-none">
-                                            <h4>Bed Room</h4>
+                                            <h6>Room Number {{ item.room_number }}</h6>
                                             <p class="room-details">
-                                                Lorem ipsum dolor sit amet consectetur
+                                                {{ item.room_desc }}
                                             </p>
                                         </a>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-
-                                    <div class="col-4">
-
-                                        <img src="../../../../images/bed-rooms.jpg" alt="">
                                     </div>
-                                    <div class="col-8">
-                                        <a href="" class="text-decoration-none">
-                                            <h4>Bed Room</h4>
-                                            <p class="room-details">
-                                                Lorem ipsum dolor sit amet consectetur
-                                            </p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-
-                                    <div class="col-4">
-
-                                        <img src="../../../../images/bed-rooms.jpg" alt="">
-                                    </div>
-                                    <div class="col-8">
-                                        <a href="" class="text-decoration-none">
-                                            <h4>Bed Room</h4>
-                                            <p class="room-details">
-                                                Lorem ipsum dolor sit amet consectetur
-                                            </p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <hr>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                    <hr>
+                               </template>
+                               
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-    </div>
+        </div>
 
-</main></template>
+    </main>
+</template>
 
 
 

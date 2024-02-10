@@ -20,6 +20,7 @@ use App\Models\Staff;
 use App\Models\User;
 use App\Models\Visitor;
 use App\Models\WebContent;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -79,6 +80,15 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::post('/contactMail', function (Request $request) {
+     \Mail::send([], [], function ($m) use ($request) {
+        // $m->from($request->email);
+        $m->text("Client Email ".$request->email."\n"."Message ".$request->message);  
+        $m->to('rajputhusama@gmail.com', $request->name)->subject("Contact Us Mail");
+    });
+    return response()->json([  'message' => 'Mail sent successfully'], 200);
+})->name('contactMail');
 
 
 // Route::resource('room', RoomController::class);

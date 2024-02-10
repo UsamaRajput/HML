@@ -24,6 +24,7 @@ class RoomController extends Controller
         ->selectRaw('
             sum(ratings.increment_amount) AS amount, rooms.id ,
             avg(ratings.rating) AS rating,
+            rooms.room_desc,
             rooms.room_number,
             rooms.capacity,
             rooms.price,
@@ -33,6 +34,7 @@ class RoomController extends Controller
         ->leftjoin('ratings','ratings.id','room_ratings.rating_id')
         ->groupBy(
             'rooms.id',
+            'rooms.room_desc',
             'rooms.room_number',
             'rooms.capacity',
             'rooms.price',
@@ -213,13 +215,14 @@ class RoomController extends Controller
 
      public function roomDetail($id=null)
      {
-        $data =  Room::with(['ImagesRoom','users'=>function($qry){
+        $data =  Room::with(['ImagesRoom','ratings','users'=>function($qry){
             return $qry->whereNull('leaving_date');
            }])
         ->selectRaw('
             sum(ratings.increment_amount) AS amount, rooms.id ,
             avg(ratings.rating) AS rating,
             rooms.room_number,
+            rooms.room_desc,
             rooms.capacity,
             rooms.price,
             rooms.is_active
@@ -229,6 +232,7 @@ class RoomController extends Controller
         ->groupBy(
             'rooms.id',
             'rooms.room_number',
+            'rooms.room_desc',
             'rooms.capacity',
             'rooms.price',
             'rooms.is_active'
@@ -237,9 +241,39 @@ class RoomController extends Controller
         ->where('rooms.id',$id)
         ->orderBy('room_number', 'ASC')
         ->first();
-            // dd($data);
+
+        $related =  Room::with(['ImagesRoom','ratings','users'=>function($qry){
+            return $qry->whereNull('leaving_date');
+           }])
+        ->selectRaw('
+            sum(ratings.increment_amount) AS amount, rooms.id ,
+            avg(ratings.rating) AS rating,
+            rooms.room_number,
+            rooms.room_desc,
+            rooms.capacity,
+            rooms.price,
+            rooms.is_active
+         ')
+        ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
+        ->leftjoin('ratings','ratings.id','room_ratings.rating_id')
+        ->groupBy(
+            'rooms.id',
+            'rooms.room_number',
+            'rooms.room_desc',
+            'rooms.capacity',
+            'rooms.price',
+            'rooms.is_active'
+        )
+        ->where('rooms.is_active',1)
+        ->where(function($qry) use ($data){
+            $qry->whereRaw('rooms.room_number BETWEEN ' . $data->room_number+1 . ' AND ' . $data->room_number-1 . '')
+            ->orwhere('rating',$data->rating) ;
+        })
+        ->orderBy('room_number', 'ASC')
+        ->get(); 
         return Inertia::render('User/Room/RoomDetails', [
-            'data'=>$data
+            'data'=>$data,
+            'related'=>$related,
         ]);
      }
 }

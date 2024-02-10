@@ -4,6 +4,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import "../../css/user/user.css";
 import "../../css/user/style.css";
+import { ref } from 'vue';
 // import "../../css/user/slicknav.css";
 // import "../../css/user/flaticon.css";
 import { Icon } from '@iconify/vue';
@@ -18,6 +19,28 @@ let props = defineProps({
     },
 
 }); 
+
+let disable = ref(false);
+
+let form = ref({
+    name:null,
+    email:null,
+    message:null
+});
+
+function contactMail() {
+    disable.value = true;
+    form.value = {};
+    axios.post(route('contactMail'),form.value )
+    .then(res => {
+        disable.value = false;
+        notify.simpleAlert('Mail sent successfully');
+    }).catch((err) => {
+        disable.value = false;
+        notify.simpleAlert('Something Wrong', 'error');
+    });
+ 
+}
 
 </script>
 
@@ -71,24 +94,25 @@ let props = defineProps({
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
                         <h3>Contact Us </h3>
-                        <form action="#">
+                        <form   @submit.prevent="contactMail">
                             <div class="check-date">
                                 <label for="date-in">Name:</label>
-                                <input type="text">
+                                <input type="text" v-model="form.name">
 
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Email:</label>
-                                <input type="email">
+                                <input type="email" v-model="form.email">
 
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Message:</label>
-                                <input type="text">
+                                <input type="text" v-model="form.message">
 
                             </div>
 
-                            <button type="submit">Send</button>
+                            <button type="submit" :disabled="disable">Send</button>
+
                         </form>
                     </div>
                 </div>
@@ -175,7 +199,7 @@ let props = defineProps({
                                         </tr>
                                     </tbody>
                                 </table>
-                                <Link :href="route('user.room_details')" class="primary-btn">More Details</Link>
+                                <Link :href="route('user.room_details',room.id)" class="primary-btn">More Details</Link>
                             </div>
                         </div>
                     </div>

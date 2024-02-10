@@ -22,6 +22,12 @@
 
                         <input id="price" class="form-control form-control-sm" v-model="form.price" type="number"
                             step="0.01" placeholder="Room price">
+
+                        <label for="capacity" class="form-label">room description</label>
+
+                        <input id="price" class="form-control form-control-sm" v-model="form.room_desc" type="text"
+                            step="0.01" placeholder="Room description">
+
                         <label for="image" class="form-label">Image</label>
                         <input id="image" type="file" class="form-control form-control-sm"
                             @input="form.images = $event.target.files" multiple accept="image/*">
@@ -45,6 +51,7 @@ import { reactive } from 'vue';
 let form = reactive({
     room_number: '',
     capacity: '',
+    room_desc:'',
     price: '',
     images: []
 })
@@ -52,9 +59,11 @@ let form = reactive({
 eventBus.on('EDIT_ROOM', function (data) {
     let myModal = new bootstrap.Modal(document.getElementById('editRoomModal'), {
         keyboard: false
-    })
+    }) 
+    
     myModal.show();
     form.id = data.id;
+    form.room_desc = data.room_desc;
     form.room_number = data.room_number;
     form.price = data.price;
     form.capacity = data.capacity;
