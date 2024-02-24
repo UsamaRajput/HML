@@ -16,26 +16,26 @@ class UserInfoController extends Controller
      */
     public function index()
     {
-        // dd('ds');
-       $res['users'] = User::with(['userInfo','rooms'=>function($qry){
-        return $qry->whereNull('leaving_date');
-       }])->get();
+        $res['users'] = User::with(['userInfo', 'rooms' => function ($qry) {
+            return $qry->whereNull('leaving_date');
+        }])->get();
 
-       $res['rooms'] = Room::withCount(['users'=>function($qry){
-        return $qry->whereNull('leaving_date');
-       }])->where('is_active',1)->get();
-    //    dd($res['rooms']);
-       return Inertia::render('Admin/User/List',[
-        'data'=>$res
+        $res['rooms'] = Room::withCount(['users' => function ($qry) {
+            return $qry->whereNull('leaving_date');
+        }])->where('is_active', 1)->get();
+
+        return Inertia::render('Admin/User/List', [
+            'data' => $res
         ]);
     }
 
 
-    function addUser(Request $request) {
-        // dd('da');
+    function addUser(Request $request)
+    {
+
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:'.User::class,
+            'email' => 'required|string|email|max:255|unique:' . User::class,
             'password' => 'required',
         ]);
 
@@ -46,7 +46,7 @@ class UserInfoController extends Controller
         ]);
         $infoData = $request->all();
 
-         if ($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $fileName = null;
             $image = $request->file('image');
             $fileName = time() . $image->getClientOriginalName();
@@ -56,8 +56,13 @@ class UserInfoController extends Controller
 
         $infoData['user_id'] = $user->id;
         $uesrInfo = UserInfo::create($infoData);
-       
+
         if ($uesrInfo) {
+            $res['users'] = User::with(['userInfo', 'rooms' => function ($qry) {
+                return $qry->whereNull('leaving_date');
+            }])->get();
+            return response()->json(['data' => $res['users'], 'message' => 'User updated']);
+            
             return back()->with('message', 'UserInfo Updated');
         } else {
             return back()->with('error', 'Failed! Something wrong');
@@ -74,7 +79,7 @@ class UserInfoController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $uesrInfo = UserInfo::updateOrCreate(['user_id'=>auth()->user()->id],$request->all());
+        $uesrInfo = UserInfo::updateOrCreate(['user_id' => auth()->user()->id], $request->all());
 
         if ($uesrInfo) {
             return back()->with('message', 'UserInfo Updated');
@@ -120,18 +125,18 @@ class UserInfoController extends Controller
     public function edit($id)
     {
         // $id = $request->user_id;
-        $res = User::leftjoin('user_infos','users.id','user_infos.user_id')
-        ->selectRaw("
+        $res = User::leftjoin('user_infos', 'users.id', 'user_infos.user_id')
+            ->selectRaw("
             user_infos.*,
             users.*,
             user_infos.user_id as user_id,
             users.id as id
         ")
-        ->where('users.id',$id)->first();
+            ->where('users.id', $id)->first();
         if ($res) {
-            return response()->json(['data'=>$res]);
+            return response()->json(['data' => $res]);
         } else {
-            return response()->json(['data'=>[],'message'=>'Not found!'],404);
+            return response()->json(['data' => [], 'message' => 'Not found!'], 404);
         }
     }
 
@@ -139,10 +144,10 @@ class UserInfoController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
-    { 
-        User::where('id',$request->id)->update([
-            'name'=>$request->name,
-            'email'=>$request->email,
+    {
+        User::where('id', $request->id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
             // 'password'=>$request->password,
         ]);
 
@@ -154,12 +159,15 @@ class UserInfoController extends Controller
             $image->storeAs('user_images', $fileName);
             $userInfoData['image'] = $fileName;
         }
-        $uesrInfo = UserInfo::updateOrCreate(['user_id'=>$request->id],$userInfoData);
+        $uesrInfo = UserInfo::updateOrCreate(['user_id' => $request->id], $userInfoData);
 
         if ($uesrInfo) {
-            return back()->with('message', 'UserInfo added');
+            $res['users'] = User::with(['userInfo', 'rooms' => function ($qry) {
+                return $qry->whereNull('leaving_date');
+            }])->get();
+            return response()->json(['data' => $res['users'], 'message' => 'User updated']);
         } else {
-            return back()->with('error', 'Failed! Something wrong');
+            return response()->json(['data' =>  [] ,'message' => 'Failed to update user']);
         }
     }
 
@@ -168,9 +176,9 @@ class UserInfoController extends Controller
      */
     public function destroy($userInfo)
     {
-        $res = User::where(['id'=>$userInfo])->delete();
-        UserInfo::where(['user_id'=>$userInfo])->delete();
-        \DB::table('room_user')->where(['user_id'=> $userInfo])->delete();
+        $res = User::where(['id' => $userInfo])->delete();
+        UserInfo::where(['user_id' => $userInfo])->delete();
+        \DB::table('room_user')->where(['user_id' => $userInfo])->delete();
         if ($res) {
             return back()->with('message', 'deleted');
         } else {
@@ -181,7 +189,8 @@ class UserInfoController extends Controller
     /**
      * Change profile image
      */
-    public function changeImage(Request $request){
+    public function changeImage(Request $request)
+    {
         // dd('hi');
         $request->validate([
             'image' => ['required', 'image'],
@@ -191,18 +200,18 @@ class UserInfoController extends Controller
             $image = $request->file('image');
             $oriFileName = time() . $image->getClientOriginalName();
             $filename = $image->storeAs('user_images', $oriFileName);
-            if($filename){
-                $res = UserInfo::updateOrCreate(['user_id'=>auth()->user()->id],['image'=>$oriFileName]);
-                if($res){
-                   return response()->json(['data'=>['image'=>$oriFileName],'message'=>'image change']);
-                }else{
-                    return response()->json(['data'=>[],'message'=>'Failed to change'],500);
+            if ($filename) {
+                $res = UserInfo::updateOrCreate(['user_id' => auth()->user()->id], ['image' => $oriFileName]);
+                if ($res) {
+                    return response()->json(['data' => ['image' => $oriFileName], 'message' => 'image change']);
+                } else {
+                    return response()->json(['data' => [], 'message' => 'Failed to change'], 500);
                 }
-            }else{
-                return response()->json(['data'=>[],'message'=>'Something wrong'],500);
+            } else {
+                return response()->json(['data' => [], 'message' => 'Something wrong'], 500);
             }
-        }else{
-            return response()->json(['data'=>[],'message'=>'Please upload image'],500);
+        } else {
+            return response()->json(['data' => [], 'message' => 'Please upload image'], 500);
         }
     }
 }

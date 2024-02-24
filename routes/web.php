@@ -175,7 +175,8 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         Route::resource('services', GeneralServicesController::class);
 
         // Staff Controller
-        Route::resource('staff', StaffController::class);
+        Route::post('staff/update',[StaffController::class,'update'])->name('staff.update');
+        Route::resource('staff', StaffController::class,['except' => ['update']]);
         
         /**
          * Mess

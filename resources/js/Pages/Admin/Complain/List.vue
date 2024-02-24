@@ -11,6 +11,9 @@ const props = defineProps({
     data: {
         type: Object,
     },
+    filter:{
+        type:String
+    },
     error: {
         type: String
     },
@@ -19,14 +22,14 @@ const props = defineProps({
     }
 });
 
-let filter = ref('all');
+let filter = ref(props.filter);
+let complains = ref(props.data);
 
 
 function complainProgress(fieldName, id) {
 
     axios.post(route('complain.complainProgress', id), { fieldName })
-        .then((res) => {
-            console.log(res);
+        .then((res) => { 
             notify.simpleAlert(res.data.message);
         }).catch((err) => {
             if (err.response.status == 404) {
@@ -36,6 +39,7 @@ function complainProgress(fieldName, id) {
             }
         })
 }
+
 function filterComplain(){
     router.get(route('complain.index',filter.value))
 }
@@ -73,7 +77,7 @@ function filterComplain(){
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item, ind ) in props.data" :key="ind">
+                                <tr v-for="(item, ind ) in complains" :key="ind">
                                     <th>{{ ind + 1 }}</th>
                                     <td>
                                         {{ item.user?.name }}

@@ -14,18 +14,27 @@
                             <thead>
                                 <tr>
                                     <td>Name</td>
-                                    <th>Action</th>
+                                    <td>Date</td>
+                                    <td>Entry</td>
+                                    <td>Exit</td> 
                                 </tr>
                             </thead>
                             <tbody>
                                  <tr v-for="(item, index) in services" :key="index">
 
                                     <td>
-                                        {{index}}
+                                        {{item.name}}
                                     </td>
                                     <td>
-                                        {{ item.name }}
+                                        {{item.date}}
                                     </td>
+                                    <td>
+                                        {{item.entry}}
+                                    </td>
+                                    <td>
+                                        {{item.exit}}
+                                    </td>
+                                     
                                 </tr>
                             </tbody>
                         </table>

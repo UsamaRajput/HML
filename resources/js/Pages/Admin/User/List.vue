@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted,ref } from 'vue';
 import { Link } from '@inertiajs/vue3'
 import { VueToggles } from "vue-toggles";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
@@ -22,11 +22,12 @@ const props = defineProps({
     }
 });
 
+let users = ref(props.data.users)
+
 function room_history (id){
     axios.post(route('room.history'),{user_id:id})
         .then((res) => {  
-            eventBus.emit('ROOM_HISTORY', res.data.data);
-            // notify.simpleAlert(res.data.message);
+            eventBus.emit('ROOM_HISTORY', res.data.data); 
         }).catch((err) => {
             if (err.response.status == 404) {
                 notify.okAlert('error', "No Room Found");
@@ -37,8 +38,12 @@ function room_history (id){
 
 }
 
-eventBus.on('ROOM_ADDED', function (data) {
-    props.data.push(data)
+eventBus.on('USER_UPDATED', function (data) {
+    users.value = data
+});
+
+eventBus.on('USER_ADDED', function (data) {
+    users.value = data
 });
 
 let edituser = (user_id)=>{
@@ -113,7 +118,7 @@ function room_change(event,id) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(user, ind ) in props.data.users" :key="ind">
+                                <tr v-for="(user, ind ) in users" :key="ind">
                                     <td>{{ ind }}</td>
                                     <td>
                                         <img  class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :src="base_url+'user_images/'+user.user_info?.image" alt="">
@@ -121,8 +126,8 @@ function room_change(event,id) {
                                     <th>{{ user.name }}</th>
                                     <td>{{ user.email }}</td> 
                                     <td >
-                                        <div class="d-flex">
-                                            <select class="form-control" :value="user.rooms[0]?.room_number" @change="room_change($event,user.id)">
+                                        <div class="d-flex"> 
+                                            <select class="form-control"  :value="user.rooms[0]?.id" @change="room_change($event,user.id)">
                                                 <option value="remove">Remove</option>
                                                 <option v-for="room in props.data.rooms" :value="room.id" :disabled="room.users_count >= room.capacity">{{ room.room_number }}</option>
                                             </select>

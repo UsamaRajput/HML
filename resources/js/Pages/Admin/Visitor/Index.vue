@@ -17,11 +17,7 @@ const props = defineProps({
         type: String
     }
 });
-
-function editRoom(data) {
-    eventBus.emit('EDIT_ROOM', data);
-}
-
+ 
 eventBus.on('ROOM_ADDED', function (data) {
     props.data.push(data)
 });

@@ -78,6 +78,7 @@ let updateRoom = () => {
         }
     })
         .then(res => {
+            eventBus.emit('ROOM_UPDATED', res.data.data);
             notify.simpleAlert(res.data.message);
         }).catch((err) => {
             if (err.response.status == 422) {

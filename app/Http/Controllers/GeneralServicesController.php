@@ -39,6 +39,9 @@ class GeneralServicesController extends Controller
     {
         $res = GeneralServices::create($request->all());
         if ($res) {
+           $res = GeneralServices::withCount(['users'=>function($qry){
+                return  $qry->where('user_service.status',0);
+             }])->get();
             return response()->json(['data' => $res, 'message' => 'Service added'], 200);
         } else {
             return response()->json(['data' => [], 'message' => 'failed'], 500);
@@ -50,10 +53,9 @@ class GeneralServicesController extends Controller
      * Display the specified resource.
      */
     public function show(Request $request)
-    {
-        // dd('hi');
+    { 
         $res = DB::table('user_service')->leftJoin('users','users.id','user_service.user_id')
-        ->selectRaw("users.id as id, users.name as name")
+        ->selectRaw("users.id as id, users.name as name , entry , `exit`, date")
         ->where('user_service.status',0)
         ->where('general_service_id',$request->service)
         ->get();
@@ -77,9 +79,12 @@ class GeneralServicesController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request )
-    {
-        $res = GeneralServices::where('id',$request->id)->update(['name'=>$request->name]);
+    { 
+        $res = GeneralServices::where('id',$request->id)->update(['name'=>$request->name,'description'=>$request->description]);
         if ($res) {
+            $res = GeneralServices::withCount(['users'=>function($qry){
+                return  $qry->where('user_service.status',0);
+             }])->get();
             return response()->json(['data' => $res, 'message' => 'Service updated'], 200);
         } else {
             return response()->json(['data' => [], 'message' => 'failed'], 500);
@@ -99,6 +104,9 @@ class GeneralServicesController extends Controller
         $status = $request->status == 'approve' ? 1:2;
         $res = DB::table('user_service')->where(['user_id'=>$request->user_id,'general_service_id'=>$request->service_id])->update(['status'=>$status]);
         if ($res) {
+            $res = GeneralServices::withCount(['users'=>function($qry){
+                return  $qry->where('user_service.status',0);
+             }])->get();
             return response()->json(['data' => $res, 'message' => 'Service '.$request->status], 200);
         } else {
             return response()->json(['data' => [], 'message' => 'failed'], 500);

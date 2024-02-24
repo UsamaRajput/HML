@@ -28,7 +28,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-primary" data-bs-dismiss="modal" @click="createStaff">Add</button>
+                        <button class="btn btn-primary" data-bs-dismiss="modal" @click="updateStaff">Update</button>
                     </div>
 
             </div>
@@ -60,13 +60,14 @@ eventBus.on('EDIT_STAFF', function (data) {
 
 
 
-let updateRoom = () => {
-    axios.post(route('room.update', form.id), form, {
+let updateStaff = () => {
+    axios.post(route('staff.update'), form, {
         headers: {
             "Content-Type": "multipart/form-data",
         }
     })
         .then(res => {
+            eventBus.emit('STAFF_ADDED',res.data.data)
             notify.simpleAlert(res.data.message);
         }).catch((err) => {
             if (err.response.status == 422) {

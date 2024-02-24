@@ -59,6 +59,7 @@ eventBus.on('EDIT_MESS', function (data) {
 let updateMess = () => {
     axios.post(route('mess.update'), form.value)
         .then(res => {
+            eventBus.emit('MESS_ADDED', res.data.data);
             simpleAlert(res.data.message); 
         }).catch((err) => {
             if (err.response.status == 422) {

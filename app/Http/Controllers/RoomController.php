@@ -13,25 +13,22 @@ use App\Models\User;
 
 class RoomController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $rooms = Room::with(['ImagesRoom','users'=>function($qry){
+    private function allData($filter = null){
+        $room = Room::with(['ImagesRoom','users'=>function($qry){
             return $qry->whereNull('leaving_date');
            }])
         ->selectRaw('
-            sum(ratings.increment_amount) AS amount, rooms.id ,
+        IFNULL(sum(ratings.increment_amount),0) AS amount, rooms.id ,
             avg(ratings.rating) AS rating,
             rooms.room_desc,
             rooms.room_number,
             rooms.capacity,
-            rooms.price,
+            IFNULL(rooms.price,0) AS price,
             rooms.is_active
          ')
         ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
         ->leftjoin('ratings','ratings.id','room_ratings.rating_id')
+         
         ->groupBy(
             'rooms.id',
             'rooms.room_desc',
@@ -40,9 +37,20 @@ class RoomController extends Controller
             'rooms.price',
             'rooms.is_active'
         )
-        ->orderBy('room_number', 'ASC')
-        ->get();
-       
+        ->orderBy('room_number', 'ASC');
+        if($filter!=null && $filter == 'active'){
+            $room = $room->where('rooms.is_active',1);
+        }
+        return $room->get(); 
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $rooms = $this->allData();
+
         return Inertia::render('Admin/Room/List', [
             'data' => $rooms,
         ]);
@@ -131,7 +139,10 @@ class RoomController extends Controller
                     ImageRoom::create(['image' => $fileName, 'room_id' => $room->id]);
                 }
             }
-            return response()->json(['data' => $room, 'message' => 'room updated'], 200);
+
+            $rooms = $this->allData();
+
+            return response()->json(['data' => $rooms, 'message' => 'room updated'], 200);
         } else {
             return response()->json(['data' => [], 'message' => 'Server error'], 500);
         }
@@ -170,38 +181,8 @@ class RoomController extends Controller
      * User Section code
      */
 
-     public function userRooms(){
-        // $rooms = Auth::user()->rooms()->paginate(10);
-
-        $rooms = Room::with(['ImagesRoom','users'=>function($qry){
-            return $qry->whereNull('leaving_date');
-           }])
-        ->selectRaw('
-            sum(ratings.increment_amount) AS amount,
-            avg(ratings.rating) AS rating,
-            rooms.id ,
-            rooms.room_number,
-            rooms.capacity,
-            rooms.price,
-            rooms.is_active
-         ')
-        ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
-        ->leftjoin('ratings','ratings.id','room_ratings.rating_id')
-        ->groupBy(
-            'rooms.id',
-            'rooms.room_number',
-            'rooms.capacity',
-            'rooms.price',
-            'rooms.is_active'
-        )
-        ->where('rooms.is_active',1)
-        ->orderBy('room_number', 'ASC')
-        ->get();
-
-        // $rooms = Room::with('ImagesRoom')
-        // ->where('is_active',1)
-        // ->orderBy('room_number', 'ASC')->get();
-
+     public function userRooms(){ 
+        $rooms = $this->allData('active'); 
         return Inertia::render('User/Room/Index', [
             'data' => $rooms,
         ]);
@@ -271,6 +252,7 @@ class RoomController extends Controller
         })
         ->orderBy('room_number', 'ASC')
         ->get(); 
+        
         return Inertia::render('User/Room/RoomDetails', [
             'data'=>$data,
             'related'=>$related,

@@ -21,7 +21,8 @@ class ComplainController extends Controller
 
         $res = $res->get();
         return Inertia::render('Admin/Complain/List', [
-            'data' => $res
+            'data' => $res,
+            'filter'=>$filter
         ]);
     }
 
@@ -43,7 +44,8 @@ class ComplainController extends Controller
         }
         $res = $res->get();
         return Inertia::render('User/Complain/Index', [
-            'data' => $res
+            'data' => $res,
+            'filter'=>$filter
         ]);
     }
     /**

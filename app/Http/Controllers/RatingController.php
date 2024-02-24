@@ -80,7 +80,8 @@ class RatingController extends Controller
         $update = $rating->update($request->all());
 
         if ($update) {
-            return response()->json(['data' => $rating, 'message' => 'rating updated'], 200);
+            $ratings = Rating::all();
+            return response()->json(['data' => $ratings, 'message' => 'rating updated'], 200);
         } else {
             return response()->json(['data' => [], 'message' => 'Server error'], 500);
         }

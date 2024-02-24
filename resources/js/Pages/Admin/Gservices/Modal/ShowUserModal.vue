@@ -5,7 +5,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Edit rating</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Approve Service</h5>
                 </div>
                 <div class="modal-body">
                     <div class="bg-light rounded h-100 ">
@@ -14,20 +14,33 @@
                             <thead>
                                 <tr>
                                     <td>Name</td>
+                                    <td>Date</td>
+                                    <td>Entry</td>
+                                    <td>Exit</td>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                 <tr v-for="(item, index) in users" :key="index">
+                                 <tr v-for="(item, index) in users" :key="index" :id="`gap${index}`">
                                     <td>
-                                        {{ item.name }}</td>
+                                        {{ item.name }}
+                                    </td> 
+                                    <td>
+                                        {{ item.date }}
+                                    </td>
+                                    <td>
+                                        {{ item.entry }}
+                                    </td>
+                                    <td>
+                                        {{ item.exit }}
+                                    </td>
                                     <td>
                                         <div class="d-flex justify-content-center flex-column">
                                             <div>
-                                                <button class="btn btn-sm btn-info " @click="approveService(item.id,'approve')">
+                                                <button class="btn btn-sm btn-info " @click="approveService(item.id,'approve',index)">
                                                     <i class="fa fa-check"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-danger " @click="approveService(item.id,'reject')">
+                                                <button class="btn btn-sm btn-danger " @click="approveService(item.id,'reject',index)">
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </div>
@@ -63,19 +76,19 @@ let users = ref({});
 eventBus.on('SHOW_USER_GENERAL', function (data) {
     let myModal = new bootstrap.Modal(document.getElementById('SHOW_USER_GENERAL'), {
         keyboard: false
-    });
-
-    console.log('data.users',data);
+    });  
     myModal.show();
     id.value = data.id
     users.value = data.users;
 });
 
-function approveService(uid,status){
+function approveService(uid,status,index){
 
     axios.post(route('services.approveAction'),{service_id:id.value,user_id:uid,status})
         .then((res) => {
             notify.simpleAlert(status);
+            eventBus.emit('GSERVICE_UPDATE',  res.data.data);
+            document.getElementById('gap'+index).style.display = 'none'
         }).catch((err) => {
             notify.okAlert('error', 'server error');
         })

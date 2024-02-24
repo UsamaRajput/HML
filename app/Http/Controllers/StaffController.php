@@ -49,9 +49,9 @@ class StaffController extends Controller
         $uesrInfo = Staff::create($data);
 
         if ($uesrInfo) {
-            return back()->with('message', 'UserInfo added');
+            return response()->json(['data' =>   Staff::all() , 'message' => 'updated'], 200);
         } else {
-            return back()->with('error', 'Failed! Something wrong');
+            return response()->json(['data' =>   [] , 'message' => 'Failed! Something wrong'], 300);
         }
     }
 
@@ -74,9 +74,24 @@ class StaffController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Staff $staff)
+    public function update(Request $request)
     {
-        //
+        $data = $request->all();
+        if ($request->hasFile('image')) {
+            $fileName = null;
+            $image = $request->file('image')[0];
+            $fileName = time() . $image->getClientOriginalName();
+            $image->storeAs('staff_images', $fileName);
+            $data['image'] = $fileName;
+        }
+
+        $uesrInfo = Staff::where('id',$request->id)->update($data);
+
+        if ($uesrInfo) {
+            return response()->json(['data' =>   Staff::all() , 'message' => 'updated'], 200);
+        } else {
+            return response()->json(['data' =>   [] , 'message' => 'Failed! Something wrong'], 300);
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted ,ref } from 'vue';
 import { Link } from '@inertiajs/vue3'
 import { VueToggles } from "vue-toggles";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
@@ -20,7 +20,7 @@ const props = defineProps({
         type: String
     }
 });
-
+let staff = ref(props.data)
 function editStaff(data) {
     eventBus.emit('EDIT_STAFF', data);
 }
@@ -28,7 +28,7 @@ function editStaff(data) {
 
 
 eventBus.on('STAFF_ADDED', function (data) {
-    props.data.push(data)
+    staff.value = data;
 });
 
 
@@ -54,22 +54,18 @@ eventBus.on('STAFF_ADDED', function (data) {
                                     <th>#</th>
                                     <th>Images</th>
                                     <th>Name</th>
-                                    <th>Phone</th>
-                                    <th>Active</th>
+                                    <th>Phone</th> 
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(user, ind ) in props.data" :key="ind">
+                                <tr v-for="(user, ind ) in staff" :key="ind">
                                     <td>{{ ind }}</td>
                                     <td>
                                         <img  class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :src="base_url+'staff_images/'+user.image" alt="">
                                     </td>
                                     <th>{{ user.name }}</th>
                                     <td>{{ user.phone }}</td>
-                                    <td>
-                                        <VueToggles @click="userActiveInactive(user.id)" :value="user.status" />
-                                    </td>
                                     <td>
                                         <button class="btn btn-sm btn-info " @click="editStaff(user)">
                                             <i class="fa fa-pencil-alt"></i>

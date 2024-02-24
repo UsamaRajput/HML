@@ -23,7 +23,7 @@ class GeneralServiceUserController extends Controller
         ]);
     }
     public function store(Request $req)
-    {
+    { 
         $data = $req->all();
 
         $data['user_id'] =  Auth::user()->id;

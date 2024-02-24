@@ -7,6 +7,7 @@ import AddRoomModal from "@/Pages/Admin/Room/Modal/AddRoom.vue";
 import RatingRoomModal from "@/Pages/Admin/Room/Modal/RatingRoom.vue";
 import EditRoomModal from "@/Pages/Admin/Room/Modal/EditRoom.vue";
 import axios from 'axios';
+import { ref } from 'vue';
 
 let base_url= _url;
 
@@ -39,9 +40,14 @@ function ratingRoom(param) {
     })
 
 }
-
+let rooms = ref( props.data);
 eventBus.on('ROOM_ADDED', function (data) {
-    props.data.push(data)
+    rooms.value.push(data)
+});
+
+
+eventBus.on('ROOM_UPDATED', function (data) {
+    rooms.value = data;
 });
 
 function roomActiveInactive(id) {
@@ -89,15 +95,15 @@ function roomActiveInactive(id) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(room, ind ) in props.data" :key="ind">
+                                <tr v-for="(room, ind ) in rooms" :key="ind">
                                     <th>{{ room.room_number }}</th>
                                     <td>
                                         <img v-for="(img, im) in room.images_room" class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :key="im" :src="base_url+'room_images/'+img.image" alt="">
                                     </td>
                                     <td>{{ room.rating }}</td>
-                                    <td>{{ parseFloat(room.price) + parseFloat(room.amount) }}</td>
+                                    <td>{{ (parseFloat(room.price)??0 )+ (parseFloat(room.amount)??0) }}</td>
                                     <td>{{ room.capacity }}</td>
-                                    <td>{{ room.users.length }}</td>
+                                    <td>{{ room?.users?.length }}</td>
                                     <td>
                                         <VueToggles @click="roomActiveInactive(room.id)" :value="room.is_active" />
                                     </td>

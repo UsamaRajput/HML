@@ -62,7 +62,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-primary" data-bs-dismiss="modal" @click="createUser">Add</button>
+                        <button class="btn btn-primary" data-bs-dismiss="modal" @click="updateUser">Update</button>
                     </div>
 
             </div>
@@ -80,11 +80,11 @@ eventBus.on('ROOM_EDIT', function (data) {
     form.value = data;
     let myModal = new bootstrap.Modal(document.getElementById('ROOM_EDIT'), {
         keyboard: false
-    })
+    });
     myModal.show()
 });
 
-let createUser = () => {
+let updateUser = () => {
     axios.post(route('update.user'), form.value, {
         headers: {
             "Content-Type": "multipart/form-data",
@@ -92,7 +92,7 @@ let createUser = () => {
     })
     .then(res => {
         simpleAlert(res.data.message);
-        eventBus.emit('ROOM_ADDED', res.data.data);
+        eventBus.emit('USER_UPDATED', res.data.data);
     }).catch((err) => {
         if (err.response.status == 422) {
             multiAlert('error', 'Validation error', err.response.data.errors)

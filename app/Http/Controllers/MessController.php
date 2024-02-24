@@ -35,6 +35,7 @@ class MessController extends Controller
     {
         $res = Mess::create($request->all());
         if ($res) {
+            $res = Mess::orderBy('day')->get();
             return response()->json(['data' => $res, 'message' => 'Mess added'], 200);
         } else {
             return response()->json(['data' => [], 'message' => 'failed'], 500);
@@ -67,6 +68,7 @@ class MessController extends Controller
         $update['day'] = $request['day'];
         $res = Mess::where('id',$request->id)->update($update);
         if ($res) {
+            $res = Mess::orderBy('day')->get();
             return response()->json(['data'=>$res,'message'=>'Mess Updated!']);
         } else {
             return response()->json(['data'=>[],'message'=>'Not found!'],404);
@@ -84,7 +86,6 @@ class MessController extends Controller
 
     public function user_mess()  {
         $res = Mess::orderBy('day')->get();
-       
         return Inertia::render('User/Mess/Index', [
             'data' => $res
         ]);

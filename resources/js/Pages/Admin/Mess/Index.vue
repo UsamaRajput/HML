@@ -4,6 +4,7 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 import AddMessModal from "@/Pages/Admin/Mess/Modal/AddMess.vue"; 
 import UpdateMessModal from "@/Pages/Admin/Mess/Modal/UpdateMess.vue"; 
 import axios from 'axios';
+import { ref } from 'vue';
 
 let base_url= _url;
 
@@ -18,11 +19,10 @@ const props = defineProps({
         type: String
     }
 });
-
+let messData = ref(props.data)
 function editMess(data) {
     axios.get(route('mess.edit',data))
-    .then(res => { 
-        console.log('res.data.data',res.data);
+    .then(res => {  
         eventBus.emit('EDIT_MESS', res.data); 
     }).catch((err) => {
         notify.simpleAlert('server error', 'error');
@@ -32,7 +32,7 @@ function editMess(data) {
 
 
 eventBus.on('MESS_ADDED', function (data) {
-    props.data.push(data)
+    messData.value = data;
 });
 
 
@@ -63,7 +63,7 @@ eventBus.on('MESS_ADDED', function (data) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(mess, ind ) in props.data" :key="ind">
+                                <tr v-for="(mess, ind ) in messData" :key="ind">
                                     <td>{{ ind }}</td>
                                     <th>{{ mess.name }}</th> 
                                     <th><input type="time" readonly :value="mess.time"/></th>  

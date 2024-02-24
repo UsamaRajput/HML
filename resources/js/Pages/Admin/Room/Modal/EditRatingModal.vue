@@ -60,6 +60,7 @@ eventBus.on('EDIT_RATING', function (data) {
 let editRating = () => {
     axios.post(route('rating.update', form.id), form)
         .then(res => {
+            eventBus.emit('RATING_UPDATE', res.data.data);
             notify.simpleAlert(res.data.message);
         }).catch((err) => {
             if (err.response.status == 422) {

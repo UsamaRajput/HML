@@ -84,7 +84,7 @@ let createUser = () => {
     })
     .then(res => {
         simpleAlert(res.data.message);
-        eventBus.emit('ROOM_ADDED', res.data.data);
+        eventBus.emit('USER_ADDED', res.data.data);
     }).catch((err) => {
         if (err.response.status == 422) {
             multiAlert('error', 'Validation error', err.response.data.errors)

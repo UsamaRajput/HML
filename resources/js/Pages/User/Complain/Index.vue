@@ -12,6 +12,9 @@ const props = defineProps({
     data: {
         type: Object,
     },
+    filter: {
+        type: String
+    },
     error: {
         type: String
     },
@@ -20,7 +23,7 @@ const props = defineProps({
     }
 });
 
-let filter = ref('all');
+let filter = ref(props.filter);
 
 
 function complainProgress(fieldName, id) {

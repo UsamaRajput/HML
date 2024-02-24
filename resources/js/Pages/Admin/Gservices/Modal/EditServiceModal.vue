@@ -12,18 +12,17 @@
 
                         <label for="name" class="form-label">Name</label>
                         <input id="name" class="form-control form-control-sm" v-model="form.name" type="text"
-                            placeholder="Service name">
+                        placeholder="Service name">
 
-
-                            <label for="description" class="form-label">Description</label>
-                            <input id="description" class="form-control form-control-sm" v-model="form.description"
-                                type="text" placeholder="Service description">
+                        <label for="description" class="form-label">Description</label>
+                        <input id="description" class="form-control form-control-sm" v-model="form.description"
+                        type="text" placeholder="Service description">
 
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary" data-bs-dismiss="modal" @click="editService">Add</button>
+                    <button class="btn btn-primary" data-bs-dismiss="modal" @click="editService">Update</button>
                 </div>
 
             </div>
@@ -45,12 +44,13 @@ eventBus.on('EDIT_GSERVICE', function (data) {
     });
 
     myModal.show();
-    form.value = data;
+    form.value =  Object.assign({}, data); 
 });
 
 function editService() {
     axios.post(route('services.updated'),  form.value )
         .then((res) => {
+            eventBus.emit('GSERVICE_UPDATE', res.data.data);
             notify.simpleAlert('Service updated');
         }).catch((err) => {
             notify.okAlert('error', 'server error');

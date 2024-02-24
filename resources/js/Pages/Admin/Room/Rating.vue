@@ -5,6 +5,7 @@ import AddRatingModal from "@/Pages/Admin/Room/Modal/AddRatingModal.vue";
 import { VueToggles } from "vue-toggles";
 import { Link } from '@inertiajs/vue3'
 import axios from 'axios';
+import { ref } from "vue";
 
 const props = defineProps({
     data: {
@@ -18,14 +19,18 @@ const props = defineProps({
     }
 });
 
-
+let ratings = ref(props.data);
 
 function editRating(data) {
     eventBus.emit('EDIT_RATING', data);
 }
 
 eventBus.on('RATING_ADDED', function (data) {
-    props.data.push(data)
+    ratings.value.push(data)
+});
+
+eventBus.on('RATING_UPDATE', function (data) {
+    ratings.value = data;
 });
 
 function roomActiveInactive(id) {
@@ -68,7 +73,7 @@ function roomActiveInactive(id) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(rating, ind) in props.data" :key="ind">
+                                <tr v-for="(rating, ind) in ratings" :key="ind">
                                     <th>{{ ind + 1 }}</th>
                                     <td>{{ rating.rating }}</td>
                                     <td>{{ rating.service }}</td>

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted,ref } from 'vue';
 import { Link } from '@inertiajs/vue3'
 import { VueToggles } from "vue-toggles";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
@@ -23,12 +23,20 @@ const props = defineProps({
     }
 });
 
+let  gservice = ref(props.data)
 function edititem(data) {
     eventBus.emit('EDIT_GSERVICE', data);
 }
 
-function showUser(id){
 
+eventBus.on('GSERVICE_UPDATE', function (data) {
+    gservice.value =  data; 
+});
+eventBus.on('SERVICE_ADDED', function (data) {
+    gservice.value =  data; 
+});
+
+function showUser(id){
     axios.get(route('services.show', id))
         .then((res) => {
             eventBus.emit('SHOW_USER_GENERAL',{id,users:res.data.data});
@@ -61,20 +69,17 @@ function showUser(id){
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Active</th>
                                     <th>Requests</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item, ind ) in props.data" :key="ind">
+                                <tr v-for="(item, ind ) in gservice" :key="ind">
 
                                     <th>{{ ind+1 }}</th>
                                     <th>{{ item.name }}</th>
                                     <th>{{ item.description }}</th>
-                                    <td>
-                                        <VueToggles @click="itemActiveInactive(item.id)" :value="item.is_active" />
-                                    </td>
+                                  
                                     <td>{{ item.users_count }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-info " @click="showUser(item.id)">
