@@ -8,13 +8,14 @@ import FooterBottom from '@/components/Admin/Footer.vue';
 
 </script>
 <template>
-    <div class="container-fluid position-relative bg-white d-flex p-0" :style="{ backgroundColor: '#fbf6f0' }">
+    <div class="container-fluid position-relative d-flex p-0" :style="{ backgroundColor: '#fbf6f0' }">
         <!-- Sidebar Start -->
         <Sidebar />
         <!-- Sidebar End -->
         <!-- Content Start -->
-    <div class="container" :style="{ backgroundColor: '#fbf6f0' }">
-        <div class="content" :style="{ backgroundColor: '#fbf6f0' }">
+    <div class="main">
+        <div class="container" :style="{ backgroundColor: '#fbf6f0' }">
+            <div class="content" :style="{ backgroundColor: '#fbf6f0' }">
             <!-- Navbar Start -->
             <Navbar />
             <!-- Navbar End -->
@@ -27,6 +28,7 @@ import FooterBottom from '@/components/Admin/Footer.vue';
             <FooterBottom />
             <!-- Footer End -->
         </div>
+    </div>
     </div>
         <!-- Content End -->
 

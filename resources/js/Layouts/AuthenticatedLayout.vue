@@ -20,8 +20,9 @@ const showingNavigationDropdown = ref(false);
         <Sidebar />
         <!-- Sidebar End -->
         <!-- Content Start -->
-       <div class="container"  :style="{ backgroundColor: '#fbf6f0' }">
-        <div class="content"  :style="{ backgroundColor: '#fbf6f0' }">
+      <div class="main">
+        <div class="container"  :style="{ backgroundColor: '#fbf6f0' }">
+            <div class="content"  :style="{ backgroundColor: '#fbf6f0' }">
             <Navbar />
             <!-- Navbar Start -->
             <!-- Navbar End -->
@@ -35,6 +36,7 @@ const showingNavigationDropdown = ref(false);
             <!-- Footer End -->
         </div>
        </div>
+      </div>
         <!-- Content End -->
 
     </div>
