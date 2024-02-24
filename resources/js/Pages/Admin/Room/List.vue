@@ -53,8 +53,7 @@ eventBus.on('ROOM_UPDATED', function (data) {
 function roomActiveInactive(id) {
 
     axios.get(route('room.activeInactive', id))
-        .then((res) => {
-            console.log(res);
+        .then((res) => { 
             notify.simpleAlert(res.data.message);
         }).catch((err) => {
             if (err.response.status == 404) {

@@ -129,6 +129,7 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         })->name('admin.dashboard');
 
         Route::post('room/{room}', [RoomController::class, 'update'])->name('room.update');
+        Route::get('room/{id}/delImg', [RoomController::class, 'delImg'])->name('room.delImg');
         Route::post('room_history', [RoomController::class, 'room_history'])->name('room.history');
         Route::post('room/{room}/test', [RoomController::class, 'test'])->name('room.test');
         Route::get('room/{room}/activeInactive', [RoomController::class, 'activeInactive'])->name('room.activeInactive');

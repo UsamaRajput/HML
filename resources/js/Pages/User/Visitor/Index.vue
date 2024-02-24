@@ -93,10 +93,10 @@ eventBus.on('VISIT_ADDED', function (data) {
                                     <th>{{ ind+1 }}</th>
                                     <th>{{ item.name }}</th>
                                     <th>{{ item.room?.room_number }}</th>
-                                    <td>{{ item.arrpove?"Approved":'Not approved' }}</td>
+                                    <td>{{ item.approve == 1?"Approved":'Not approved' }}</td>
                                     <td>{{ item.visit }}</td>
-                                    <td>
-                                        <input :value="item.leave" :disabled="!item.arrpove" type="date" @change="changeLeave($event,item.id)" id="">
+                                    <td>  
+                                        <input :value="item.leave" :disabled="!item.approve" type="date" @change="changeLeave($event,item.id)" id="">
                                     </td>
                                 </tr>
                             </tbody>

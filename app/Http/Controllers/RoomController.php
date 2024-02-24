@@ -257,5 +257,16 @@ class RoomController extends Controller
             'data'=>$data,
             'related'=>$related,
         ]);
-     }
+    }
+
+    public function delImg($id){
+        $image = ImageRoom::where('id',$id)->first();
+        if($image){
+            $image->delete();
+            Storage::delete('room_images/' . $image->image);
+            $res = $this->allData();
+            return response()->json(['data'=> $res, 'message' => 'updated'], 200);
+        }
+        return response()->json([ 'message' => 'Failed'], 500);
+    }
 }

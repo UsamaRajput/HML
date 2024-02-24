@@ -68,7 +68,7 @@ function approveVisitor(id) {
                                     <td>{{ item.visit }}</td>
                                     <td>{{ item.leave }}</td>
                                     <td>
-                                        <VueToggles :value="item.approve"  @change="approveVisitor(item.id)" :disabled="item.approve" :class="item.approve?'disabled':''"/>
+                                        <VueToggles :value="item.approve"  @click="approveVisitor(item.id)" :disabled="item.approve" :class="item.approve?'disabled':''"/>
                                     </td>
                                 </tr>
                             </tbody>

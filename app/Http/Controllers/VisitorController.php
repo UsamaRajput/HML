@@ -87,6 +87,7 @@ class VisitorController extends Controller
     public function userVisitor()
     {
         $res = Visitor::with('room')->where('user_id', auth()->user()->id)->get();
+        // dd(   $res );
         return Inertia::render('User/Visitor/Index', [
             'data' => $res
         ]);
