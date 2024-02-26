@@ -166,8 +166,9 @@ onMounted(() => {
                                 <p class="text">
                                     {{ props.data.room_desc }}
                                     <hr>
-                                </p>
-                            <h3 class="product-title">Services</h3>
+                                </p> 
+                                <div v-if=" props.data.ratings.length !=0">
+                                    <h3 class="product-title">Services</h3>
                                 <table class="table  ">
                                     <thead class="table-warning">
                                         <tr>
@@ -191,6 +192,7 @@ onMounted(() => {
                                         </tr>
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>
