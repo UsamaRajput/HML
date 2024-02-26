@@ -5,10 +5,6 @@
                 <div class="bg-light rounded h-100 p-4">
                     <div class="d-flex justify-content-between">
                         <h6 class="mb-4">Services List</h6>
-                        <!-- Button trigger modal -->
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#adRoomModal">
-                            <i class="fa fa-plus"></i>
-                        </button>
                     </div>
                     <div class="table-responsive">
                         <table class="table">

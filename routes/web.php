@@ -95,7 +95,7 @@ Route::post('/contactMail', function (Request $request) {
 
 
 Route::middleware('auth')->group(function () {
-Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () {
+Route::group(['prefix' => 'user','middleware' => 'user_auth'], function () {
         Route::get('/', [ProfileController::class, 'index'])->name('profile.edit');
         Route::post('/change_image', [UserInfoController::class, 'changeImage'])->name('profile.changeImage');
         Route::post('/profile', [UserInfoController::class, 'updateProfile'])->name('profile.updateProfile');
@@ -119,7 +119,7 @@ Route::group(['prefix' => 'user',/* 'middleware' => 'user_auth'*/], function () 
         Route::post('/visitorLeave/', [VisitorController::class, 'visitorLeave'])->defaults('filter', 'all')->name('user.visitorLeave');
     });
 
-    Route::group(['prefix' => 'admin',/* 'middleware' => 'admin_auth'*/], function () {
+    Route::group(['prefix' => 'admin','middleware' => 'admin_auth'], function () {
         Route::get('/', function () {
             $data['user_count'] = User::count();
             $data['room_count'] = Room::count();
