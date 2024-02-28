@@ -83,7 +83,7 @@ eventBus.on('VISIT_ADDED', function (data) {
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Room</th>
-                                    <th>Arrpove</th>
+                                    <th>Approve</th>
                                     <th>Visit</th>
                                     <th>leave</th>
                                 </tr>

@@ -61,7 +61,7 @@ Route::get('/', function () {
     )
     ->where('rooms.is_active',1)
     ->orderBy('room_number', 'ASC')
-    ->get();
+    ->paginate(1);
 
     $data['staff'] = Staff::where('active',1)->get();
 
@@ -77,9 +77,9 @@ Route::get('/', function () {
 });
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth' ])->name('dashboard');
 
 Route::post('/contactMail', function (Request $request) {
      \Mail::send([], [], function ($m) use ($request) {
@@ -90,6 +90,7 @@ Route::post('/contactMail', function (Request $request) {
     return response()->json([  'message' => 'Mail sent successfully'], 200);
 })->name('contactMail');
 
+Route::get('/roomPaginate', [RoomController::class, 'roomPaginate'])->name('room.paginate');
 
 // Route::resource('room', RoomController::class);
 
@@ -109,6 +110,9 @@ Route::group(['prefix' => 'user','middleware' => 'user_auth'], function () {
         Route::get('/service_history/{id}',[GeneralServiceUserController::class,'service_history'])->name('service.history');
         Route::post('/service/request',[GeneralServiceUserController::class,'store'])->name('service.request');
         // User complain
+        Route::post('/complain/add', [ComplainController::class, 'store'])->defaults('filter', 'all')->name('user.addcomplain'); 
+        Route::post('complain/user/{complain}', [ComplainController::class, 'complainProgress'])->name('complain.user.complainProgress');
+
         Route::get('/complain/{filter?}', [ComplainController::class, 'userComplain'])->defaults('filter', 'all')->name('user.complain');
         
         // Mess

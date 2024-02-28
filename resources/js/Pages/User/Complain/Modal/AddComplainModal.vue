@@ -34,7 +34,7 @@ let form = reactive({
 })
 
 function addComplain(){
-    axios.post(route('complain.store',form))
+    axios.post(route('user.addcomplain',form))
         .then(res => {
             notify.simpleAlert(res.data.message);
             eventBus.emit('COMPLAIN_ADDED', res.data.data);
@@ -47,5 +47,4 @@ function addComplain(){
 
         })
 }
-
 </script>

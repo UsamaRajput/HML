@@ -22,12 +22,11 @@ const submit = () => {
 
 <template>
     <Head title="Log in" />
-
-    <section class="vh-100" style="background-color: #9A616D;">
-        <div class="container py-5 h-100">
+    <section class="vh-150" style="background-color: #9A616D;">
+        <div class="container py-2 h-190">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col col-xl-10">
-                    <div class="card" style="border-radius: 1rem;">
+                    <div class="card" style="border-radius: 1rem; ">
                         <div class="row g-0">
                             <div class="col-md-6 col-lg-5 d-none d-md-block">
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
@@ -41,7 +40,7 @@ const submit = () => {
 
                                     <form @submit.prevent="submit">
 
-                                        <div class="d-flex align-items-center mb-3 pb-1">
+                                        <div class="d-flex align-items-center mb-2 pb-1">
                                             <!-- <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i> -->
                                             <span class="h1 fw-bold mb-0">HMS</span>
                                         </div>
@@ -87,12 +86,10 @@ const submit = () => {
                                             class="small text-muted">
                                         Forgot password?
                                         </Link> -->
-
                                         <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account?
                                             <Link :href="route('login')" style="color: #393f81;">Login</Link>
                                         </p>
                                     </form>
-
                                 </div>
                             </div>
                         </div>

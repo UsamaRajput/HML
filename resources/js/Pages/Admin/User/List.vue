@@ -94,9 +94,9 @@ function room_change(event,id) {
 
 <template>
     <AdminLayout>
-        <div class="row g-4">
-            <div class="col-12">
-                <div class="bg-light rounded h-100 p-4">
+        <div class="row g-5">
+            <div class="col-13">
+                <div class="bg-light rounded h-100 p-5">
                     <div class="d-flex justify-content-between">
                         <h6 class="mb-4">User List</h6>
                         <!-- Button trigger modal -->

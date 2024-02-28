@@ -269,4 +269,31 @@ class RoomController extends Controller
         }
         return response()->json([ 'message' => 'Failed'], 500);
     }
+
+    public function roomPaginate(Request $request){
+        $data = Room::with(['ImagesRoom','users'=>function($qry){
+            return $qry->whereNull('leaving_date');
+           }])
+        ->selectRaw('
+            sum(ratings.increment_amount) AS amount, rooms.id ,
+            avg(ratings.rating) AS rating,
+            rooms.room_number,
+            rooms.capacity,
+            rooms.price,
+            rooms.is_active
+         ')
+        ->leftjoin('room_ratings','rooms.id','room_ratings.room_id')
+        ->leftjoin('ratings','ratings.id','room_ratings.rating_id')
+        ->groupBy(
+            'rooms.id',
+            'rooms.room_number',
+            'rooms.capacity',
+            'rooms.price',
+            'rooms.is_active'
+        )
+        ->where('rooms.is_active',1)
+        ->orderBy('room_number', 'ASC')
+        ->paginate(1);
+        return response()->json(['data'=>$data]);
+    }
 }

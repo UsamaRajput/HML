@@ -27,7 +27,7 @@ let filter = ref(props.filter);
 
 
 function complainProgress(fieldName, id) {
-    axios.post(route('complain.complainProgress', id), { fieldName })
+    axios.post(route('complain.user.complainProgress', id), { fieldName })
         .then((res) => {
             notify.simpleAlert(res.data.message);
         }).catch((err) => {

@@ -97,7 +97,11 @@ function roomActiveInactive(id) {
                                 <tr v-for="(room, ind ) in rooms" :key="ind">
                                     <th>{{ room.room_number }}</th>
                                     <td>
-                                        <img v-for="(img, im) in room.images_room" class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :key="im" :src="base_url+'room_images/'+img.image" alt="">
+                                        <template v-for="(img, im) in room.images_room" >
+                                            <a :href="base_url+'room_images/'+img.image" target="_blank">
+                                                <img class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :key="im" :src="base_url+'room_images/'+img.image" alt="">
+                                            </a>
+                                        </template>
                                     </td>
                                     <td>{{ room.rating }}</td>
                                     <td>{{ (parseFloat(room.price)??0 )+ (parseFloat(room.amount)??0) }}</td>

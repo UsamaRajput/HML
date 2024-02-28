@@ -4,7 +4,9 @@
 import { Head, Link } from '@inertiajs/vue3';
 import "../../css/user/user.css";
 import "../../css/user/style.css";
-import { ref } from 'vue';
+import { ref,reactive } from 'vue'; 
+// import "../../css/user/slicknav.css";
+// import "../../css/user/flaticon.css"; 
 // import "../../css/user/slicknav.css";
 // import "../../css/user/flaticon.css";
 import { Icon } from '@iconify/vue';
@@ -17,17 +19,27 @@ let props = defineProps({
     canLogin: {
         type: Boolean,
     },
+    auth: {
+        type: Object,
+    },
 
 }); 
 
 let disable = ref(false);
+
+let paginate = ref({
+    current_page:1,
+    last_page:2
+});
+
+let rooms = reactive(props.data.rooms.data);
 
 let form = ref({
     name:null,
     email:null,
     message:null
 });
-
+let pagiHide = ref(false);
 function contactMail() {
     disable.value = true;
     form.value = {};
@@ -40,6 +52,26 @@ function contactMail() {
         notify.simpleAlert('Something Wrong', 'error');
     });
  
+}
+
+function loadMore(){
+    
+    if(paginate.value.last_page <= paginate.value.current_page && paginate.value.current_page != 1){
+        pagiHide.value = true; 
+        return ;
+    }
+    paginate.value.current_page = paginate.value.current_page+1;
+
+    axios.get(route('room.paginate',{page:paginate.value.current_page}) )
+    .then(res => {   
+        rooms.push(res.data.data.data[0]);
+        paginate.value.current_page = res.data.data.current_page;
+        paginate.value.last_page = res.data.data.last_page;
+
+    }).catch((err) => {
+        disable.value = false;
+        notify.simpleAlert('Something Wrong', 'error');
+    });
 }
 
 </script>
@@ -62,11 +94,11 @@ function contactMail() {
                         <div class="nav-menu">
                             <nav class="mainmenu">
                                 <ul>
-                                    <li class="active"><a href="./index.html">Home</a></li>
+                                    <li class="active"><a href="/">Home</a></li>
                                     <li><a href="#rooms-all">Rooms</a></li>
                                     <li><a href="#about-us">About Us</a></li>
                                     <li><Link :href="route('login')" v-if="canLogin">Login</Link></li>
-                                    <li><Link :href="route('user.rooms')" v-if="!canLogin">Panel</Link></li>
+                                    <li><Link :href="route('user.rooms')" v-if="!canLogin && props?.auth?.user?.role!=1">Panel</Link></li>
 
 
                                 </ul>
@@ -80,18 +112,17 @@ function contactMail() {
     </header>
 
     <!-- hero-section -->
-    <section class="hero-section"  :style="`background-image: url('${base_url}main_images/${props.data.main_content.banner}');`">
+    <section class="hero-section"  :style="`background-image: url('${base_url}main_images/${props.data.main_content.banner}');background-size: cover;background-repeat: repeat;` ">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-12">
 
                     <div class="hero-text">
                         <h1>{{ props.data.main_content.title }}</h1>
-                        <p>{{ props.data.main_content.content }}</p>
-                        <a href="#" class="primary-btn">Discover Now</a>
+                        <p>{{ props.data.main_content.content }}</p> 
                     </div>
                 </div>
-                <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
+                <!-- <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
                         <h3>Contact Us </h3>
                         <form   @submit.prevent="contactMail">
@@ -115,7 +146,7 @@ function contactMail() {
 
                         </form>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
@@ -153,7 +184,7 @@ function contactMail() {
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span>Discover Our Room</span>
+                        <span>Discover Our Service</span>
                     </div>
                 </div>
             </div>
@@ -176,16 +207,17 @@ function contactMail() {
                 <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span>Discover Our Services</span>
+                        <span>Discover Our Room</span>
                     </div>
                 </div>
             </div>
                 <div class="row">
-                    <div class="col-lg-3 col-md-6" v-for="(room , ind) in props.data.rooms" :key="ind">
-                    
-                        <div class="hp-room-item set-bg room1" :style="`background-image: url('${base_url}room_images/${room.images_room[0]?.image}');`">
-                            <div class="hr-text">
-                                <h3>{{ room.room_number }}</h3>
+                    <div class="col-lg-3 col-md-3" v-for="(room , ind) in rooms" :key="ind">
+                        <div class="hp-room-item set-bg " 
+                        :style="`background-image: url('${base_url}room_images/${room?.images_room[0]?.image}');`"
+                        >
+                            <div class="hr-text" style="background: black; border-radius: 5px; opacity: 0.5; padding: 20px;" >
+                                <h3>Room {{ room.room_number }}</h3><br>
                                 <h2>{{ parseFloat(room.price??0) + parseFloat(room.amount??0) }} RS</h2>
                                 <table>
                                     <tbody>
@@ -203,7 +235,11 @@ function contactMail() {
                             </div>
                         </div>
                     </div>
-
+                </div>
+                <div class="row mt-2" v-show="!pagiHide">
+                    <div class="offset-md-4 col-md-4 text-center">
+                        <span class="btn btn-warning btn-block" @click="loadMore">Load More</span>
+                    </div>
                 </div>
             </div>
         </div>

@@ -31,7 +31,7 @@ const submit = () => {
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col col-xl-10">
-                    <div class="card" style="border-radius: 1rem;">
+                    <div class="card" style="border-radius: 1rem; ">
                         <div class="row g-0">
                             <div class="col-md-6 col-lg-5 d-none d-md-block">
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
@@ -56,7 +56,7 @@ const submit = () => {
                                         <div class="form-outline mb-4">
                                             <input type="email" id="email" class="form-control form-control-lg"
                                                 v-model="form.email" required autofocus autocomplete="username" />
-                                            <label class="form-label" for="email">Email address</label>
+                                            <label class="form-label" for="email">Email Address</label>
                                             <InputError class="mt-2" :message="form.errors.email" />
 
                                         </div>
@@ -73,10 +73,6 @@ const submit = () => {
                                                 :disabled="form.processing" type="submit">Login</button>
                                         </div>
 
-                                        <Link v-if="canResetPassword" :href="route('password.request')"
-                                            class="small text-muted">
-                                        Forgot password?
-                                        </Link>
 
                                         <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account?
                                             <Link :href="route('register')" style="color: #393f81;">Register here</Link>

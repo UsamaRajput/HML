@@ -31,15 +31,20 @@
                         <label for="image" class="form-label">Image</label>
                         <input id="image" type="file" class="form-control form-control-sm"
                             @input="form.images = $event.target.files" multiple accept="image/*">
-                        <div >
-                            <span v-for="(imge,ind) in form.preImages" :id="`img-${imge.id}`" :key="ind">
-                              <div class="position-relative">
-                                <span @click="delImg(imge.id)" >X</span>
-                                <img class="position-absolute" :src="base_url+'room_images/'+imge.image" alt="">
-                              </div>
-                            </span>
+                        <div class="container">
+                            <div class="row w-100">
+                                <div v-for="(imge, ind) in form.preImages" :id="`img-${imge.id}`" :key="ind"
+                                    class=" col-md-3">
+                                    <div class=" position-relative" >
+                                        <img class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;"
+                                            :key="ind" :src="base_url + 'room_images/' + imge.image" alt="">
+                                     
+                                        <a @click.prevent="delImg(imge.id)" class=" cursor-pointer  position-absolute  bi bi-x"> </a>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
-                        <div></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -55,11 +60,11 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import { reactive } from 'vue';
-let base_url= _url;
+let base_url = _url;
 let form = reactive({
     room_number: '',
     capacity: '',
-    room_desc:'',
+    room_desc: '',
     price: '',
     images: [],
     preImages: [],
@@ -68,30 +73,30 @@ let form = reactive({
 eventBus.on('EDIT_ROOM', function (data) {
     let myModal = new bootstrap.Modal(document.getElementById('editRoomModal'), {
         keyboard: false
-    }) 
-    
+    })
+
     myModal.show();
     form.id = data.id;
     form.room_desc = data.room_desc;
     form.room_number = data.room_number;
     form.price = data.price;
     form.capacity = data.capacity;
-    form.preImages = data.images_room; 
+    form.preImages = data.images_room;
 });
 
-let delImg = (id) =>{
-    axios.get(route('room.delImg', id) )
-    .then(res => {
-        document.getElementById('img-'+id).style.display = 'none'
-        eventBus.emit('ROOM_UPDATED', res.data.data);
-        notify.simpleAlert(res.data.message);
-    }).catch((err) => {
-        if (err.response.status == 422) {
-            notify.multiAlert('error', 'Validation error', err.response.data.errors)
-        } else {
-            notify.okAlert('error', 'server error');
-        }
-    })
+let delImg = (id) => {
+    axios.get(route('room.delImg', id))
+        .then(res => {
+            document.getElementById('img-' + id).style.display = 'none'
+            eventBus.emit('ROOM_UPDATED', res.data.data);
+            notify.simpleAlert(res.data.message);
+        }).catch((err) => {
+            if (err.response.status == 422) {
+                notify.multiAlert('error', 'Validation error', err.response.data.errors)
+            } else {
+                notify.okAlert('error', 'server error');
+            }
+        })
 }
 
 let updateRoom = () => {
@@ -100,16 +105,16 @@ let updateRoom = () => {
             "Content-Type": "multipart/form-data",
         }
     })
-    .then(res => {
-        eventBus.emit('ROOM_UPDATED', res.data.data);
-        notify.simpleAlert(res.data.message);
-    }).catch((err) => {
-        if (err.response.status == 422) {
-            notify.multiAlert('error', 'Validation error', err.response.data.errors)
-        } else {
-            notify.okAlert('error', 'server error');
-        }
-    })
+        .then(res => {
+            eventBus.emit('ROOM_UPDATED', res.data.data);
+            notify.simpleAlert(res.data.message);
+        }).catch((err) => {
+            if (err.response.status == 422) {
+                notify.multiAlert('error', 'Validation error', err.response.data.errors)
+            } else {
+                notify.okAlert('error', 'server error');
+            }
+        })
 }
 
 

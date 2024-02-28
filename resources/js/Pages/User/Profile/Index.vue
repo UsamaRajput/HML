@@ -85,7 +85,7 @@ function imageChange(event) {
                             placeholder="name@example.com" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="email">Email address</label>
+                        <label for="email">Email Address</label>
                         <input type="email" class="form-control disabled" :disabled="true" id="email"
                             :value="props.data.email" placeholder="name@example.com" readonly>
                     </div>
@@ -94,11 +94,11 @@ function imageChange(event) {
                         <input type="date" class="form-control" id="udate" v-model="form.dob">
                     </div>
                     <div class="mb-3">
-                        <label for="cnic">cnic</label>
+                        <label for="cnic">CNIC</label>
                         <input id="cnic" type="text" class="form-control" v-model="form.cnic" />
                     </div>
                     <div class=" mb-3">
-                        <label for="blood_group">blood group</label>
+                        <label for="blood_group">Blood Group</label>
                         <select class="form-select form-control" id="blood_group" v-model="form.blood_group">
                             <option value="A+">A+</option>
                             <option value="A-">A-</option>
@@ -133,7 +133,7 @@ function imageChange(event) {
                     <div class=" mb-3">
                         <button class="btn btn-primary" @click="updateUser">Update</button>
                     </div>
-
+<br><br>
                 </div>
             </div>
         </div>
