@@ -17,9 +17,9 @@
                         <input id="service" class="form-control form-control-sm" v-model="form.service" type="text"
                             placeholder="Service">
 
-                        <label for="increment_amount" class="form-label">increment_amount</label>
+                        <label for="increment_amount" class="form-label">Increment amount</label>
                         <input id="increment_amount" class="form-control form-control-sm" v-model="form.increment_amount" min="1" type="number"
-                            placeholder="increment_amount">
+                            placeholder="increment amount">
 
                     </div>
                 </div>

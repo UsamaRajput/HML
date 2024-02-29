@@ -77,9 +77,9 @@ Route::get('/', function () {
 });
 
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth' ])->name('dashboard');
+Route::get('/dashboard', function () {
+    return redirect()->to('/user');
+})->middleware(['auth' ])->name('dashboard');
 
 Route::post('/contactMail', function (Request $request) {
      \Mail::send([], [], function ($m) use ($request) {

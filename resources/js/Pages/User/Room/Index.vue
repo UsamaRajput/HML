@@ -64,8 +64,11 @@ function requestRoom(id){
                                 <tr v-for="(room, ind ) in props.data" :key="ind">
                                     <th>{{ room.room_number }}</th>
                                     <td>
-
-                                        <img v-for="(img, im) in room.images_room" style="width: 50px; height: 50px; border-radius: 50%;" class="img-fliud" :key="im" :src="base_url+'room_images/'+img.image" alt="">
+                                        <template  v-for="(img, im) in room.images_room" >
+                                            <a :href="base_url+'room_images/'+img.image" target="_blank" rel="noopener noreferrer">
+                                                <img style="width: 50px; height: 50px; border-radius: 50%;" class="img-fliud"   :src="base_url+'room_images/'+img.image" alt="">
+                                            </a>
+                                        </template>
                                     </td>
                                     <td>{{ room.capacity }}</td>
                                     <td>{{ room.users.length??0 }}</td>
