@@ -293,7 +293,7 @@ class RoomController extends Controller
         )
         ->where('rooms.is_active',1)
         ->orderBy('room_number', 'ASC')
-        ->paginate(1);
+        ->paginate(4);
         return response()->json(['data'=>$data]);
     }
 }

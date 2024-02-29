@@ -61,7 +61,7 @@ Route::get('/', function () {
     )
     ->where('rooms.is_active',1)
     ->orderBy('room_number', 'ASC')
-    ->paginate(1);
+    ->paginate(4);
 
     $data['staff'] = Staff::where('active',1)->get();
 

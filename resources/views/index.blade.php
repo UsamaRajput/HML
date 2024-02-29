@@ -8,8 +8,8 @@
     @vite('resources/scss/bootstrap.scss' )
     @vite('resources/css/app.css')
 </head>
-<body>
-    <div id="app">
+<body  style="width: 100%!important; overflow-x: hidden!important;">
+    <div id="app" style="width: 100%!important; overflow-x: hidden!important;">
 
     </div>
     @vite('resources/js/app.js')
