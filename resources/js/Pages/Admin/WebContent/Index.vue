@@ -87,10 +87,9 @@ function updateContent() {
                                 <label for="superintendent_desc">superintendent Description</label>
                                 <textarea  class="form-control" id="superintendent_desc" name="superintendent_desc"  v-model="content.superintendent_desc" rows="3" placeholder="superintendent desc"></textarea>
                             </div>
-
                             <button  @click.prevent="updateContent" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
+                        </form><br><br>
+                 </div>
                 </div>
             </div>
         </div>

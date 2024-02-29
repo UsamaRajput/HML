@@ -98,6 +98,7 @@ let deductionHistory = (user_id,name)=>{
                                 </tr>
                             </tbody>
                         </table>
+                        <br>
                     </div>
                 </div>
             </div>
