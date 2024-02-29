@@ -151,19 +151,24 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Room $room)
+    public function destroy($id)
     {
-        $room = $room->with('ImagesRoom')->find($room->id);
+        $room  = Room::where('id',$id)->first();
+        if($room){
+            $room = $room->with('ImagesRoom')->find($room->id);
 
-        foreach ($room->ImagesRoom as $key => $value) {
-            if (Storage::exists('room_images/' . $value->image)) {
-                Storage::delete('room_images/' . $value->image);
+            foreach ($room->ImagesRoom as $key => $value) {
+                if (Storage::exists('room_images/' . $value->image)) {
+                    Storage::delete('room_images/' . $value->image);
+                }
             }
+    
+            $room->delete();
+            return response()->json(['data' => [], 'message' => 'Deleted'], 200);
         }
+        return response()->json(['data' => [], 'message' => 'Server error'], 500);
 
-        $room->delete();
-
-        return back()->with('message','deleted');
+        
     }
 
     public function activeInactive($room){

@@ -31,6 +31,15 @@ eventBus.on('STAFF_ADDED', function (data) {
     staff.value = data;
 });
 
+function delStaff(id,ind){
+    axios.delete(route('staff.destroy', id))
+    .then((res)=>{
+        document.getElementById(`col-staf-${ind}`).style.display = 'none';
+        notify.simpleAlert(res.data.message);
+    }).catch((err)=>{
+        notify.okAlert('error', 'server error');
+    })
+}
 
 </script>
 
@@ -59,7 +68,7 @@ eventBus.on('STAFF_ADDED', function (data) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(user, ind ) in staff" :key="ind">
+                                <tr v-for="(user, ind ) in staff" :key="ind" :id="`col-staf-${ind}`">
                                     <td>{{ ind }}</td>
                                     <td>
                                         <img  class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :src="base_url+'staff_images/'+user.image" alt="">
@@ -70,10 +79,14 @@ eventBus.on('STAFF_ADDED', function (data) {
                                         <button class="btn btn-sm btn-info " @click="editStaff(user)">
                                             <i class="fa fa-pencil-alt"></i>
                                         </button>
-                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('staff.destroy', user.id)"
+                                        <a class="btn btn-sm btn-danger ml-1" @click.prevent="delStaff(user.id,ind)" 
+                                             as="button" type="button">
+                                             <i class="fa fa-trash" aria-hidden="true"></i> 
+                                        </a>   
+                                        <!-- <Link class="btn btn-sm btn-danger ml-1" :href="route('staff.destroy', user.id)"
                                             method="DELETE" as="button" type="button">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </Link>
+                                        </Link> -->
                                     </td>
                                 </tr>
                             </tbody>

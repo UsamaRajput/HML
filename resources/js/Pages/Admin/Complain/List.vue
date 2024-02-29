@@ -43,6 +43,17 @@ function complainProgress(fieldName, id) {
 function filterComplain(){
     router.get(route('complain.index',filter.value))
 }
+
+function delComplain(id,ind){
+    axios.delete(route('complain.destroy', id))
+    .then((res)=>{
+        document.getElementById(`col-room-${ind}`).style.display = 'none';
+        notify.simpleAlert(res.data.message);
+    }).catch((err)=>{
+        notify.okAlert('error', 'server error');
+    })
+}
+
 </script>
 
 
@@ -77,7 +88,7 @@ function filterComplain(){
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item, ind ) in complains" :key="ind">
+                                <tr v-for="(item, ind ) in complains" :key="ind" :id="`col-room-${ind}`">
                                     <th>{{ ind + 1 }}</th>
                                     <td>
                                         {{ item.user?.name }}
@@ -96,10 +107,10 @@ function filterComplain(){
                                         <VueToggles :disabled="true" @click="complainProgress('closed', item.id)" :value="item.closed" />
                                     </td>
                                     <td>
-                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('complain.destroy', item.id)"
-                                            method="DELETE" as="button">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </Link>
+                                        <a class="btn btn-sm btn-danger ml-1" @click.prevent="delComplain(item.id,ind)" 
+                                             as="button" type="button">
+                                             <i class="fa fa-trash" aria-hidden="true"></i>    
+                                        </a>
                                     </td>
                                 </tr>
                             </tbody>

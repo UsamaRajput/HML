@@ -13,6 +13,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th scope="col" colspan="5">Service</th>
                                     <th scope="col" colspan="5">Rating</th>
                                     <th scope="col" >Increment Amount</th>
                                     <th scope="col">Action</th>
@@ -21,6 +22,7 @@
                             <tbody> 
                                 <tr v-for="(rr, ind) in r_rooms" :key="ind">
                                     <td colspan="5"> {{ rr.rating_name }}</td>
+                                    <td colspan="5"> {{ rr.rating }}</td>
                                     <td> {{ rr.increment_amount }}</td>
                                     <td>  
                                         <button v-if="rr.room_id != room.id" @click="addRemoveRating(rr.rating_id,room.id,'added')" class="btn btn-sm btn-info">Add</button>

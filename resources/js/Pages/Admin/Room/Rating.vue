@@ -47,6 +47,16 @@ function roomActiveInactive(id) {
         })
 }
 
+function delRating(id,ind){
+    axios.delete(route('rating.destroy', id))
+    .then((res)=>{
+        document.getElementById(`col-room-${ind}`).style.display = 'none';
+        notify.simpleAlert(res.data.message);
+    }).catch((err)=>{
+        notify.okAlert('error', 'server error');
+    })
+}
+
 </script>
 <template>
     <AdminLayout>
@@ -73,7 +83,7 @@ function roomActiveInactive(id) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(rating, ind) in ratings" :key="ind">
+                                <tr v-for="(rating, ind) in ratings" :key="ind" :id="`col-room-${ind}`">
                                     <th>{{ ind + 1 }}</th>
                                     <td>{{ rating.rating }}</td>
                                     <td>{{ rating.service }}</td>
@@ -85,10 +95,15 @@ function roomActiveInactive(id) {
                                         <button class="btn btn-sm btn-info " @click="editRating(rating)">
                                             <i class="fa fa-pencil-alt"></i>
                                         </button>
-                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('rating.destroy', rating.id)"
+                                        <!-- <Link class="btn btn-sm btn-danger ml-1" :href="route('rating.destroy', rating.id)"
                                             method="DELETE" as="button" type="button">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </Link>
+                                        </Link> -->
+
+                                        <a class="btn btn-sm btn-danger ml-1" @click.prevent="delRating(rating.id,ind)" 
+                                             as="button" type="button">
+                                             <i class="fa fa-trash" aria-hidden="true"></i>    
+                                        </a>
                                     </td>
                                 </tr>
                             </tbody>

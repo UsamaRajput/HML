@@ -22,7 +22,7 @@ class ComplainController extends Controller
         $res = $res->get();
         return Inertia::render('Admin/Complain/List', [
             'data' => $res,
-            'filter'=>$filter
+            'filter' => $filter
         ]);
     }
 
@@ -45,7 +45,7 @@ class ComplainController extends Controller
         $res = $res->get();
         return Inertia::render('User/Complain/Index', [
             'data' => $res,
-            'filter'=>$filter
+            'filter' => $filter
         ]);
     }
     /**
@@ -97,9 +97,13 @@ class ComplainController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Complain $complain)
+    public function destroy($complain)
     {
-        $complain->delete();
-        return back()->with('message', 'Deleted!');
+        $complain = Complain::where('id', $complain)->first();
+        if ($complain) {
+            $complain->delete();
+            return response()->json(['data' => [], 'message' => 'Deleted'], 200);
+        }
+        return response()->json(['data' => [], 'message' => 'Server error'], 500);
     }
 }

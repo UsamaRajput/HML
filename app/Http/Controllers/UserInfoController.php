@@ -180,9 +180,9 @@ class UserInfoController extends Controller
         UserInfo::where(['user_id' => $userInfo])->delete();
         \DB::table('room_user')->where(['user_id' => $userInfo])->delete();
         if ($res) {
-            return back()->with('message', 'deleted');
+            return response()->json(['data' =>[], 'message' => 'User Deleted']);
         } else {
-            return back()->with('error', 'failed');
+            return response()->json(['data' => [], 'message' => 'Server Error'],500);
         }
     }
 

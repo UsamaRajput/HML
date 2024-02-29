@@ -47,7 +47,9 @@ function addComplain(){
        }).catch((err) => {
            if (err.response.status == 422) {
                notify.multiAlert('error', 'Validation error', err.response.data.errors)
-           } else {
+           }else  if (err.response.status == 400) { 
+                notify.okAlert('error','Request for room first');
+            } else {
                notify.simpleAlert('server error','error');
            }
 

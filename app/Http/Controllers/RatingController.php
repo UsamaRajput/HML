@@ -90,10 +90,15 @@ class RatingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rating $rating)
+    public function destroy( $rating)
     {
-        $rating->delete();
-        return back()->with('message','deleted');
+        $rating = Rating::where('id',$rating)->delete();
+
+        if( $rating){
+            return response()->json(['data' => [], 'message' => 'Deleted'], 200);
+        }            
+        return response()->json(['data' => [], 'message' => 'Server error'], 500);
+
     }
 
     public function activeInactive($rating){
@@ -110,6 +115,7 @@ class RatingController extends Controller
         $res = Rating:: distinct()
         ->selectRaw("
         ratings.id as rating_id,
+        ratings.rating as rating,
         ratings.increment_amount as increment_amount,
         ratings.service as rating_name,
         (select room_id from room_ratings where room_id = {$request->id} and room_ratings.rating_id = ratings.id limit 1 ) as room_id
@@ -135,6 +141,7 @@ class RatingController extends Controller
             $res = Rating:: distinct()
             ->selectRaw("
             ratings.id as rating_id,
+            ratings.rating as rating,
             ratings.increment_amount as increment_amount,
             ratings.service as rating_name,
             (select room_id from room_ratings where room_id = {$request->room_id} and room_ratings.rating_id = ratings.id limit 1 ) as room_id

@@ -89,6 +89,16 @@ function room_change(event,id) {
     
 }
 
+function delUser(id,ind){
+    axios.delete(route('user.destroy', id))
+    .then((res)=>{
+        document.getElementById(`col-room-${ind}`).style.display = 'none';
+        notify.simpleAlert(res.data.message);
+    }).catch((err)=>{
+        notify.okAlert('error', 'server error');
+    })
+}
+
 </script>
 
 
@@ -118,8 +128,8 @@ function room_change(event,id) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(user, ind ) in users" :key="ind">
-                                    <td>{{ ind }}</td>
+                                <tr v-for="(user, ind ) in users" :key="ind"  :id="`col-room-${ind}`">
+                                    <td>{{ ind + 1}}</td>
                                     <td>
                                         <img  class="img-fliud" style="width: 50px; height: 50px; border-radius: 50%;" :src="base_url+'user_images/'+user.user_info?.image" alt="">
                                     </td>
@@ -144,10 +154,14 @@ function room_change(event,id) {
                                         <button class="btn btn-sm btn-info " @click="edituser(user.id)">
                                             <i class="fa fa-pencil-alt"></i>
                                         </button>
-                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('user.destroy', user.id)"
+                                        <a class="btn btn-sm btn-danger ml-1" @click.prevent="delUser(user.id,ind)" 
+                                             as="button" type="button">
+                                             <i class="fa fa-trash" aria-hidden="true"></i> 
+                                        </a>   
+                                        <!-- <Link class="btn btn-sm btn-danger ml-1" :href="route('user.destroy', user.id)"
                                             method="DELETE" as="button" type="button">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </Link>
+                                        </Link> -->
                                     </td>
                                 </tr>
                             </tbody>

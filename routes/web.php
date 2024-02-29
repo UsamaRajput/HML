@@ -111,6 +111,7 @@ Route::group(['prefix' => 'user','middleware' => 'user_auth'], function () {
         Route::post('/service/request',[GeneralServiceUserController::class,'store'])->name('service.request');
         // User complain
         Route::post('/complain/add', [ComplainController::class, 'store'])->defaults('filter', 'all')->name('user.addcomplain'); 
+        Route::delete('/complain/{id}/delete', [ComplainController::class, 'destroy'])->defaults('filter', 'all')->name('user.delComp'); 
         Route::post('complain/user/{complain}', [ComplainController::class, 'complainProgress'])->name('complain.user.complainProgress');
 
         Route::get('/complain/{filter?}', [ComplainController::class, 'userComplain'])->defaults('filter', 'all')->name('user.complain');

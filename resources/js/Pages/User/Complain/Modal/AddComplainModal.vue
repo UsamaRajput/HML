@@ -39,9 +39,10 @@ function addComplain(){
             notify.simpleAlert(res.data.message);
             eventBus.emit('COMPLAIN_ADDED', res.data.data);
         }).catch((err) => {
+         
             if (err.response.status == 422) {
                 notify.multiAlert('error', 'Validation error', err.response.data.errors)
-            } else {
+            }   else {
                 notify.simpleAlert('server error','error');
             }
 

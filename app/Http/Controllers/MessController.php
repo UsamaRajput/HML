@@ -78,10 +78,15 @@ class MessController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Mess $mess)
+    public function destroy($mess)
     {
-        $mess->delete();
-        return redirect()->back();
+        $Mess = Mess::where('id',$mess)->delete();
+
+        if( $Mess){
+            return response()->json(['data' => [], 'message' => 'Deleted'], 200);
+        }            
+        return response()->json(['data' => [], 'message' => 'Server error'], 500);
+
     }
 
     public function user_mess()  {

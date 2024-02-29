@@ -30,9 +30,11 @@ function complainProgress(fieldName, id) {
     axios.post(route('complain.user.complainProgress', id), { fieldName })
         .then((res) => {
             notify.simpleAlert(res.data.message);
-        }).catch((err) => {
+        }).catch((err) => { 
             if (err.response.status == 404) {
                 notify.okAlert('error', "No Room Found");
+            } else   if (err.response.status == 400) { 
+                notify.okAlert('error','Request for room first');
             } else {
                 notify.okAlert('error', 'server error');
             }
@@ -46,6 +48,16 @@ function filterComplain(){
 eventBus.on('COMPLAIN_ADDED', function (data) {
     props.data.push(data)
 });
+
+function delComplain(id,ind){
+    axios.delete(route('user.delComp', id))
+    .then((res)=>{
+        document.getElementById(`col-room-${ind}`).style.display = 'none';
+        notify.simpleAlert(res.data.message);
+    }).catch((err)=>{
+        notify.okAlert('error', 'server error');
+    })
+}
 </script>
 
 
@@ -83,7 +95,7 @@ eventBus.on('COMPLAIN_ADDED', function (data) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item, ind ) in props.data" :key="ind">
+                                <tr v-for="(item, ind ) in props.data" :key="ind"  :id="`col-room-${ind}`">
                                     <th>{{ ind + 1 }}</th>
 
                                     <td>
@@ -102,10 +114,14 @@ eventBus.on('COMPLAIN_ADDED', function (data) {
                                             :value="item.closed" />
                                     </td>
                                     <td>
-                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('complain.destroy', item.id)"
+                                        <!-- <Link class="btn btn-sm btn-danger ml-1" :href="route('complain.destroy', item.id)"
                                             method="DELETE" as="button">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </Link>
+                                        </Link> -->
+                                        <a class="btn btn-sm btn-danger ml-1" @click.prevent="delComplain(item.id,ind)" 
+                                             as="button" type="button">
+                                             <i class="fa fa-trash" aria-hidden="true"></i>    
+                                        </a>
                                     </td>
                                 </tr>
                             </tbody>

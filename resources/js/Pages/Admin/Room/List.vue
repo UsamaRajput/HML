@@ -64,6 +64,16 @@ function roomActiveInactive(id) {
         })
 }
 
+function delRoom(id,ind){
+    axios.delete(route('room.destroy', id))
+    .then((res)=>{
+        document.getElementById(`col-room-${ind}`).style.display = 'none';
+        notify.simpleAlert(res.data.message);
+    }).catch((err)=>{
+        notify.okAlert('error', 'server error');
+    })
+}
+
 </script>
 
 
@@ -94,7 +104,7 @@ function roomActiveInactive(id) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(room, ind ) in rooms" :key="ind">
+                                <tr v-for="(room, ind ) in rooms" :key="ind" :id="`col-room-${ind}`">
                                     <th>{{ room.room_number }}</th>
                                     <td>
                                         <template v-for="(img, im) in room.images_room" >
@@ -103,7 +113,7 @@ function roomActiveInactive(id) {
                                             </a>
                                         </template>
                                     </td>
-                                    <td>{{ room.rating }}</td>
+                                    <td>{{ parseInt(room.rating) }}</td>
                                     <td>{{ (parseFloat(room.price)??0 )+ (parseFloat(room.amount)??0) }}</td>
                                     <td>{{ room.capacity }}</td>
                                     <td>{{ room?.users?.length }}</td>
@@ -117,10 +127,10 @@ function roomActiveInactive(id) {
                                         <button class="btn btn-sm btn-info " @click="editRoom(room)">
                                             <i class="fa fa-pencil-alt"></i>
                                         </button>
-                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('room.destroy', room.id)"
-                                            method="DELETE" as="button" type="button">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </Link>
+                                        <a class="btn btn-sm btn-danger ml-1" @click.prevent="delRoom(room.id,ind)" 
+                                             as="button" type="button">
+                                             <i class="fa fa-trash" aria-hidden="true"></i>    
+                                        </a>
                                     </td>
                                 </tr>
                             </tbody>

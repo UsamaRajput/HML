@@ -49,9 +49,9 @@ class StaffController extends Controller
         $uesrInfo = Staff::create($data);
 
         if ($uesrInfo) {
-            return response()->json(['data' =>   Staff::all() , 'message' => 'updated'], 200);
+            return response()->json(['data' =>   Staff::all(), 'message' => 'updated'], 200);
         } else {
-            return response()->json(['data' =>   [] , 'message' => 'Failed! Something wrong'], 300);
+            return response()->json(['data' =>   [], 'message' => 'Failed! Something wrong'], 300);
         }
     }
 
@@ -85,21 +85,25 @@ class StaffController extends Controller
             $data['image'] = $fileName;
         }
 
-        $uesrInfo = Staff::where('id',$request->id)->update($data);
+        $uesrInfo = Staff::where('id', $request->id)->update($data);
 
         if ($uesrInfo) {
-            return response()->json(['data' =>   Staff::all() , 'message' => 'updated'], 200);
+            return response()->json(['data' =>   Staff::all(), 'message' => 'updated'], 200);
         } else {
-            return response()->json(['data' =>   [] , 'message' => 'Failed! Something wrong'], 300);
+            return response()->json(['data' =>   [], 'message' => 'Failed! Something wrong'], 300);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Staff $staff)
+    public function destroy($staff)
     {
-        $staff->delete();
-        return back()->with('message', 'Deleted!');
+        $staff = Staff::where('id', $staff)->delete();
+
+        if ($staff) {
+            return response()->json(['data' => [], 'message' => 'Deleted'], 200);
+        }
+        return response()->json(['data' => [], 'message' => 'Server error'], 500);
     }
 }

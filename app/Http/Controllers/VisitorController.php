@@ -95,11 +95,15 @@ class VisitorController extends Controller
 
     public function visitorRequest(Request $request)
     {
+        if(auth()->user()->current_room->first()== null){
+            return response()->json(['data' => [], 'message' => 'Please request for room first'], 400);
+        }
+
         $res = Visitor::create([
             "name" => $request->input("name"),
             "visit" => $request->input("visit"),
             'user_id' => auth()->user()->id,
-            'room_id' => auth()->user()->current_room->first()->id,
+            'room_id' => auth()->user()->current_room->first()?->id??0,
         ]);
 
         if ($res) {

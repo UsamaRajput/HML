@@ -35,6 +35,15 @@ eventBus.on('MESS_ADDED', function (data) {
     messData.value = data;
 });
 
+function delMess(id,ind){
+    axios.delete(route('mess.destroy', id))
+    .then((res)=>{
+        document.getElementById(`col-room-${ind}`).style.display = 'none';
+        notify.simpleAlert(res.data.message);
+    }).catch((err)=>{
+        notify.okAlert('error', 'server error');
+    })
+}
 
 </script>
 
@@ -63,7 +72,7 @@ eventBus.on('MESS_ADDED', function (data) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(mess, ind ) in messData" :key="ind">
+                                <tr v-for="(mess, ind ) in messData" :key="ind" :id="`col-room-${ind}`">
                                     <td>{{ ind }}</td>
                                     <th>{{ mess.name }}</th> 
                                     <th><input type="time" readonly :value="mess.time"/></th>  
@@ -82,10 +91,14 @@ eventBus.on('MESS_ADDED', function (data) {
                                         <button class="btn btn-sm btn-info " @click="editMess(mess.id)">
                                             <i class="fa fa-pencil-alt"></i>
                                         </button>
-                                        <Link class="btn btn-sm btn-danger ml-1" :href="route('mess.destroy', mess.id)"
+                                        <a class="btn btn-sm btn-danger ml-1" @click.prevent="delMess(mess.id,ind)" 
+                                             as="button" type="button">
+                                             <i class="fa fa-trash" aria-hidden="true"></i>    
+                                        </a>
+                                        <!-- <Link class="btn btn-sm btn-danger ml-1" :href="route('mess.destroy', mess.id)"
                                             method="DELETE" as="button" type="button">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </Link>
+                                        </Link> -->
                                     </td>
                                 </tr>
                             </tbody>
