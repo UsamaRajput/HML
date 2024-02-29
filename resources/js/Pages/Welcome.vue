@@ -112,7 +112,7 @@ function loadMore(){
     </header>
 
     <!-- hero-section -->
-    <section class="hero-section"  :style="`background-image: url('${base_url}main_images/${props.data.main_content.banner}');background-size: cover;background-repeat: repeat;` ">
+    <section class="hero-section"  :style="`background-image: url('${base_url}main_images/${props.data.main_content.banner}');background-size: coverlog;background-repeat: repeat;` ">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
